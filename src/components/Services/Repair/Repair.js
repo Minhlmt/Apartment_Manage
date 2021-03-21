@@ -7,36 +7,36 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function Repair() {
   const [topic, setTopic] = useState('');
   const [content, setContent] = useState('');
-  const [userId,setUserId]=useState('123');
-  const [token,setToken]=useState('');
-  const [apartId,setApartId]=useState('');
+  const [userId, setUserId] = useState('123');
+  const [token, setToken] = useState('');
+  const [apartId, setApartId] = useState('');
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
-  const [flag,setFlag]=useState(true);
-  const [flag2,setFlag2]=useState(true);
+  const [flag, setFlag] = useState(true);
+  const [flag2, setFlag2] = useState(true);
   const getData = async () => {
-    
+
     try {
-      console.log("123 "+userId+" "+token+" "+apartId);
+      console.log("123 " + userId + " " + token + " " + apartId);
       const _token = await AsyncStorage.getItem('token');
-      const _apartId=await AsyncStorage.getItem('apartId');
-      const _userId=await AsyncStorage.getItem('infoUser');
-    
-     
-        if (_token !== null&& _apartId!==null &&_userId!==null) {
-         
-          const _tokenObject=JSON.parse(_token);
-          const _apartIdObject=JSON.parse(_apartId);
-          const _userIdObject=JSON.parse(_userId);
-          // console.log(userId+" "+token+" "+apartId);
-          setUserId(_userIdObject.id);
-          setToken(_tokenObject);
-          setApartId(_apartIdObject);
-          setFlag2(false);
-          console.log(userId+" "+token+" "+apartId);
+      const _apartId = await AsyncStorage.getItem('apartId');
+      const _userId = await AsyncStorage.getItem('infoUser');
+
+
+      if (_token !== null && _apartId !== null && _userId !== null) {
+
+        const _tokenObject = JSON.parse(_token);
+        const _apartIdObject = JSON.parse(_apartId);
+        const _userIdObject = JSON.parse(_userId);
+        // console.log(userId+" "+token+" "+apartId);
+        setUserId(_userIdObject.id);
+        setToken(_tokenObject);
+        setApartId(_apartIdObject);
+        setFlag2(false);
+        console.log(userId + " " + token + " " + apartId);
       }
-     
+
     } catch (e) {
       // error reading value
     }
@@ -46,8 +46,8 @@ export default function Repair() {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
-    let date=CalDate(currentDate);
-    let string_date=date.dd+'/'+date.mm+'/'+date.yyyy
+    let date = CalDate(currentDate);
+    let string_date = date.dd + '/' + date.mm + '/' + date.yyyy
     console.log(string_date);
 
 
@@ -81,11 +81,11 @@ export default function Repair() {
     //Do whatever you want
     alert('Success');
   };
-  useEffect(()=>{
+  useEffect(() => {
     getData();
     setFlag(false);
-   
-  },[flag,flag2])
+
+  }, [flag, flag2])
 
   return (
     <View>
@@ -104,19 +104,29 @@ export default function Repair() {
         multiline
         onChangeText={text => setAddress(text)}
       /></View> */}
-      <View  style={styles.container}>
-      <Text style={styles.text}>Nội dung</Text>
-      <TextInput   style={styles.text_input}
-        placeholderTextColor="#FF0000"
-        onChangeText={text => setContent(text)}
-      />
+      <View style={styles.container}>
+        <Text style={styles.text}>Nội dung</Text>
+        <TextInput style={styles.text_input}
+          placeholderTextColor="#FF0000"
+          onChangeText={text => setContent(text)}
+        />
       </View>
-     <View style={{marginTop:10}}>
-     <Button title="Gửi" 
-        onPress={checkTextInput}
-      />
-     </View>
-     {/* <View>
+      <View>
+        <Button
+          onPress={onPressLearnMore}
+          title="Learn More"
+          color="#841584"
+          accessibilityLabel="Learn more about this purple button"
+        />
+      </View>
+
+      <View style={{ marginTop: 10 }}>
+        <Button title="Gửi"
+          onPress={checkTextInput}
+        />
+      </View>
+
+      {/* <View>
         <Button onPress={showDatepicker} title="Show date picker!" />
       </View>
       <View>
@@ -140,25 +150,25 @@ export default function Repair() {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
-       
+
   },
   text: {
     color: 'black',
     fontSize: Text_Size.Text,
-    marginTop:10,
-    marginLeft:10,
-    marginRight:10
+    marginTop: 10,
+    marginLeft: 10,
+    marginRight: 10
   },
-  text_input:{
+  text_input: {
     color: 'black',
     fontSize: Text_Size.Text,
-    borderBottomWidth:1,
-    borderColor:'#2ecc71',
-    marginLeft:10,
-    marginRight:10
-    
+    borderBottomWidth: 1,
+    borderColor: '#2ecc71',
+    marginLeft: 10,
+    marginRight: 10
+
   },
-  button:{
-    
+  button: {
+
   }
 });
