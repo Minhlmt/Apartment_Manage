@@ -4,8 +4,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { ScreenKey } from './constants'
 import { Icon } from 'react-native-elements'
 import Home from '../components/Home/Home'
-import Bill from '../components/Services/Bill/Bill';
-import Repair from '../components/Services/Repair/Repair';
+import BillScreen from '../components/Services/Bill/Bill';
+import RepairScreen from '../components/Services/Repair/ScreenRepair';
 import Profile from '../components/Info/Info'
 const ServiceNavigationStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -13,9 +13,9 @@ export const Stack_Home_Service = () => {
   return (
     <ServiceNavigationStack.Navigator initialRouteName={ScreenKey.HomeService}>
       <ServiceNavigationStack.Screen name={ScreenKey.HomeService} component={Home} options={{ title: 'Trang chủ', headerShown: false }} />
-      <ServiceNavigationStack.Screen name={ScreenKey.Bill} component={Bill} options={{ title: 'Hóa đơn' }} />
+      <ServiceNavigationStack.Screen name={ScreenKey.Bill} component={BillScreen} options={{ title: 'Hóa đơn' }} />
 
-      <ServiceNavigationStack.Screen name={ScreenKey.Repair} component={Repair} options={{ title: 'Sửa chữa' }} />
+      <ServiceNavigationStack.Screen name={ScreenKey.Repair} component={RepairScreen} options={{ title: 'Sửa chữa' }} />
     </ServiceNavigationStack.Navigator>
   )
 }
@@ -25,6 +25,9 @@ export const Tab_Home_Profile = () => {
       initialRouteName={ScreenKey.TabHome}
       tabBarOptions={{
         activeTintColor: '#e91e63',
+        labelStyle:{
+          fontSize:20
+        }
       }}
     >
       <Tab.Screen

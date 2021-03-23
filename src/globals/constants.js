@@ -7,7 +7,9 @@ export const ScreenKey={
     ChooseApart:'chooseApart',
     Home:'home',
     Welcome:'welcome',
-    SignIn:'signin'
+    SignIn:'signin',
+    RepairService:'repairService',
+    ChooseImage:'chooseImage'
 
 }
 export const Service={

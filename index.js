@@ -13,4 +13,4 @@ import Info from './src/components/Info/Info'
 import Test from './src/components/Services/Repair/test'
 import {name as appName} from './app.json';
 
-AppRegistry.registerComponent(appName, () => Test);
+AppRegistry.registerComponent(appName, () => App);

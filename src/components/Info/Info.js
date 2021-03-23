@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, SectionList, Text, View, Image, TouchableOpacity } from 'react-native';
-import { Icon, Button } from 'react-native-elements'
+import { StyleSheet, SectionList, Text, View, Image, TouchableOpacity, Button } from 'react-native';
+import { Icon } from 'react-native-elements'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { URL, Text_Size } from '../../globals/constants'
 import { ScreenKey } from '../../globals/constants'
@@ -15,8 +15,7 @@ export default function Info(props) {
     const [flag, setFlag] = useState(true);
     const [flag2, setFlag2] = useState(true);
     const getInfoApart = async () => {
-        console.log("apart ", apartId);
-        console.log("token ", token);
+
 
         const res = await fetch(URL + `api/apart/${apartId}`, {
             method: 'GET',
@@ -27,6 +26,7 @@ export default function Info(props) {
 
         })
         const result = await res.json();
+        console.log(result);
         setAddress("toà " + result.data.block + " số nhà " + result.data.name);
     }
 
@@ -141,25 +141,20 @@ export default function Info(props) {
 
                 <Text style={styles.text_info}>{address}</Text>
             </View>
-            <View>
+            <View style={styles.myButtonContainer}>
 
-                <Button
-                    icon={
-                        <Icon name='exchange'
-                        type='font-awesome'
-                        color='#1abc9c'
-                        size={30}
-                    />
-                    }
-                    iconRight
-                    title="Button with right icon"
-                />
-                <Button
-                    title="Đăng xuất"
-                    type="outline"
-                    titleStyle={{ color: 'red' }}
-                    onPress={deleteAsync}
-                />
+                <View style={styles.myButton}>
+                    <TouchableOpacity>
+                        <Text>Thay đổi căn hộ</Text>
+                    </TouchableOpacity>
+                </View>
+                <View>
+                    <TouchableOpacity>
+                        <Text>Đăng xuất</Text>
+                    </TouchableOpacity>
+                </View>
+
+
             </View>
         </View>
     )
@@ -185,7 +180,8 @@ const styles = StyleSheet.create({
     text_info: {
         fontSize: Text_Size.Text,
         color: 'black',
-        marginTop: 5
+        marginTop: 5,
+
     },
     _title: {
         display: 'flex',
@@ -196,7 +192,17 @@ const styles = StyleSheet.create({
     },
     _text_title: {
         fontSize: 25,
-        color: "#f5f6fa"
+        color: "#f5f6fa",
+        textShadowRadius: 5, textShadowColor: '#2c3e50'
+    },
+    myButtonContainer:{
+        display:'flex',
+        alignItems:'stretch',
+        flexDirection:'column',
+        backgroundColor:'red'
+    },
+    myButton:{
+        alignItems:'center'
     }
 
 

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, SectionList, Text, TextInput, View, Button, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, SectionList, Text, TextInput, View, Button, Image, Alert, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import CalDate from '../Bill/CalDate'
 import { Text_Size, URL } from '../../../globals/constants'
+import { ScreenKey } from '../../../globals/constants'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-export default function Repair() {
+export default function Repair(props) {
   const [topic, setTopic] = useState('');
   const [content, setContent] = useState('');
   const [userId, setUserId] = useState('123');
@@ -14,7 +15,11 @@ export default function Repair() {
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
   const [flag, setFlag] = useState(true);
-  const [flag2, setFlag2] = useState(true);
+  const [flag2, setFlag2,] = useState(true);
+  const [image, setImage] = useState(null);
+  const { imageBase64, uri, width, height, mime } = props.route.params;
+ 
+  
   const getData = async () => {
 
     try {
@@ -69,12 +74,12 @@ export default function Repair() {
   const checkTextInput = () => {
     //Check for the Name TextInput
     if (!topic.trim()) {
-      alert('Please Enter Name');
+      Alert.alert('Thông báo','Chủ đề không được trống');
       return;
     }
     //Check for the Email TextInput
     if (!content.trim()) {
-      alert('Please Enter Email');
+      Alert.alert('Thông báo','Nội dung không được trống');
       return;
     }
     //Checked Successfully
@@ -82,10 +87,28 @@ export default function Repair() {
     alert('Success');
   };
   useEffect(() => {
+    console.log("123 ");
     getData();
     setFlag(false);
+    setImage({
+      uri: uri,
+      width: width,
+      height: height,
+      mime: mime,
 
-  }, [flag, flag2])
+    })
+
+  }, [flag, flag2,props.route.params?.imageBase64])
+  const renderAsset = (image) => {
+
+    return (<Image
+      style={{ width: 100, height: 100, resizeMode: 'contain' }}
+      source={image}
+    />);
+  }
+  const hanldeChooseImage = () => {
+    props.navigation.navigate(ScreenKey.ChooseImage)
+  }
 
   return (
     <View>
@@ -97,13 +120,7 @@ export default function Repair() {
           onChangeText={text => setTopic(text)}
         />
       </View>
-      {/* <View  style={styles.container}>
-      <Text style={styles.text}>Địa chỉ</Text>
-      <TextInput style={styles.text_input}
-        placeholderTextColor="#FF0000"
-        multiline
-        onChangeText={text => setAddress(text)}
-      /></View> */}
+
       <View style={styles.container}>
         <Text style={styles.text}>Nội dung</Text>
         <TextInput style={styles.text_input}
@@ -111,16 +128,22 @@ export default function Repair() {
           onChangeText={text => setContent(text)}
         />
       </View>
-      <View>
-        <Button
-          onPress={onPressLearnMore}
-          title="Learn More"
-          color="#841584"
-          accessibilityLabel="Learn more about this purple button"
-        />
+      <View style={{flexDirection:'row'}}>
+      
+        <View style={styles.button_image}>
+          <Button
+            onPress={hanldeChooseImage}
+            title="Chọn ảnh"
+            color="#841584"
+
+          />
+         
+        </View>
+        {image ? renderAsset(image) : null}
+
       </View>
 
-      <View style={{ marginTop: 10 }}>
+      <View style={styles.button}>
         <Button title="Gửi"
           onPress={checkTextInput}
         />
@@ -152,6 +175,13 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
 
   },
+  button_image: {
+    flexDirection:'column',
+    marginTop:10,
+    marginLeft:10
+    // justifyContent:'center'
+
+  },
   text: {
     color: 'black',
     fontSize: Text_Size.Text,
@@ -169,6 +199,7 @@ const styles = StyleSheet.create({
 
   },
   button: {
-
+    // marginLeft:10,
+    // marginRight:10
   }
 });
