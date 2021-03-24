@@ -12,6 +12,8 @@ export default function Info(props) {
     const [address, setAddress] = useState('toa c lo B ');
     const [apartId, setApartId] = useState();
     const [token, setToken] = useState();
+    const [userId, setUserId] = useState();
+    const [identify_card, setIndetify_card] = useState();
     const [flag, setFlag] = useState(true);
     const [flag2, setFlag2] = useState(true);
     const getInfoApart = async () => {
@@ -41,10 +43,13 @@ export default function Info(props) {
                 const _apartId = JSON.parse(apartId);
                 await setApartId(_apartId);
                 await setToken(_token);
+                console.log(_infoUser);
                 setName(_infoUser.name);
                 setEmail(_infoUser.email);
                 setPhone(_infoUser.phone);
                 setNativePlace(_infoUser.native_place);
+                setUserId(_infoUser.id);
+                setIndetify_card(_infoUser.identify_card);
                 setFlag(false);
 
 
@@ -59,7 +64,18 @@ export default function Info(props) {
         getInfoApart();
         setFlag2(false);
 
-    }, [flag, flag2])
+        const unsubscribe = props.navigation.addListener('focus', () => {
+            getData();
+            getInfoApart();
+            setFlag2(false);
+        });
+
+        return unsubscribe;
+
+
+
+
+    }, [flag, flag2, props.navigation])
     // const deleteAsync = async () => {
     //     try {
 
@@ -71,6 +87,17 @@ export default function Info(props) {
     // }
     const deleteAsync = () => {
         props.navigation.navigate(ScreenKey.SignIn);
+    }
+    const handleUpdateInfo = () => {
+        props.navigation.navigate(ScreenKey.ChangeInfo, {
+            user_id: userId,
+            name: name,
+            email: email,
+            phone: phone,
+            identify_card: identify_card,
+            native_place: nativePlace,
+            token: token
+        });
     }
 
     return (
@@ -142,17 +169,29 @@ export default function Info(props) {
                 <Text style={styles.text_info}>{address}</Text>
             </View>
             <View style={styles.myButtonContainer}>
+                <View style={styles.rowButton}>
+                    <TouchableOpacity onPress={() => console.log("swicth")} style={styles.appButtonContainer}>
+                        <View style={styles.myButton}>
 
-                <View style={styles.myButton}>
-                    <TouchableOpacity>
-                        <Text>Thay đổi căn hộ</Text>
+                            <Text style={styles.appButtonText}>Thay đổi căn hộ</Text>
+
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={handleUpdateInfo} style={styles.appButtonContainer}>
+                        <View style={styles.myButton}>
+
+                            <Text style={styles.appButtonText}>Cập nhật thông tin</Text>
+
+                        </View>
                     </TouchableOpacity>
                 </View>
-                <View>
-                    <TouchableOpacity>
-                        <Text>Đăng xuất</Text>
-                    </TouchableOpacity>
-                </View>
+                <TouchableOpacity onPress={deleteAsync} style={styles.appButtonContainerLogOut}>
+                    <View style={styles.myButtonLogOut}>
+
+                        <Text style={styles.appButtonText}>Đăng xuất</Text>
+
+                    </View>
+                </TouchableOpacity>
 
 
             </View>
@@ -187,23 +226,73 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: "row",
         justifyContent: 'center',
-        padding: 15,
-        backgroundColor: "#00a8ff"
+        padding: 25,
+        backgroundColor: "#00a8ff",
+        paddingVertical: 10,
+        paddingHorizontal: 12,
+        elevation: 8,
     },
     _text_title: {
         fontSize: 25,
-        color: "#f5f6fa",
-        textShadowRadius: 5, textShadowColor: '#2c3e50'
-    },
-    myButtonContainer:{
-        display:'flex',
-        alignItems:'stretch',
-        flexDirection:'column',
-        backgroundColor:'red'
-    },
-    myButton:{
-        alignItems:'center'
-    }
 
+        color: "#fff",
+        fontWeight: "bold",
+        alignSelf: "center",
+        textTransform: 'capitalize',
+    },
+    myButtonContainer: {
+        display: 'flex',
+        alignItems: 'stretch',
+        flexDirection: 'column',
+        // backgroundColor:'red'
+    },
+    myButton: {
+        alignItems: 'center',
+        // marginTop:10,
+
+    },
+    myButtonLogOut: {
+        alignItems: 'center',
+        // marginTop:10,
+
+    },
+    myText: {
+        fontSize: Text_Size.Text,
+
+    },
+    rowButton: {
+        flexDirection: 'row',
+        marginTop: 20,
+        justifyContent: 'space-around'
+    },
+    appButtonContainer: {
+        elevation: 8,
+        backgroundColor: "#009688",
+        borderRadius: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 12, marginTop: 10
+    },
+
+
+
+
+
+    appButtonText: {
+        fontSize: 18,
+        color: "#fff",
+        fontWeight: "bold",
+        alignSelf: "center",
+        textTransform: "uppercase",
+
+    },
+    appButtonContainerLogOut: {
+        elevation: 8,
+        backgroundColor: "#e74c3c",
+        borderRadius: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 12, marginTop: 15,
+        marginLeft: 10,
+        marginRight: 10
+    },
 
 });

@@ -9,7 +9,10 @@ export const ScreenKey={
     Welcome:'welcome',
     SignIn:'signin',
     RepairService:'repairService',
-    ChooseImage:'chooseImage'
+    ChooseImage:'chooseImage',
+    ChangeInfo:'changeInfo',
+    
+
 
 }
 export const Service={

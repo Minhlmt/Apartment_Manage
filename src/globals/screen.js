@@ -6,7 +6,7 @@ import { Icon } from 'react-native-elements'
 import Home from '../components/Home/Home'
 import BillScreen from '../components/Services/Bill/Bill';
 import RepairScreen from '../components/Services/Repair/ScreenRepair';
-import Profile from '../components/Info/Info'
+import ScreenInfo from '../components/Info/ScreenInfo'
 const ServiceNavigationStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 export const Stack_Home_Service = () => {
@@ -26,7 +26,10 @@ export const Tab_Home_Profile = () => {
       tabBarOptions={{
         activeTintColor: '#e91e63',
         labelStyle:{
-          fontSize:20
+          fontSize:20,
+          fontWeight: "bold",
+         
+         
         }
       }}
     >
@@ -44,7 +47,7 @@ export const Tab_Home_Profile = () => {
 
       <Tab.Screen
         name={ScreenKey.TabProfile}
-        component={Profile}
+        component={ScreenInfo}
       
         options={{
           

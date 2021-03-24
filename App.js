@@ -7,77 +7,63 @@ import {Tab_Home_Profile} from './src/globals/screen'
 import Apartment from './src/components/Apartment/Apartment'
 import { ScreenKey } from './src/globals/constants';
 import SignIn from './src/components/SignIn/SignIn'
+import messaging from '@react-native-firebase/messaging';
 // import PushNotificationIOS from "@react-native-community/push-notification-ios";
 import PushNotification from "react-native-push-notification";
 import Firesase from '@react-native-firebase/app' 
+import {PushNotify} from './src/globals/pushNotification'
 const MainNavigationStack = createStackNavigator();
 export default function App({navigation}) {
   const [checkToken, setCheckToken] = useState(false);
+  const [notification,setNotification]=useState(true);
+  const handleRefesh=()=>{
+    setNotification(false);
+  }
   useEffect(()=>{
-    Firesase.initializeApp();
-    PushNotification.configure({
+    PushNotify(navigation,handleRefesh)
+    // Firesase.initializeApp();
+    
+    // PushNotification.configure({
    
-      onRegister: function (token) {
-        console.log("TOKEN:", token);
-      },
+    //   onRegister: function (token) {
+    //     console.log("TOKEN:", token);
+    //   },
     
     
-      onNotification: function (notification) {
-        console.log("NOTIFICATION:", notification);
+    //   onNotification: function (notification) {
+    //     console.log("NOTIFICATION:", notification);
+    //     setNotification(notification)
+      
+    //     // notification.finish(PushNotificationIOS.FetchResult.NoData);
+    //   },
+    
+    //   onAction: function (notification) {
+    //     console.log("ACTION:", notification.action);
+    //     console.log("NOTIFICATION:", notification);
     
       
-        // notification.finish(PushNotificationIOS.FetchResult.NoData);
-      },
-    
-      onAction: function (notification) {
-        console.log("ACTION:", notification.action);
-        console.log("NOTIFICATION:", notification);
-    
-      
-      },
+    //   },
     
      
-      onRegistrationError: function(err) {
-        console.error(err.message, err);
-      },
+    //   onRegistrationError: function(err) {
+    //     console.error(err.message, err);
+    //   },
     
      
-      permissions: {
-        alert: true,
-        badge: true,
-        sound: true,
-      },
+    //   permissions: {
+    //     alert: true,
+    //     badge: true,
+    //     sound: true,
+    //   },
     
     
-      popInitialNotification: true,
+    //   popInitialNotification: true,
     
     
-      requestPermissions: true,
-    });
-  })
-  
-  
-  // useEffect(()=>{
-  //   const getData = async () => {
-  //     try {
-  //       const value = await AsyncStorage.getItem('token');
-  //         if (value !== null) {
-  //         let valueObject = JSON.parse(value);
-  //         setCheckToken(true)
-  //         console.log(valueObject);
-  //       }
-  //       else {
-  //         console.log(value);
-  //         setCheckToken(false);
-  //       }
-  //     } catch (e) {
-  //       // error reading value
-  //     }
-  //   }
-  //  getData();
-  
-  // },[])
- 
+    //   requestPermissions: true,
+    // });
+  },[notification])
+
  
 
 
