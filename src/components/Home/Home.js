@@ -27,33 +27,18 @@ export default function Home(props) {
            <View style={styles.service_h}>
                <ItemService id={Service.Bill} src='' name='Hóa đơn' navigation={props.navigation}/>
                <ItemService id={Service.Repair} src='' name='Sửa chữa' navigation={props.navigation}/>
-               <ItemService src='' name='rty'/>
+               <ItemService  name='' navigation={props.navigation}/>
            </View>
            </View>
            <View style={styles.service_v}>
            <View style={styles.service_h}>
-               <ItemService src='' name='yui'/>
+               <ItemService id={Service.NotifyRepair} name='TB sửa chữa' navigation={props.navigation}/>
                <ItemService src='' name='opl'/>
 
                <ItemService src='' name='jhg'/>
            </View>
            </View>
-           <View>
-               <Text style={styles.title}>Notification</Text>
-           </View>
-          <View>
-          <FlatList
-        data={[
-          {key: 'Devin'},
-          {key: 'Dan'},
-          {key: 'Dominic'},
-          {key: 'Jackson'},
-          {key: 'James'},
           
-        ]}
-        renderItem={({item}) => <ItemNotification >{item.key}</ItemNotification>}
-      />
-          </View>
            
         </ScrollView>
     )

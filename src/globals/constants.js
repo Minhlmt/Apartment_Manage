@@ -11,13 +11,19 @@ export const ScreenKey={
     RepairService:'repairService',
     ChooseImage:'chooseImage',
     ChangeInfo:'changeInfo',
+    NotifyManage:'notifyManage',
+    NotifyDetailManage:'notifyDetailManage',
+    TabNotify:'tabNotify',
+    NotifyRepair:'notifyRepair',
+    NotifyDetailRepair:'notifyDetailRepair',
     
 
 
 }
 export const Service={
     Bill:'bill',
-    Repair:'repair'
+    Repair:'repair',
+    NotifyRepair:'notifyRepair'
 }
 export const Text_Size={
     Text:20,

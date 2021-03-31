@@ -1,23 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet,SectionList ,Text, View,Image, TouchableOpacity} from 'react-native';
+import {ScreenKey} from '../../../globals/constants'
 export default function ItemNotification(props){
+    
+    const handleClick=()=>{
+       props.navigation.navigate(ScreenKey.NotifyDetailRepair,{
+        notice_id:props.id,
+        token:props.token
+       })
+    }
     return(
-        <TouchableOpacity style={styles.container}>
+        <TouchableOpacity  style={props.is_read_user?styles.container1:styles.container2} onPress={handleClick}>
             <Image style={{width: 50, height: 50, borderRadius: 400/ 2}} source={{
           uri: 'https://reactnative.dev/img/tiny_logo.png',
         }}/>
-        <Text style={styles.text}>ok chua ban quan ly chung cu thong bao ve viec thu tien nha</Text>
+        <Text style={styles.text}>{props.title}</Text>
         </TouchableOpacity>
     )
 }
 const styles = StyleSheet.create({
-   container:{
-       flexDirection:'row',
-       backgroundColor:"#BDC3C7",
-       borderBottomColor:'gray',
-       borderBottomWidth:1,
-       marginTop:5
-   },
+    container1: {
+        flexDirection: 'row',
+        backgroundColor: "#EEEEEE",
+        borderBottomColor: 'gray',
+        borderBottomWidth: 1,
+        marginTop: 15,
+        padding:10,
+        paddingVertical: 20,
+        paddingHorizontal: 15,
+        elevation: 5,
+      },
+      container2: {
+        flexDirection: 'row',
+        backgroundColor: "#BBBBBB",
+        borderBottomColor: 'gray',
+        borderBottomWidth: 1,
+        marginTop: 15,
+        padding:10,
+        paddingVertical: 20,
+        paddingHorizontal: 15,
+        elevation: 5,
+      },
    text:{
        flex:1,
     color:'black',

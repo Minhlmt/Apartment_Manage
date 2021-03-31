@@ -3,10 +3,12 @@ import { StyleSheet, SectionList, Text, View, Image, TouchableOpacity, Button, T
 import { Text_Size, URL } from '../../globals/constants'
 import {ScreenKey} from '../../globals/constants'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Spinner from 'react-native-loading-spinner-overlay';
 export default function ChangeInfo(props) {
   const {name,user_id, email, phone,identify_card,native_place,token } = props.route.params;
   const [newEmail, setNewEmail] = useState(email);
   const [newPhone, setNewPhone] = useState(phone);
+  const [spinner, setSpinner] = useState(false);
   const getData = async () => {
     try {
         const infoUser = await AsyncStorage.getItem('infoUser');
@@ -43,7 +45,7 @@ export default function ChangeInfo(props) {
     })
     const result = await res.json();
     if(res.status===200){
-      console.log(result.data);
+      setSpinner(false);
       storeData(result.data);
       getData();
       Alert.alert(
@@ -63,11 +65,17 @@ export default function ChangeInfo(props) {
    
 }
   const handleUpdateInfo=()=>{
+    setSpinner(true);
     sendDataUpdate();
     
   }
   return (
     <View>
+       <Spinner
+                visible={spinner}
+                textContent={'Loading...'}
+                textStyle={styles.spinnerTextStyle}
+            />
       <View style={styles.container}>
         <Text style={styles.text}>Email</Text>
         <TextInput

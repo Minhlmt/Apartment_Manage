@@ -18,6 +18,7 @@ export default function SumBill({ route }) {
     const [month, setMonth] = useState(0);
     const [year, setYear] = useState(0);
     const { monthYear, apartId, token } = route.params;
+    console.log("apartId ",apartId)
     const showPicker = useCallback((value) => setShow(value), []);
     let tempSum=0;
     const onValueChange = useCallback(
@@ -50,8 +51,10 @@ export default function SumBill({ route }) {
             },
         })
         const result_elect = await res_elec.json();
+        console.log('tien nuoc ',result_elect);
         if (res_elec.status === 200) {
             tempSum=tempSum+result_elect.data.total_money;
+            console.log('tong tien dien ',result_elect.data.total_money)
             var _sumPrice_elec = numeral(result_elect.data.total_money.toString()).format('0,0');
             setElectric(_sumPrice_elec);
           
@@ -68,6 +71,7 @@ export default function SumBill({ route }) {
         const result_water = await res_water.json();
         if (res_water.status === 200) {
             tempSum=tempSum+result_water.data.total_money;
+            console.log('tien nuoc temp sum',tempSum)
             var _sumPrice_water = numeral(result_water.data.total_money.toString()).format('0,0');
             setWater(_sumPrice_water)
            
@@ -82,20 +86,23 @@ export default function SumBill({ route }) {
             },
           })
           const result_other = await res_other.json();
-        
+          console.log('hoa don kahc ',result_other)
+          console.log(res_other.status)
+          setSpinner(false);
           if(res_other.status===200)
           {
 
              let _sumPrice_other= result_other.data.apart_management+result_other.data.parking_fees+result_other.data.maintenance_fee
              +result_other.data.service_charge+result_other.data.other_fees;
              tempSum=tempSum+_sumPrice_other;
+             
              let _sumPriceFormat=numeral(_sumPrice_other.toString()).format('0,0');
             
              setOther(_sumPriceFormat);
           }
 
           setSumPrice(numeral(tempSum.toString()).format('0,0'));
-          setSpinner(false);
+         
 
 
     }
@@ -125,7 +132,7 @@ export default function SumBill({ route }) {
     const handleClick = () => {
         setSpinner(true);
         getdata();
-        setSpinner(false);
+        
     }
 
     return (

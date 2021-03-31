@@ -54,6 +54,7 @@ export default function WaterBill({route}) {
         })
         const result = await res.json();
       
+      
         setSpinner(false);
         if (res.status === 200) {
             setOldIndex(result.data.old_index);
@@ -100,6 +101,11 @@ export default function WaterBill({route}) {
 
     return (
         <View>
+            <Spinner
+                visible={spinner}
+                textContent={'Loading...'}
+                textStyle={styles.spinnerTextStyle}
+            />
               <View style={styles.container}>
                 <TouchableOpacity onPress={() => showPicker(true)}>
                     <Text style={styles.text}>Tháng {month}, năm {year}</Text>

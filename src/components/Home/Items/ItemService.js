@@ -6,16 +6,20 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function ItemService(props){
   const [token,setToken]=useState('');
   const [apartId,setApartID]=useState('');
+  const [userId,setUserId]=useState();
   const getData = async () => {
     try {
       const _token = await AsyncStorage.getItem('token');
       const _apartId=await AsyncStorage.getItem('apartId');
+      const _userId=await AsyncStorage.getItem('infoUser');
      
         if (_token !== null&& _apartId!==null) {
           const _tokenObject=JSON.parse(_token);
           const _apartIdObject=JSON.parse(_apartId);
+          const _userIdObject=JSON.parse(_userId);
           setToken(_tokenObject);
           setApartID(_apartIdObject);
+          setUserId(_userIdObject.id)
       
       }
      
@@ -35,6 +39,12 @@ export default function ItemService(props){
     }
     if(props.id===Service.Repair){
       props.navigation.navigate(ScreenKey.Repair)
+    }
+    if(props.id===Service.NotifyRepair){
+      props.navigation.navigate(ScreenKey.NotifyRepair,{
+        token:token,
+        userId:userId
+      })
     }
   }
     return(

@@ -4,18 +4,20 @@ import { Icon } from 'react-native-elements'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { URL, Text_Size } from '../../globals/constants'
 import { ScreenKey } from '../../globals/constants'
+import Spinner from 'react-native-loading-spinner-overlay';
 export default function Info(props) {
-    const [name, setName] = useState('nguyen van a');
-    const [email, setEmail] = useState('abc@gmail.com');
-    const [phone, setPhone] = useState('0909099900');
-    const [nativePlace, setNativePlace] = useState('quan 5 tphcm');
-    const [address, setAddress] = useState('toa c lo B ');
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [nativePlace, setNativePlace] = useState('');
+    const [address, setAddress] = useState('');
     const [apartId, setApartId] = useState();
     const [token, setToken] = useState();
     const [userId, setUserId] = useState();
     const [identify_card, setIndetify_card] = useState();
     const [flag, setFlag] = useState(true);
     const [flag2, setFlag2] = useState(true);
+    const [spinner, setSpinner] = useState(false);
     const getInfoApart = async () => {
 
 
@@ -28,8 +30,9 @@ export default function Info(props) {
 
         })
         const result = await res.json();
-        console.log(result);
+
         setAddress("toà " + result.data.block + " số nhà " + result.data.name);
+        setSpinner(false);
     }
 
     const getData = async () => {
@@ -60,11 +63,13 @@ export default function Info(props) {
         }
     }
     useEffect(() => {
+        setSpinner(true);
         getData();
         getInfoApart();
         setFlag2(false);
 
         const unsubscribe = props.navigation.addListener('focus', () => {
+            setSpinner(true);
             getData();
             getInfoApart();
             setFlag2(false);
@@ -102,8 +107,14 @@ export default function Info(props) {
 
     return (
         <View>
+          
+            <Spinner
+                visible={spinner}
+                textContent={'Loading...'}
+                textStyle={styles.spinnerTextStyle}
+            />
             <View style={styles._title}>
-                <Text style={styles._text_title}>Thông tin cá nhân</Text>
+                <Text style={styles._text_title}  >Thông tin cá nhân</Text>
             </View>
 
             <View style={styles.container}>
@@ -117,7 +128,10 @@ export default function Info(props) {
                     <Text style={styles.text} >Họ tên</Text>
                 </View>
 
-                <Text style={styles.text_info}>{name}</Text>
+               
+            </View>
+            <View style={{flexDirection:'row',justifyContent:'flex-end'}}>
+            <Text style={styles.text_info}>{name}</Text>
             </View>
             <View style={styles.container}>
                 <View style={styles._row}>
@@ -126,10 +140,15 @@ export default function Info(props) {
                         color='#e74c3c'
                         size={30}
                     />
-                    <Text style={styles.text}>Email</Text>
-                </View>
+                  
+                        <Text style={styles.text}>Email</Text>
+                  
 
-                <Text style={styles.text_info}>{email}</Text>
+                </View>
+               
+            </View>
+            <View style={{flexDirection:'row',justifyContent:'flex-end'}}>
+            <Text style={styles.text_info}>{email}</Text>
             </View>
             <View style={styles.container}>
                 <View style={styles._row}>
@@ -141,7 +160,10 @@ export default function Info(props) {
                     <Text style={styles.text}>Điện thoại</Text>
                 </View>
 
-                <Text style={styles.text_info}>{phone}</Text>
+               
+            </View>
+            <View style={{flexDirection:'row',justifyContent:'flex-end'}}>
+            <Text style={styles.text_info}>{phone}</Text>
             </View>
             <View style={styles.container}>
                 <View style={styles._row}>
@@ -153,7 +175,10 @@ export default function Info(props) {
                     <Text style={styles.text}>Quê Quán</Text>
                 </View>
 
-                <Text style={styles.text_info}>{nativePlace}</Text>
+                
+            </View>
+            <View style={{flexDirection:'row',justifyContent:'flex-end'}}>
+            <Text style={styles.text_info}>{nativePlace}</Text>
             </View>
 
             <View style={styles.container}>
@@ -166,7 +191,10 @@ export default function Info(props) {
                     <Text style={styles.text}>Địa chỉ</Text>
                 </View>
 
-                <Text style={styles.text_info}>{address}</Text>
+               
+            </View>
+            <View style={{flexDirection:'row',justifyContent:'flex-end'}}>
+            <Text style={styles.text_info}>{address}</Text>
             </View>
             <View style={styles.myButtonContainer}>
                 <View style={styles.rowButton}>
@@ -201,8 +229,8 @@ export default function Info(props) {
 const styles = StyleSheet.create({
     container: {
         flexDirection: "row",
-        justifyContent: 'space-between',
-        margin: 10
+        // justifyContent: 'space-between',
+        margin: 5
     },
     _row: {
         flexDirection: 'row',
@@ -213,13 +241,15 @@ const styles = StyleSheet.create({
     text: {
         fontSize: Text_Size.Text,
         color: 'black',
-        marginLeft: 10
-
+        marginLeft: 10,
+       
     },
     text_info: {
         fontSize: Text_Size.Text,
         color: 'black',
         marginTop: 5,
+        flexWrap: 'wrap' 
+
 
     },
     _title: {
@@ -278,7 +308,7 @@ const styles = StyleSheet.create({
 
 
     appButtonText: {
-        fontSize: 18,
+        fontSize: 16,
         color: "#fff",
         fontWeight: "bold",
         alignSelf: "center",

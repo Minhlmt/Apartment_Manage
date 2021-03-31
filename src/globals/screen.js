@@ -7,6 +7,8 @@ import Home from '../components/Home/Home'
 import BillScreen from '../components/Services/Bill/Bill';
 import RepairScreen from '../components/Services/Repair/ScreenRepair';
 import ScreenInfo from '../components/Info/ScreenInfo'
+import ScreenNotifyManage from '../components/Notify/ScreenNotifyManage'
+import ScreenNotifyRepair from '../components/Services/NotifyRepair/ScreenNotifyRepair'
 const ServiceNavigationStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 export const Stack_Home_Service = () => {
@@ -16,6 +18,8 @@ export const Stack_Home_Service = () => {
       <ServiceNavigationStack.Screen name={ScreenKey.Bill} component={BillScreen} options={{ title: 'Hóa đơn' }} />
 
       <ServiceNavigationStack.Screen name={ScreenKey.Repair} component={RepairScreen} options={{ title: 'Sửa chữa' }} />
+      <ServiceNavigationStack.Screen name={ScreenKey.NotifyRepair} component={ScreenNotifyRepair} options={{ title: 'TB sửa chữa' }} />
+      
     </ServiceNavigationStack.Navigator>
   )
 }
@@ -26,7 +30,7 @@ export const Tab_Home_Profile = () => {
       tabBarOptions={{
         activeTintColor: '#e91e63',
         labelStyle:{
-          fontSize:20,
+          fontSize:16,
           fontWeight: "bold",
          
          
@@ -37,9 +41,20 @@ export const Tab_Home_Profile = () => {
         name={ScreenKey.TabHome}
         component={Stack_Home_Service}
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: 'Trang chủ',
           tabBarIcon: () => (
             <Icon name="home" type='feather' color='#f1c40f'
+              size={30} />
+          )
+        }}
+      />
+        <Tab.Screen
+        name={ScreenKey.TabNotify}
+        component={ScreenNotifyManage}
+        options={{
+          tabBarLabel: 'Thông báo',
+          tabBarIcon: () => (
+            <Icon name="notifications-outline" type='ionicon' color='#f1c40f'
               size={30} />
           )
         }}
@@ -51,7 +66,7 @@ export const Tab_Home_Profile = () => {
       
         options={{
           
-          tabBarLabel: 'Profile',
+          tabBarLabel: 'Cá nhân',
           tabBarIcon: () => (
             <Icon name='user'
               type='feather'

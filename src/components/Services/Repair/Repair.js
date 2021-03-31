@@ -17,13 +17,14 @@ export default function Repair(props) {
   const [flag, setFlag] = useState(true);
   const [flag2, setFlag2,] = useState(true);
   const [image, setImage] = useState(null);
+  const [imagePublic, setImagePublic] = useState();
   const { imageBase64, uri, width, height, mime } = props.route.params;
- 
-  
+
+
   const getData = async () => {
 
     try {
-      console.log("123 " + userId + " " + token + " " + apartId);
+     
       const _token = await AsyncStorage.getItem('token');
       const _apartId = await AsyncStorage.getItem('apartId');
       const _userId = await AsyncStorage.getItem('infoUser');
@@ -39,13 +40,75 @@ export default function Repair(props) {
         setToken(_tokenObject);
         setApartId(_apartIdObject);
         setFlag2(false);
-        console.log(userId + " " + token + " " + apartId);
+
       }
 
     } catch (e) {
       // error reading value
     }
   }
+  const sendImage = async () => {
+    if (imageBase64 !== '') {
+      const res = await fetch(URL + 'api/upload-image/upload', {
+        method: 'POST',
+        headers: {
+          Authorization: 'Bearer ' + `${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          data: imageBase64
+        }),
+      })
+      const result = await res.json();
+      if (res.status === 200) {
+        const res1 = await fetch(URL + 'api/repair/add', {
+          method: 'POST',
+          headers: {
+            Authorization: 'Bearer ' + `${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            title: topic,
+            content: content,
+            author: userId,
+            image: result.data
+
+          }),
+        })
+        if(res1.status===200){
+          Alert.alert('Thông báo','Báo cáo thành công',
+          [
+            
+            { text: "OK"}
+          ]);
+        }
+
+      }
+    }
+    else{
+      const res1 = await fetch(URL + 'api/repair/add', {
+        method: 'POST',
+        headers: {
+          Authorization: 'Bearer ' + `${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: topic,
+          content: content,
+          author: userId,
+          image: ''
+
+        }),
+      })
+      if(res1.status===200){
+        Alert.alert('Thông báo','Báo cáo thành công',
+        [
+          { text: "OK" }
+        ]);
+      }
+    }
+  }
+ 
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -53,7 +116,7 @@ export default function Repair(props) {
     setDate(currentDate);
     let date = CalDate(currentDate);
     let string_date = date.dd + '/' + date.mm + '/' + date.yyyy
-    console.log(string_date);
+  
 
 
   };
@@ -71,23 +134,27 @@ export default function Repair(props) {
     showMode('time');
   };
 
-  const checkTextInput = () => {
+  const checkTextInput = async () => {
+   
     //Check for the Name TextInput
     if (!topic.trim()) {
-      Alert.alert('Thông báo','Chủ đề không được trống');
+      Alert.alert('Thông báo', 'Chủ đề không được trống');
       return;
     }
     //Check for the Email TextInput
     if (!content.trim()) {
-      Alert.alert('Thông báo','Nội dung không được trống');
+      Alert.alert('Thông báo', 'Nội dung không được trống');
       return;
     }
-    //Checked Successfully
-    //Do whatever you want
-    alert('Success');
+    else{
+      await sendImage();
+    }
+
+   
+
   };
   useEffect(() => {
-    console.log("123 ");
+   
     getData();
     setFlag(false);
     setImage({
@@ -98,7 +165,7 @@ export default function Repair(props) {
 
     })
 
-  }, [flag, flag2,props.route.params?.imageBase64])
+  }, [flag, flag2, props.route.params?.imageBase64])
   const renderAsset = (image) => {
 
     return (<Image
@@ -124,12 +191,13 @@ export default function Repair(props) {
       <View style={styles.container}>
         <Text style={styles.text}>Nội dung</Text>
         <TextInput style={styles.text_input}
+        multiline
           placeholderTextColor="#FF0000"
           onChangeText={text => setContent(text)}
         />
       </View>
-      <View style={{flexDirection:'row'}}>
-      
+      <View style={{ flexDirection: 'row' }}>
+
         <View style={styles.button_image}>
           <Button
             onPress={hanldeChooseImage}
@@ -137,17 +205,19 @@ export default function Repair(props) {
             color="#841584"
 
           />
-         
+
         </View>
         {image ? renderAsset(image) : null}
 
       </View>
 
-      <View style={styles.button}>
-        <Button title="Gửi"
-          onPress={checkTextInput}
-        />
-      </View>
+      <TouchableOpacity onPress={checkTextInput} style={styles.appButtonContainer}>
+                    <View style={styles.myButtonLogOut}>
+
+                        <Text style={styles.appButtonText}>Gửi</Text>
+
+                    </View>
+                </TouchableOpacity>
 
       {/* <View>
         <Button onPress={showDatepicker} title="Show date picker!" />
@@ -176,9 +246,10 @@ const styles = StyleSheet.create({
 
   },
   button_image: {
-    flexDirection:'column',
-    marginTop:10,
-    marginLeft:10
+    flexDirection: 'column',
+    marginTop: 10,
+    marginLeft: 10,
+    
     // justifyContent:'center'
 
   },
@@ -198,8 +269,26 @@ const styles = StyleSheet.create({
     marginRight: 10
 
   },
-  button: {
-    // marginLeft:10,
-    // marginRight:10
-  }
+  appButtonContainer: {
+    elevation: 8,
+    backgroundColor: "#009688",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12, marginTop: 10,
+    
+},
+
+
+
+
+
+appButtonText: {
+    fontSize: 16,
+    color: "#fff",
+    fontWeight: "bold",
+    alignSelf: "center",
+    textTransform: "uppercase",
+
+},
+ 
 });

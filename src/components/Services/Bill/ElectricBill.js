@@ -47,7 +47,7 @@ export default function ElectricBill({ route }) {
         [date, showPicker],
     );
     const senddata = async () => {
-       console.log("moth ",month);
+     
         const res = await fetch(URL + `api/elec-bill/month-bill/${apartId}/${month}/${year}`, {
             method: 'GET',
             headers: {

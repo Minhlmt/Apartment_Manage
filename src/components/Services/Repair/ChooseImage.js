@@ -104,7 +104,7 @@ export default function ChooseImage(props) {
 const styles = StyleSheet.create({
   font_size: {
     fontSize: Text_Size.Text,
-    padding:10,
+    padding:7,
     paddingLeft:20,
    
   },
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
   font_title:{
     color:"#1abc9c",
     fontSize: Text_Size.Text_title,
-    padding:20,
+    padding:10,
     borderBottomWidth:0.3,
     borderColor:"#1abc9c"
   }

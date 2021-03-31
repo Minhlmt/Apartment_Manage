@@ -53,6 +53,7 @@ export default function ElectricBill({ route }) {
         },
       })
       const result = await res.json();
+     
       setSpinner(false);
       if(res.status===200)
       {
