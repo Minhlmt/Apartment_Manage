@@ -9,17 +9,9 @@ const renderItem = ({ item }) => {
   const t=false;
   return (
     <ItemNotification id={item._id} title={item.title} is_read_user={item.is_read_user} navigation={props.navigation}/>
-    // <TouchableOpacity  style={item.is_read_user?styles.container1:styles.container2}>
-    //   <Image style={{ width: 50, height: 50, borderRadius: 400 / 2 }} source={require('../../../../image/bell.png')}
-    //    />
-    //   <Text style={styles.text}>{item.title}</Text>
-    // </TouchableOpacity>
-  
   );
 };
-const handleDetail=(id)=>{
-  console.log(id);
-}
+
 
 let stopFetchMore = true;
 
@@ -43,15 +35,8 @@ export default function App(props) {
   const [limit,setLimit]=useState(1);
   const {token,userId}=props.route.params;
   const renderItem = ({ item }) => {
-    const t=false;
     return (
       <ItemNotification id={item._id} title={item.title} is_read_user={item.is_read_user} navigation={props.navigation} token={token}/>
-      // <TouchableOpacity  style={item.is_read_user?styles.container1:styles.container2}>
-      //   <Image style={{ width: 50, height: 50, borderRadius: 400 / 2 }} source={require('../../../../image/bell.png')}
-      //    />
-      //   <Text style={styles.text}>{item.title}</Text>
-      // </TouchableOpacity>
-    
     );
   };
 
@@ -64,10 +49,9 @@ const fetchData=async()=>{
     },
   })
   const result=await res.json();
-  console.log(result);
-  console.log(res.status);
+  console.log("res ",result);
   if(res.status===200){
-    setData(result.data);
+    setData(data.concat(result.data));
   }
 }
   useEffect(() => {
@@ -76,8 +60,12 @@ const fetchData=async()=>{
 
   const handleOnEndReached = async () => {
     console.log("het trang");
-    // setPage(page+1);
-    // console.log(page);
+    setPage(page+1);
+    console.log(page);
+    if(page!==1){
+      fetchData();
+    }
+   
     // setPage(page + 1);
     // console.log(page);
     // setLoadingMore(true);

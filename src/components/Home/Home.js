@@ -19,7 +19,7 @@ const DATA = [
   ];
 export default function Home(props) {
     return (
-        <ScrollView>
+        <ScrollView style={{flex: 1}}>
            <View>
                <Text style={styles.title}>Service</Text>
            </View>
@@ -47,7 +47,8 @@ const styles = StyleSheet.create({
    
     service_h:{
         flexDirection:'row',
-        justifyContent:'space-around'
+        justifyContent:'space-around',
+        paddingVertical: 10
     },
     title:{
        fontSize:20,

@@ -16,9 +16,9 @@ const cld = new Cloudinary({
     }
 });
 export default function NotifyDetailRepair(props) {
-    const [title, setTitle] = useState('đèn cầu thang');
-    const [content, setContent] = useState("đèn cầu thang bị hỏng yêu cầu ban quản lý sửa gấp tối đéo thấy đường đi");
-    const [createDate, setCreateDate] = useState('3/26/2021, 11:04:43 AM');
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
+    const [createDate, setCreateDate] = useState('');
     const [image, setImage] = useState('');
     const [spinner, setSpinner] = useState(false);
     const { notice_id, token } = props.route.params;
@@ -31,8 +31,6 @@ export default function NotifyDetailRepair(props) {
                 Authorization: 'Bearer ' + `${token}`,
                 'Content-Type': 'application/json',
             },
-
-
         })
         const result = await res.json();
         setSpinner(false);

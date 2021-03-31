@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import {StyleSheet,View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { ScreenKey } from './constants'
@@ -19,7 +20,7 @@ export const Stack_Home_Service = () => {
 
       <ServiceNavigationStack.Screen name={ScreenKey.Repair} component={RepairScreen} options={{ title: 'Sửa chữa' }} />
       <ServiceNavigationStack.Screen name={ScreenKey.NotifyRepair} component={ScreenNotifyRepair} options={{ title: 'TB sửa chữa' }} />
-      
+
     </ServiceNavigationStack.Navigator>
   )
 }
@@ -29,26 +30,32 @@ export const Tab_Home_Profile = () => {
       initialRouteName={ScreenKey.TabHome}
       tabBarOptions={{
         activeTintColor: '#e91e63',
-        labelStyle:{
-          fontSize:16,
+        labelStyle: {
+          fontSize: 16,
           fontWeight: "bold",
-         
-         
-        }
+
+
+        },
+    
+
       }}
     >
       <Tab.Screen
         name={ScreenKey.TabHome}
+        
         component={Stack_Home_Service}
         options={{
           tabBarLabel: 'Trang chủ',
           tabBarIcon: () => (
-            <Icon name="home" type='feather' color='#f1c40f'
+            <View style={styles.button_tab}>
+                  <Icon name="home" type='feather' color='#f1c40f' 
               size={30} />
+            </View>
+          
           )
         }}
       />
-        <Tab.Screen
+      <Tab.Screen
         name={ScreenKey.TabNotify}
         component={ScreenNotifyManage}
         options={{
@@ -63,9 +70,9 @@ export const Tab_Home_Profile = () => {
       <Tab.Screen
         name={ScreenKey.TabProfile}
         component={ScreenInfo}
-      
+
         options={{
-          
+
           tabBarLabel: 'Cá nhân',
           tabBarIcon: () => (
             <Icon name='user'
@@ -79,3 +86,16 @@ export const Tab_Home_Profile = () => {
     </Tab.Navigator>
   )
 }
+const styles = StyleSheet.create({
+  button_tab: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    shadowOpacity: 0.51,
+    shadowRadius: 13.16,
+
+    elevation: 20,
+  }
+});
