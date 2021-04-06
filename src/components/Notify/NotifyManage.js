@@ -1,20 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 
-import Item from '../Home/Items/ItemNotification'
 import {URL} from '../../globals/constants'
+import ItemNotification from '../Home/Items/ItemNotification'
+
 
 const renderItem = ({ item }) => {
   return (
-    <TouchableOpacity style={styles.container1} onPress >
-      <Image style={{ width: 50, height: 50, borderRadius: 400 / 2 }} source={{
-        uri: 'https://reactnative.dev/img/tiny_logo.png',
-      }} />
-      <Text style={styles.text}>{item}</Text>
-    </TouchableOpacity>
-  
+    <ItemNotification id={item._id} title={item.title} is_read_user={item.is_read_user} navigation={props.navigation}/>
   );
 };
+
 
 let stopFetchMore = true;
 
@@ -31,39 +27,51 @@ const ListFooterComponent = () => (
   </Text>
 );
 
-export default function App() {
+export default function App(props) {
   const [data, setData] = useState([]);
   const [loadingMore, setLoadingMore] = useState(false);
   const [page, setPage] = useState(1);
-  // const fetchData = async () => {
-  //   const response = await fakeServer(20);
-  //   setData([...response]);
-  // };
+  const [limit,setLimit]=useState(1);
+  const {token,userId}=props.route.params;
+  const renderItem = ({ item }) => {
+    return (
+      <ItemNotification id={item._id} title={item.title} is_read_user={item.is_read_user} navigation={props.navigation} token={token}/>
+    );
+  };
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
-  // const getdata= async()=>{
-  //   const res=fetch(URL+'')
-  // }
+const fetchData=async()=>{
+  const res = await fetch(URL + `api/repair/all/${userId}/${page}/10`, {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + `${token}`,
+      'Content-Type': 'application/json',
+    },
+  })
+  const result=await res.json();
+  console.log("res ",result);
+  if(res.status===200){
+    setData(data.concat(result.data));
+  }
+}
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleOnEndReached = async () => {
-    // setPage(page + 1);
-    // console.log(page);
-    // setLoadingMore(true);
-    // if (!stopFetchMore) {
-    //   const response = await fakeServer(20);
-    //   if (response === 'done') return setLoadingMore(false);
-    //   setData([...data, ...response]);
-    //   stopFetchMore = true;
-    // }
-    // setLoadingMore(false);
+    console.log("het trang");
+    setPage(page+1);
+    console.log(page);
+    if(page!==1){
+      fetchData();
+    }
+   
+
   };
 
   return (
     <FlatList
       data={data}
-      keyExtractor={item => item}
+      keyExtractor={(item,index) => index.toString()}
       renderItem={renderItem}
       onEndReached={handleOnEndReached}
       onEndReachedThreshold={0.1}
@@ -84,15 +92,30 @@ const styles = StyleSheet.create({
   },
   container1: {
     flexDirection: 'row',
-    backgroundColor: "#BDC3C7",
+    backgroundColor: "#EEEEEE",
     borderBottomColor: 'gray',
     borderBottomWidth: 1,
-    marginTop: 5
+    marginTop: 15,
+    padding:10,
+    paddingVertical: 20,
+    paddingHorizontal: 15,
+    elevation: 5,
+  },
+  container2: {
+    flexDirection: 'row',
+    backgroundColor: "#BBBBBB",
+    borderBottomColor: 'gray',
+    borderBottomWidth: 1,
+    marginTop: 15,
+    padding:10,
+    paddingVertical: 20,
+    paddingHorizontal: 15,
+    elevation: 5,
   },
   text: {
     flex: 1,
     color: 'black',
     marginBottom: 10,
-    fontSize: 20
+    fontSize: 20,marginLeft:5
   }
 });

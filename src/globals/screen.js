@@ -72,7 +72,6 @@ export const Tab_Home_Profile = () => {
         component={ScreenInfo}
 
         options={{
-
           tabBarLabel: 'Cá nhân',
           tabBarIcon: () => (
             <Icon name='user'
@@ -96,6 +95,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.51,
     shadowRadius: 13.16,
 
-    elevation: 20,
+    elevation: 5,
+    backgroundColor:'white'
   }
 });

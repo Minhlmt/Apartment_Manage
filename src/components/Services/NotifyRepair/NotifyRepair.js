@@ -36,7 +36,8 @@ export default function App(props) {
   const {token,userId}=props.route.params;
   const renderItem = ({ item }) => {
     return (
-      <ItemNotification id={item._id} title={item.title} is_read_user={item.is_read_user} navigation={props.navigation} token={token}/>
+      <ItemNotification id={item._id} title={item.title} is_read_user={item.is_read_user} 
+      status={item.status} navigation={props.navigation} token={token}/>
     );
   };
 
@@ -51,7 +52,13 @@ const fetchData=async()=>{
   const result=await res.json();
   console.log("res ",result);
   if(res.status===200){
-    setData(data.concat(result.data));
+    if(result.data.length===0){
+     setPage(1);
+    }
+    else{
+      setData(data.concat(result.data));
+    }
+   
   }
 }
   useEffect(() => {

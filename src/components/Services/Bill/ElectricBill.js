@@ -13,10 +13,10 @@ export default function ElectricBill({ route }) {
     const [unitPrice, setUnitPrice] = useState(0);
     const [sumPrice, setSumPrice] = useState('1000');
     const [spinner, setSpinner] = useState(false);
-    const [flag,setFlag]=useState(true);
+    const [flag, setFlag] = useState(true);
     const [date, setDate] = useState(new Date());
     const [show, setShow] = useState(false);
-    
+
     const [month, setMonth] = useState(0);
     const [year, setYear] = useState(0);
 
@@ -40,14 +40,14 @@ export default function ElectricBill({ route }) {
                 setMonth(mydate.mm);
                 setYear(mydate.yyyy);
             }
-           
-            
+
+
 
         },
         [date, showPicker],
     );
     const senddata = async () => {
-     
+
         const res = await fetch(URL + `api/elec-bill/month-bill/${apartId}/${month}/${year}`, {
             method: 'GET',
             headers: {
@@ -56,16 +56,26 @@ export default function ElectricBill({ route }) {
             },
         })
         const result = await res.json();
-      
+
         setSpinner(false);
         if (res.status === 200) {
-            setOldIndex(result.data.old_index);
-            setNewIndex(result.data.new_index);
-            let _unitPrice = numeral(result.data.unit_price.toString()).format('0,0');
-            setUnitPrice(_unitPrice);
-            setSumIndex(result.data.consume);
-            var _sumPrice = numeral(result.data.total_money.toString()).format('0,0');
-            setSumPrice(_sumPrice);
+            if (result.data !== null) {
+                setOldIndex(result.data.old_index);
+                setNewIndex(result.data.new_index);
+                let _unitPrice = numeral(result.data.unit_price.toString()).format('0,0');
+                setUnitPrice(_unitPrice);
+                setSumIndex(result.data.consume);
+                var _sumPrice = numeral(result.data.total_money.toString()).format('0,0');
+                setSumPrice(_sumPrice);
+            }
+            else{
+                setOldIndex(0);
+                setNewIndex(0);
+                setUnitPrice(0);
+                setSumIndex(0);
+                setSumPrice(0);
+            }
+
 
 
         }
@@ -75,11 +85,10 @@ export default function ElectricBill({ route }) {
     useEffect(() => {
         let monthtoday, yeartoday;
         let preMonth = (monthYear.mm - 1).toString();
-        if (preMonth.length < 2)
-        {
+        if (preMonth.length < 2) {
             preMonth = '0' + preMonth;
         }
-           
+
         if (preMonth != 0) {
             monthtoday = preMonth;
             yeartoday = monthYear.yyyy;
@@ -88,7 +97,7 @@ export default function ElectricBill({ route }) {
             monthtoday = 12
             yeartoday = monthYear.yyyy - 1;
         }
-      
+
         setMonth(monthtoday);
         setYear(yeartoday);
         setFlag(false)

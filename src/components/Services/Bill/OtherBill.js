@@ -53,25 +53,38 @@ export default function ElectricBill({ route }) {
         },
       })
       const result = await res.json();
-     
+      console.log("hoa don khac Bill", result);
+      console.log("sau ",res.status);
       setSpinner(false);
       if(res.status===200)
       {
-          let _apart_manage=numeral(result.data.apart_management.toString()).format('0,0');
-         setApartManage(_apart_manage);
-         let _park=numeral(result.data.parking_fees.toString()).format('0,0');
-         setPark(_park);
-         let _maintenance=numeral(result.data.maintenance_fee.toString()).format('0,0');
-         setMaintenance(_maintenance);
-         let _garbage=numeral(result.data.service_charge.toString()).format('0,0');
-         setGarbage(_garbage);
-         let _other=numeral(result.data.other_fees.toString()).format('0,0');
-         setOther(_other);
-         let _sumPrice= result.data.apart_management+result.data.parking_fees+result.data.maintenance_fee
-         +result.data.service_charge+result.data.other_fees;
-         let _sumPriceFormat=numeral(_sumPrice.toString()).format('0,0');
-         setNote(result.data.note);
-        setSumPrice(_sumPriceFormat);
+         if(result.data!==null){
+            let _apart_manage=numeral(result.data.apart_management.toString()).format('0,0');
+            setApartManage(_apart_manage);
+            let _park=numeral(result.data.parking_fees.toString()).format('0,0');
+            setPark(_park);
+            let _maintenance=numeral(result.data.maintenance_fee.toString()).format('0,0');
+            setMaintenance(_maintenance);
+            let _garbage=numeral(result.data.service_charge.toString()).format('0,0');
+            setGarbage(_garbage);
+            let _other=numeral(result.data.other_fees.toString()).format('0,0');
+            setOther(_other);
+            let _sumPrice= result.data.apart_management+result.data.parking_fees+result.data.maintenance_fee
+            +result.data.service_charge+result.data.other_fees;
+            let _sumPriceFormat=numeral(_sumPrice.toString()).format('0,0');
+            setNote(result.data.note);
+           setSumPrice(_sumPriceFormat);
+         }
+         else{
+            setApartManage(0);
+            setPark(0);
+            setMaintenance(0);
+            setGarbage(0);
+            setOther(0);
+            setSumPrice(0);
+
+         }
+        
       }
     
   

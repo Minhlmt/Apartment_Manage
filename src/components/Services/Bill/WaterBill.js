@@ -57,14 +57,21 @@ export default function WaterBill({route}) {
       
         setSpinner(false);
         if (res.status === 200) {
-            setOldIndex(result.data.old_index);
-            setNewIndex(result.data.new_index);
-            let _unitPrice = numeral(result.data.unit_price.toString()).format('0,0');
-            setUnitPrice(_unitPrice);
-            setSumIndex(result.data.consume);
-            var _sumPrice = numeral(result.data.total_money.toString()).format('0,0');
-            setSumPrice(_sumPrice);
-
+            if(result.data!==null){
+                setOldIndex(result.data.old_index);
+                setNewIndex(result.data.new_index);
+                let _unitPrice = numeral(result.data.unit_price.toString()).format('0,0');
+                setUnitPrice(_unitPrice);
+                setSumIndex(result.data.consume);
+                var _sumPrice = numeral(result.data.total_money.toString()).format('0,0');
+                setSumPrice(_sumPrice);
+    
+            }
+            else{
+                setOldIndex(0);
+                setNewIndex(0);
+            }
+          
 
         }
 
