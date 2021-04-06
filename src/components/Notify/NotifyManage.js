@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 
-import {URL} from '../../globals/constants'
-import ItemNotification from '../Home/Items/ItemNotification'
+import { URL } from '../../globals/constants'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import ItemNotifyManger from '../../components/Home/Items/ItemNotifyManger'
 
 
-const renderItem = ({ item }) => {
-  return (
-    <ItemNotification id={item._id} title={item.title} is_read_user={item.is_read_user} navigation={props.navigation}/>
-  );
-};
 
 
 let stopFetchMore = true;
@@ -31,47 +27,78 @@ export default function App(props) {
   const [data, setData] = useState([]);
   const [loadingMore, setLoadingMore] = useState(false);
   const [page, setPage] = useState(1);
-  const [limit,setLimit]=useState(1);
-  const {token,userId}=props.route.params;
+  const [limit, setLimit] = useState(1);
+  const [token, setToken] = useState();
+  const [flag, setFlag] = useState(true);
+  const [load,setLoad]=useState(false);
   const renderItem = ({ item }) => {
     return (
-      <ItemNotification id={item._id} title={item.title} is_read_user={item.is_read_user} navigation={props.navigation} token={token}/>
+      <ItemNotifyManger id={item._id} title={item.title} is_read_user={item.is_read_user} 
+      status={item.status} navigation={props.navigation} token={token}/>
+      
     );
   };
+  const getData = async () => {
+    try {
 
-const fetchData=async()=>{
-  const res = await fetch(URL + `api/repair/all/${userId}/${page}/10`, {
-    method: 'GET',
-    headers: {
-      Authorization: 'Bearer ' + `${token}`,
-      'Content-Type': 'application/json',
-    },
-  })
-  const result=await res.json();
-  console.log("res ",result);
-  if(res.status===200){
-    setData(data.concat(result.data));
+      const token = await AsyncStorage.getItem('token');
+      if (token !== null) {
+        const _token = JSON.parse(token);
+        setToken(_token);
+        setFlag(false);
+      }
+
+    } catch (e) {
+      // error reading value
+    }
   }
-}
+
+  const fetchData = async () => {
+    console.log("token2 ", token)
+    const res = await fetch(URL + `api/noti/all/${page}/10`, {
+      method: 'GET',
+      headers: {
+        Authorization: 'Bearer ' + `${token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+    const result = await res.json();
+    console.log('result ',res.status);
+    console.log("res ", result);
+    if (res.status === 200) {
+      if (result.data.length === 0) {
+        setPage(1);
+        setLoad(true);
+      }
+      else {
+        if(!load)
+        {
+          setData(data.concat(result.data));
+        }
+     
+      }
+    }
+  }
   useEffect(() => {
+    getData();
     fetchData();
-  }, []);
+  }, [flag]);
 
   const handleOnEndReached = async () => {
-    console.log("het trang");
-    setPage(page+1);
+    setPage(page + 1);
     console.log(page);
-    if(page!==1){
+    if(page!==1)
+    {
       fetchData();
     }
-   
-
+    
+    
   };
 
   return (
     <FlatList
       data={data}
-      keyExtractor={(item,index) => index.toString()}
+      keyExtractor={(item, index) => index.toString()}
       renderItem={renderItem}
       onEndReached={handleOnEndReached}
       onEndReachedThreshold={0.1}
@@ -96,7 +123,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'gray',
     borderBottomWidth: 1,
     marginTop: 15,
-    padding:10,
+    padding: 10,
     paddingVertical: 20,
     paddingHorizontal: 15,
     elevation: 5,
@@ -107,7 +134,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'gray',
     borderBottomWidth: 1,
     marginTop: 15,
-    padding:10,
+    padding: 10,
     paddingVertical: 20,
     paddingHorizontal: 15,
     elevation: 5,
@@ -116,6 +143,6 @@ const styles = StyleSheet.create({
     flex: 1,
     color: 'black',
     marginBottom: 10,
-    fontSize: 20,marginLeft:5
+    fontSize: 20, marginLeft: 5
   }
 });

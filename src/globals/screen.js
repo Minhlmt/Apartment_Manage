@@ -65,6 +65,7 @@ export const Tab_Home_Profile = () => {
               size={30} />
           )
         }}
+        
       />
 
       <Tab.Screen

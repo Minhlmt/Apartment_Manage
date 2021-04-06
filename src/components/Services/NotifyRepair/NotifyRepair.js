@@ -2,15 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import Item from '../../Home/Items/ItemNotification'
 import {URL} from '../../../globals/constants'
-import ItemNotification from '../../Home/Items/ItemNotification'
+import ItemNotification from '../../Home/Items/ItemNotifyManger'
 import { useLinkProps } from '@react-navigation/native';
 
-const renderItem = ({ item }) => {
-  const t=false;
-  return (
-    <ItemNotification id={item._id} title={item.title} is_read_user={item.is_read_user} navigation={props.navigation}/>
-  );
-};
+
 
 
 let stopFetchMore = true;
@@ -33,6 +28,7 @@ export default function App(props) {
   const [loadingMore, setLoadingMore] = useState(false);
   const [page, setPage] = useState(1);
   const [limit,setLimit]=useState(1);
+  const [load,setLoad]=useState(false);
   const {token,userId}=props.route.params;
   const renderItem = ({ item }) => {
     return (
@@ -54,9 +50,13 @@ const fetchData=async()=>{
   if(res.status===200){
     if(result.data.length===0){
      setPage(1);
+     setLoad(true);
     }
     else{
-      setData(data.concat(result.data));
+      if(!load){
+        setData(data.concat(result.data));
+      }
+     
     }
    
   }
