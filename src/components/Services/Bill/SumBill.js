@@ -75,6 +75,7 @@ export default function SumBill({ route }) {
             },
         })
         const result_water = await res_water.json();
+        console.log("nuoc tra ve ",result_water);
         if (res_water.status === 200) {
             if(result_water.data!==null){
                 tempSum=tempSum+result_water.data.total_money;

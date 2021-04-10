@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, SectionList, Text, View, Image, TouchableOpacity } from 'react-native';
 import { ScreenKey } from '../../../globals/constants'
+import { Icon } from 'react-native-elements'
 export default function ItemNotification(props) {
     const [status,setStatus]=useState();
     const [styleStatus,setStyleStatus]=useState();
@@ -23,7 +24,6 @@ export default function ItemNotification(props) {
             notice_id: props.id,
             token: props.token,
             status:status,
-     
         })
     }
     return (
@@ -32,12 +32,14 @@ export default function ItemNotification(props) {
              <Image style={{ width: 50, height: 50, borderRadius: 400 / 2 }} source={require('../../../../image/bell.png')} />
            
             <Text style={styles.text}>{props.title}</Text>
-            <View style={{flexDirection:'row',justifyContent:'flex-end',width:30}}>
-            <Text style={styleStatus}>{status}</Text>
-
+            <View style={{flexDirection:'row',justifyContent:'flex-end',width:30,marginTop:10}}>
+            {/* <Text style={styleStatus}>{status}</Text> */}
+            <Icon name='arrow-forward-ios'
+                        type='material'
+                        color='#3498db'
+                        size={20}
+                    />
             </View>
-           
-           
         </TouchableOpacity>
         </View>
     )

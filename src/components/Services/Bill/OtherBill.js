@@ -53,8 +53,7 @@ export default function ElectricBill({ route }) {
         },
       })
       const result = await res.json();
-      console.log("hoa don khac Bill", result);
-      console.log("sau ",res.status);
+  
       setSpinner(false);
       if(res.status===200)
       {

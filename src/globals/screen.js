@@ -36,8 +36,6 @@ export const Tab_Home_Profile = () => {
 
 
         },
-    
-
       }}
     >
       <Tab.Screen

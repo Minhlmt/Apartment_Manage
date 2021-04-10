@@ -1,24 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, SectionList, Text, View, Image, TouchableOpacity, Button, TextInput,Alert } from 'react-native';
+import { StyleSheet, SectionList, Text, View, Image, TouchableOpacity, Button, TextInput, Alert } from 'react-native';
 import { Text_Size, URL } from '../../globals/constants'
-import {ScreenKey} from '../../globals/constants'
+import { ScreenKey } from '../../globals/constants'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import { Fumi } from 'react-native-textinput-effects';
 export default function ChangeInfo(props) {
-  const {name,user_id, email, phone,identify_card,native_place,token } = props.route.params;
+  const { name, user_id, email, phone, identify_card, native_place, token } = props.route.params;
   const [newEmail, setNewEmail] = useState(email);
   const [newPhone, setNewPhone] = useState(phone);
   const [spinner, setSpinner] = useState(false);
   const getData = async () => {
     try {
-        const infoUser = await AsyncStorage.getItem('infoUser');
-       console.log(infoUser);
-       
+      const infoUser = await AsyncStorage.getItem('infoUser');
+
 
     } catch (e) {
-        // error reading value
+      // error reading value
     }
-}
+  }
   const sendDataUpdate = async () => {
     const storeData = async (infoUser) => {
       try {
@@ -30,21 +32,21 @@ export default function ChangeInfo(props) {
     }
 
     const res = await fetch(URL + `api/auth/update-info`, {
-        method: 'PUT',
-        headers: {
-            Authorization: 'Bearer ' + `${token}`,
-            'Content-Type': 'application/json',
-        },
-        body:JSON.stringify({
-          user_id,name,
-          phone:newPhone,
-          email:newEmail,
-          identify_card,native_place
-        })
+      method: 'PUT',
+      headers: {
+        Authorization: 'Bearer ' + `${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        user_id, name,
+        phone: newPhone,
+        email: newEmail,
+        identify_card, native_place
+      })
 
     })
     const result = await res.json();
-    if(res.status===200){
+    if (res.status === 200) {
       setSpinner(false);
       storeData(result.data);
       getData();
@@ -55,46 +57,72 @@ export default function ChangeInfo(props) {
           {
             text: "Ok",
             onPress: () => props.navigation.navigate(ScreenKey.TabProfile),
-            
+
           },
-         
+
         ]
       );
-  
+
     }
-   
-}
-  const handleUpdateInfo=()=>{
+
+  }
+  const handleUpdateInfo = () => {
     setSpinner(true);
     sendDataUpdate();
-    
+
   }
   return (
     <View>
-       <Spinner
-                visible={spinner}
-                textContent={'Loading...'}
-                textStyle={styles.spinnerTextStyle}
-            />
+      <Spinner
+        visible={spinner}
+        textContent={'Loading...'}
+        textStyle={styles.spinnerTextStyle}
+      />
       <View style={styles.container}>
-        <Text style={styles.text}>Email</Text>
+        {/* <Text style={styles.text}>Email</Text>
         <TextInput
           style={styles.text_input}
           // placeholder={email}
           multiline
           defaultValue={newEmail}
           
-          onChangeText={text => setNewEmail(text)} />
+          onChangeText={text => setNewEmail(text)} /> */}
+        <Fumi
+          label={'Email'}
+          iconClass={MaterialCommunityIcons}
+          iconName={'email-open'}
+          iconColor={'#3498db'}
+          iconSize={20}
+          iconWidth={40}
+          inputPadding={16}
+          defaultValue={newEmail}
+          inputStyle={{ color:'black'}}
+          labelStyle={{fontSize:16}}
+          onChangeText={text => setNewEmail(text)}
+        />
       </View>
       <View style={styles.container}>
-        <Text style={styles.text}>Số điện thoại</Text>
+        {/* <Text style={styles.text}>Số điện thoại</Text>
         <TextInput
           style={styles.text_input}
           // placeholder={phone}
           // multiline
           defaultValue={newPhone}
-          onChangeText={text => setNewPhone(text)} />
-          
+          onChangeText={text => setNewPhone(text)} /> */}
+        <Fumi
+          label={'Số điện thoại'}
+          iconClass={FontAwesome5}
+          iconName={'mobile-alt'}
+          iconColor={'#3498db'}
+          iconSize={20}
+          iconWidth={40}
+          inputPadding={16}
+          defaultValue={newPhone}
+          inputStyle={{ color:'black'}}
+          labelStyle={{fontSize:16}}
+          onChangeText={text => setNewPhone(text)}
+        />
+
       </View>
       <View style={styles.myButtonContainer}>
         <TouchableOpacity onPress={handleUpdateInfo} style={styles.appButtonContainerLogOut}>
@@ -140,27 +168,27 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     flexDirection: 'column',
     // backgroundColor:'red'
-},
-appButtonContainerLogOut: {
-  elevation: 8,
-  backgroundColor: "#009688",
-  borderRadius: 10,
-  paddingVertical: 10,
-  paddingHorizontal: 12, marginTop: 15,
-  marginLeft:10,
-  marginRight:10
-},
-myButtonLogOut: {
-  alignItems: 'center',
-  // marginTop:10,
+  },
+  appButtonContainerLogOut: {
+    elevation: 8,
+    backgroundColor: "#009688",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12, marginTop: 15,
+    marginLeft: 10,
+    marginRight: 10
+  },
+  myButtonLogOut: {
+    alignItems: 'center',
+    // marginTop:10,
 
-},
-appButtonText: {
-  fontSize: 18,
-  color: "#fff",
-  fontWeight: "bold",
-  alignSelf: "center",
-  textTransform: "uppercase",
+  },
+  appButtonText: {
+    fontSize: 18,
+    color: "#fff",
+    fontWeight: "bold",
+    alignSelf: "center",
+    textTransform: "uppercase",
 
-},
+  },
 });

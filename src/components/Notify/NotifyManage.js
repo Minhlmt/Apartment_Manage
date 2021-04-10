@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import { FlatList, StyleSheet, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
 
 import { URL } from '../../globals/constants'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ItemNotifyManger from '../../components/Home/Items/ItemNotifyManger'
+import { Dimensions } from 'react-native';
 
+const window = Dimensions.get('window');
 
 
 
@@ -31,10 +33,25 @@ export default function App(props) {
   const [token, setToken] = useState();
   const [flag, setFlag] = useState(true);
   const [load,setLoad]=useState(false);
+  const [userId,setUserId]=useState();
+  const [is_read,setIs_read]=useState();
+  const [alive,setAlive]=useState();
   const renderItem = ({ item }) => {
+      // console.log(item);
+     
+      for( let receivers of item.receivers){
+        if( receivers.user_id===userId){
+         setIs_read(receivers.is_read) 
+        }
+        
+      }
+
     return (
-      <ItemNotifyManger id={item._id} title={item.title} is_read_user={item.is_read_user} 
-      status={item.status} navigation={props.navigation} token={token}/>
+   
+        <ItemNotifyManger id={item._id} title={item.title} content={item.content} create_date={item.create_date}
+        image={item.image} link={item.link}
+          status={is_read} navigation={props.navigation} token={token} userId={userId} />
+     
       
     );
   };
@@ -42,8 +59,11 @@ export default function App(props) {
     try {
 
       const token = await AsyncStorage.getItem('token');
+      const infoUser = await AsyncStorage.getItem('infoUser');
       if (token !== null) {
         const _token = JSON.parse(token);
+        const _info= JSON.parse(infoUser);
+        setUserId(_info._id);
         setToken(_token);
         setFlag(false);
       }
@@ -54,18 +74,17 @@ export default function App(props) {
   }
 
   const fetchData = async () => {
-    console.log("token2 ", token)
-    const res = await fetch(URL + `api/noti/all/${page}/10`, {
+    const res = await fetch(URL + `api/noti/user/${userId}/${page}/10`, {
       method: 'GET',
       headers: {
         Authorization: 'Bearer ' + `${token}`,
         'Content-Type': 'application/json',
       },
+      
     })
     const result = await res.json();
-    console.log('result ',res.status);
-    console.log("res ", result);
     if (res.status === 200) {
+     
       if (result.data.length === 0) {
         setPage(1);
         setLoad(true);
@@ -73,6 +92,7 @@ export default function App(props) {
       else {
         if(!load)
         {
+
           setData(data.concat(result.data));
         }
      
@@ -96,7 +116,17 @@ export default function App(props) {
   };
 
   return (
-    <FlatList
+    <View>
+       <View style={styles.container1} >
+                <View style={styles.background} >
+                    {/* <Image style={styles.image} source={require('../../../image/sea.jpg')} /> */}
+                    <ImageBackground source={require('../../../image/notify.jpg')} style={styles.image}>
+                        <Text style={styles.text1} adjustsFontSizeToFit>Thông báo</Text>
+                    </ImageBackground>
+                </View>
+            </View>
+            <ImageBackground source={require('../../../image/notify1.png')} style={styles.image1}>
+            <FlatList
       data={data}
       keyExtractor={(item, index) => index.toString()}
       renderItem={renderItem}
@@ -107,6 +137,10 @@ export default function App(props) {
       }}
       ListFooterComponent={() => loadingMore && <ListFooterComponent />}
     />
+            </ImageBackground>
+           
+    </View>
+    
   );
 }
 
@@ -144,5 +178,44 @@ const styles = StyleSheet.create({
     color: 'black',
     marginBottom: 10,
     fontSize: 20, marginLeft: 5
-  }
+  },
+  container1: {
+    alignSelf: 'center',
+    width: window.width,
+    overflow: 'hidden',
+    height: window.width / 2
+},
+background: { // this shape is a circle 
+    borderRadius: window.width,
+    width: window.width * 2,
+    height: window.width * 2,
+    marginLeft: -(window.width / 2),
+    position: 'absolute',
+    bottom: 0,
+    overflow: 'hidden'
+},
+image: {
+    height: window.width / 1.7,
+    width: window.width,
+    position: 'absolute',
+    bottom: 0,
+    marginLeft: window.width / 2,
+    backgroundColor: '#9DD6EB'
+},
+text1: {
+    marginTop: window.height/9.5,
+    color: "white",
+    fontSize: 42,
+    fontWeight: "bold",
+    textAlign: "center",
+    // backgroundColor: "#000000a0"
+},
+image1: {
+  height: window.height/1.5,
+  width: window.width,
+  // position: 'absolute',
+  bottom: 0,
+  // marginLeft: window.width / 2,
+  backgroundColor: '#9DD6EB'
+},
 });

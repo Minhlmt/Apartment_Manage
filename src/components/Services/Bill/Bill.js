@@ -20,7 +20,7 @@ export default function Bill({route}){
     
          tabBarOptions={{
             activeTintColor: '#e91e63',
-            labelStyle: { fontSize: 14 },
+            labelStyle: { fontSize: 14 ,  fontWeight: "bold",},
             style: { backgroundColor: 'powderblue' },
             
           }}>

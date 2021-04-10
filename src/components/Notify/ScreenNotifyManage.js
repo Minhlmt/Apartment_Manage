@@ -8,7 +8,7 @@ export default function ScreenNotifyManage(){
     return(
         <ScreenManage.Navigator>
             <ScreenManage.Screen name={ScreenKey.NotifyManage} component={NotifyManage} options={{headerShown:false}}/>
-            <ScreenManage.Screen name={ScreenKey.NotifyDetailManage} component={NotifyDetailManage} />
+            <ScreenManage.Screen name={ScreenKey.NotifyDetailManage} component={NotifyDetailManage} options={{title:'Chi tiết'}}/>
         </ScreenManage.Navigator>
     )
 }

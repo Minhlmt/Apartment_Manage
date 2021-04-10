@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, SectionList, Text, View, Image, TouchableOpacity, Button } from 'react-native';
+import { StyleSheet, SectionList, Text, View, Image, TouchableOpacity,ImageBackground, Button,ScrollView } from 'react-native';
 import { Icon } from 'react-native-elements'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { URL, Text_Size } from '../../globals/constants'
 import { ScreenKey } from '../../globals/constants'
 import Spinner from 'react-native-loading-spinner-overlay';
+import { Dimensions } from 'react-native';
+const window = Dimensions.get('window');
 export default function Info(props) {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -30,9 +32,12 @@ export default function Info(props) {
 
         })
         const result = await res.json();
-
-        setAddress("toà " + result.data.block + " số nhà " + result.data.name);
         setSpinner(false);
+        if(res.status===200){
+            setAddress("toà " + result.data.block + " số nhà " + result.data.name);
+        }
+       
+       
     }
 
     const getData = async () => {
@@ -46,12 +51,11 @@ export default function Info(props) {
                 const _apartId = JSON.parse(apartId);
                 await setApartId(_apartId);
                 await setToken(_token);
-                console.log(_infoUser);
                 setName(_infoUser.name);
                 setEmail(_infoUser.email);
                 setPhone(_infoUser.phone);
                 setNativePlace(_infoUser.native_place);
-                setUserId(_infoUser.id);
+                setUserId(_infoUser._id);
                 setIndetify_card(_infoUser.identify_card);
                 setFlag(false);
 
@@ -106,17 +110,24 @@ export default function Info(props) {
     }
 
     return (
-        <View>
+        <ScrollView>
           
             <Spinner
                 visible={spinner}
                 textContent={'Loading...'}
                 textStyle={styles.spinnerTextStyle}
             />
-            <View style={styles._title}>
-                <Text style={styles._text_title}  >Thông tin cá nhân</Text>
+            {/* <View style={styles._title}>
+                <Text style={styles._text_title} >Thông tin cá nhân</Text>
+            </View> */}
+             <View style={styles.container1} >
+                <View style={styles.background} >
+                    {/* <Image style={styles.image} source={require('../../../image/sea.jpg')} /> */}
+                    <ImageBackground source={require('../../../image/sea.jpg')} style={styles.image}>
+                        <Text style={styles.text1} adjustsFontSizeToFit>Thông tin cá nhân</Text>
+                    </ImageBackground>
+                </View>
             </View>
-
             <View style={styles.container}>
                 <View style={styles._row}>
                     <Icon name='user'
@@ -124,13 +135,10 @@ export default function Info(props) {
                         color='#f1c40f'
                         size={30}
                     />
-
                     <Text style={styles.text} >Họ tên</Text>
                 </View>
-
-               
             </View>
-            <View style={{flexDirection:'row',justifyContent:'flex-end'}}>
+            <View style={{flexDirection:'row',justifyContent:'flex-end',borderBottomWidth:0.5}}>
             <Text style={styles.text_info}>{name}</Text>
             </View>
             <View style={styles.container}>
@@ -140,14 +148,10 @@ export default function Info(props) {
                         color='#e74c3c'
                         size={30}
                     />
-                  
                         <Text style={styles.text}>Email</Text>
-                  
-
                 </View>
-               
             </View>
-            <View style={{flexDirection:'row',justifyContent:'flex-end'}}>
+            <View style={{flexDirection:'row',justifyContent:'flex-end',borderBottomWidth:0.5}}>
             <Text style={styles.text_info}>{email}</Text>
             </View>
             <View style={styles.container}>
@@ -162,7 +166,7 @@ export default function Info(props) {
 
                
             </View>
-            <View style={{flexDirection:'row',justifyContent:'flex-end'}}>
+            <View style={{flexDirection:'row',justifyContent:'flex-end',borderBottomWidth:0.5}}>
             <Text style={styles.text_info}>{phone}</Text>
             </View>
             <View style={styles.container}>
@@ -177,7 +181,7 @@ export default function Info(props) {
 
                 
             </View>
-            <View style={{flexDirection:'row',justifyContent:'flex-end'}}>
+            <View style={{flexDirection:'row',justifyContent:'flex-end',borderBottomWidth:0.5}}>
             <Text style={styles.text_info}>{nativePlace}</Text>
             </View>
 
@@ -223,7 +227,7 @@ export default function Info(props) {
 
 
             </View>
-        </View>
+        </ScrollView>
     )
 }
 const styles = StyleSheet.create({
@@ -324,5 +328,36 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         marginRight: 10
     },
+    container1: {
+        alignSelf: 'center',
+        width: window.width,
+        overflow: 'hidden',
+        height: window.width / 2
+    },
+    background: { // this shape is a circle 
+        borderRadius: window.width,
+        width: window.width * 2,
+        height: window.width * 2,
+        marginLeft: -(window.width / 2),
+        position: 'absolute',
+        bottom: 0,
+        overflow: 'hidden'
+    },
+    image: {
+        height: window.width / 1.7,
+        width: window.width,
+        position: 'absolute',
+        bottom: 0,
+        marginLeft: window.width / 2,
+        backgroundColor: '#9DD6EB'
+    },
+    text1: {
+        marginTop: window.height/9.5,
+        color: "white",
+        fontSize: 42,
+        fontWeight: "bold",
+        textAlign: "center",
+        // backgroundColor: "#000000a0"
+    }
 
 });

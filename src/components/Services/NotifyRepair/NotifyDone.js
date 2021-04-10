@@ -38,7 +38,7 @@ export default function App(props) {
   };
 
 const fetchData=async()=>{
-  const res = await fetch(URL + `api/repair/all/${userId}/${page}/10`, {
+  const res = await fetch(URL + `api/repair/all/${userId}/${page}/10/2`, {
     method: 'GET',
     headers: {
       Authorization: 'Bearer ' + `${token}`,
@@ -46,7 +46,7 @@ const fetchData=async()=>{
     },
   })
   const result=await res.json();
-  console.log("res ",result);
+  console.log('hoan thanh ',result);
   if(res.status===200){
     if(result.data.length===0){
      setPage(1);
@@ -73,16 +73,6 @@ const fetchData=async()=>{
       fetchData();
     }
    
-    // setPage(page + 1);
-    // console.log(page);
-    // setLoadingMore(true);
-    // if (!stopFetchMore) {
-    //   const response = await fakeServer(20);
-    //   if (response === 'done') return setLoadingMore(false);
-    //   setData([...data, ...response]);
-    //   stopFetchMore = true;
-    // }
-    // setLoadingMore(false);
   };
 
   return (

@@ -5,6 +5,8 @@ import CalDate from '../Bill/CalDate'
 import { Text_Size, URL } from '../../../globals/constants'
 import { ScreenKey } from '../../../globals/constants'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Hoshi } from 'react-native-textinput-effects';
+import { Isao } from 'react-native-textinput-effects';
 export default function Repair(props) {
   const [topic, setTopic] = useState('');
   const [content, setContent] = useState('');
@@ -24,7 +26,7 @@ export default function Repair(props) {
   const getData = async () => {
 
     try {
-     
+
       const _token = await AsyncStorage.getItem('token');
       const _apartId = await AsyncStorage.getItem('apartId');
       const _userId = await AsyncStorage.getItem('infoUser');
@@ -75,17 +77,17 @@ export default function Repair(props) {
 
           }),
         })
-        if(res1.status===200){
-          Alert.alert('Thông báo','Báo cáo thành công',
-          [
-            
-            { text: "OK"}
-          ]);
+        if (res1.status === 200) {
+          Alert.alert('Thông báo', 'Báo cáo thành công',
+            [
+
+              { text: "OK" }
+            ]);
         }
 
       }
     }
-    else{
+    else {
       const res1 = await fetch(URL + 'api/repair/add', {
         method: 'POST',
         headers: {
@@ -100,15 +102,15 @@ export default function Repair(props) {
 
         }),
       })
-      if(res1.status===200){
-        Alert.alert('Thông báo','Báo cáo thành công',
-        [
-          { text: "OK" }
-        ]);
+      if (res1.status === 200) {
+        Alert.alert('Thông báo', 'Báo cáo thành công',
+          [
+            { text: "OK" }
+          ]);
       }
     }
   }
- 
+
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -116,7 +118,7 @@ export default function Repair(props) {
     setDate(currentDate);
     let date = CalDate(currentDate);
     let string_date = date.dd + '/' + date.mm + '/' + date.yyyy
-  
+
 
 
   };
@@ -135,7 +137,7 @@ export default function Repair(props) {
   };
 
   const checkTextInput = async () => {
-   
+
     //Check for the Name TextInput
     if (!topic.trim()) {
       Alert.alert('Thông báo', 'Chủ đề không được trống');
@@ -146,15 +148,15 @@ export default function Repair(props) {
       Alert.alert('Thông báo', 'Nội dung không được trống');
       return;
     }
-    else{
+    else {
       await sendImage();
     }
 
-   
+
 
   };
   useEffect(() => {
-   
+
     getData();
     setFlag(false);
     setImage({
@@ -180,21 +182,57 @@ export default function Repair(props) {
   return (
     <View>
       <View style={styles.container}>
-        <Text style={styles.text}>Chủ đề</Text>
-        <TextInput style={styles.text_input}
+        {/* <Text style={styles.text}>Chủ đề</Text> */}
+        {/* <TextInput style={styles.text_input}
           placeholderTextColor="#FF0000"
+          multiline
+          onChangeText={text => setTopic(text)}
+        /> */}
+        
+        <Isao
+          label={'Chủ đề'}
+          labelStyle={styles.text}
+          // this is applied as active border and label color
+          activeColor={'#da7071'}
+          // active border height
+          borderHeight={3}
+          inputPadding={20}
+          labelHeight={24}
+          inputStyle={{ color:'black'}}
+          // this is applied as passive border and label color
+          passiveColor={'#3498db'}
           multiline
           onChangeText={text => setTopic(text)}
         />
       </View>
 
       <View style={styles.container}>
-        <Text style={styles.text}>Nội dung</Text>
+        {/* <Text style={styles.text}>Nội dung</Text>
         <TextInput style={styles.text_input}
-        multiline
+          multiline
           placeholderTextColor="#FF0000"
           onChangeText={text => setContent(text)}
+        /> */}
+       
+         <Isao
+          label={'Nội dung'}
+          labelStyle={styles.text}
+          // this is applied as active border and label color
+          activeColor={'#da7071'}
+       
+          // active border height
+          borderHeight={3}
+          inputPadding={20}
+          labelHeight={24}
+          inputStyle={{ color:'black'}}
+          // this is applied as passive border and label color
+          passiveColor={'#3498db'}
+          multiline
+          onChangeText={text => setContent(text)}
+          
         />
+
+
       </View>
       <View style={{ flexDirection: 'row' }}>
 
@@ -212,12 +250,12 @@ export default function Repair(props) {
       </View>
 
       <TouchableOpacity onPress={checkTextInput} style={styles.appButtonContainer}>
-                    <View style={styles.myButtonLogOut}>
+        <View style={styles.myButtonLogOut}>
 
-                        <Text style={styles.appButtonText}>Gửi</Text>
+          <Text style={styles.appButtonText}>Gửi</Text>
 
-                    </View>
-                </TouchableOpacity>
+        </View>
+      </TouchableOpacity>
 
       {/* <View>
         <Button onPress={showDatepicker} title="Show date picker!" />
@@ -243,22 +281,21 @@ export default function Repair(props) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
+    marginTop: 10,
 
   },
   button_image: {
     flexDirection: 'column',
     marginTop: 10,
     marginLeft: 10,
-    
+
     // justifyContent:'center'
 
   },
   text: {
     color: 'black',
-    fontSize: Text_Size.Text,
-    marginTop: 10,
-    marginLeft: 10,
-    marginRight: 10
+    fontSize: 18,
+   
   },
   text_input: {
     color: 'black',
@@ -275,20 +312,20 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 12, marginTop: 10,
-    
-},
+
+  },
 
 
 
 
 
-appButtonText: {
+  appButtonText: {
     fontSize: 16,
     color: "#fff",
     fontWeight: "bold",
     alignSelf: "center",
     textTransform: "uppercase",
 
-},
- 
+  },
+
 });
