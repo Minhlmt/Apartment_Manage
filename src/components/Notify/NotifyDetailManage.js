@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import { FlatList, StyleSheet, Text, View, TouchableOpacity, Image, BackHandler, Alert, Linking } from 'react-native';
 import { Cloudinary } from '@cloudinary/base';
 
 import { URL, Text_Size } from '../../globals/constants'
-
+import { ScreenKey } from '../../globals/constants'
 import { ScrollView } from 'react-native-gesture-handler';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Icon } from 'react-native-elements'
@@ -18,17 +18,18 @@ const cld = new Cloudinary({
 export default function NotifyDetailManage(props) {
     const [statusImage, setStatusImage] = useState(true);
     const [_image, setImage] = useState('');
-    const { title, content, create_date, image, link,token,userId,notice_id } = props.route.params;
-    const changeStatusNotify= async()=>{
+    const [statusLink, setStatusLink] = useState(true);
+    const { title, content, create_date, image, link, token, userId, notice_id } = props.route.params;
+    const changeStatusNotify = async () => {
         const res = await fetch(URL + `api/noti/change-is-read`, {
             method: 'POST',
             headers: {
-              Authorization: 'Bearer ' + `${token}`,
-              'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + `${token}`,
+                'Content-Type': 'application/json',
             },
 
-          })
-          const result = await res.json();
+        })
+        const result = await res.json();
     }
     useEffect(() => {
         if (image === '') {
@@ -39,7 +40,25 @@ export default function NotifyDetailManage(props) {
             const myURL = myImage.toURL();
             setImage(myURL);
         }
-        
+        console.log("link ",link);
+        if (link === '') {
+            setStatusLink(false);
+        }
+        else {
+            setStatusLink(true);
+        }
+        const backAction = () => {
+            props.navigation.navigate(ScreenKey.NotifyManage)
+            return true;
+        };
+
+        const backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            backAction
+        );
+
+        return () => backHandler.remove();
+
     }, [])
 
     return (
@@ -89,6 +108,25 @@ export default function NotifyDetailManage(props) {
 
                 <Text style={styles.text_input}>{create_date}</Text>
             </View>
+           
+                {statusLink && (
+                    <View style={{ marginTop: 20 }}>
+                        <View style={styles.icon_title}>
+                            <Icon name='article'
+                                type='material'
+                                color='#3498db'
+                                size={25}
+                            />
+                            <Text style={styles.text}>Bài viết</Text>
+                        </View>
+
+                        <Text style={styles.text_input}>{link}</Text>
+                    </View>)}
+
+
+
+          
+
             <View style={{ marginTop: 20 }}>
                 {statusImage && (
                     <View style={styles.icon_title}>

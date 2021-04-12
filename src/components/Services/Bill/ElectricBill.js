@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { StyleSheet, SectionList, Text, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, SectionList, Text, View, Image, TouchableOpacity,ImageBackground } from 'react-native';
 import { Text_Size, URL } from '../../../globals/constants'
 import MonthPicker from 'react-native-month-year-picker';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -110,7 +110,7 @@ export default function ElectricBill({ route }) {
     }
 
     return (
-        <View>
+        <ImageBackground  style={{ flex: 1, resizeMode: 'cover' }} source={require('../../../../image/bill2.jpg')}>
             <Spinner
                 visible={spinner}
                 textContent={'Loading...'}
@@ -163,7 +163,7 @@ export default function ElectricBill({ route }) {
                 <Text style={styles.text_sum}>Tổng tiền</Text>
                 <Text style={styles.text_sum}>{sumPrice} đ</Text>
             </View>
-        </View>
+        </ImageBackground>
     )
 }
 const styles = StyleSheet.create({

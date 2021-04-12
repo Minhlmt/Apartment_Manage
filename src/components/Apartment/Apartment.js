@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, SectionList, Text, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, SectionList, Text, View, Image, TouchableOpacity ,ScrollView} from 'react-native';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { URL, Text_Size } from '../../globals/constants'
 import { ScreenKey } from '../../globals/constants'
+import { Dimensions } from 'react-native';
+const window = Dimensions.get('window');
 export default function Apartment(props) {
-    const [apart, setApart] = useState([]);
     // const { token, userId } = props.route.params;
+    const {token,userId}=props.route.params;
+    const [apart, setApart] = useState([]);
     const [apartId, setApartId] = useState();
+    const [types3, settypes3] = useState([{ label: 'param1', value: 0 }, { label: 'param2', value: 1 }, { label: 'param3', value: 2 },]);
+    const [value3, setvalue3] = useState(0);
+    const [value3Index, setvalue3Index] = useState(0);
     const getInfoApart = async () => {
-      
+
         const res = await fetch(URL + `api/apart/all-aparts/${userId}`, {
             method: 'GET',
             headers: {
@@ -20,25 +26,48 @@ export default function Apartment(props) {
         })
         const result = await res.json();
         if (res.status === 200) {
-            let temp_apart = [];
+            let block_Id = [];
+            let name_apart=[];
+            let block_name=[];
+            let apart_Id=[];
             for (let t of result.data) {
-                const temp = {
-                    label: "toa: " + t.block + " " + " nha: " + t.name,
-                    value: t._id
-                }
-                temp_apart.push(temp);
-
+                block_Id.push(t.block);
+                name_apart.push(t.name);
+                apart_Id.push(t._id);
             }
+            for(let block_id of block_Id){
+                const res_1 = await fetch(URL + `api/block/${block_id}`, {
+                    method: 'GET',
+                    headers: {
+                        Authorization: 'Bearer ' + `${token}`,
+                        'Content-Type': 'application/json',
+                    },
+        
+                })
+                const result_1 = await res_1.json();
+                if(res_1.status===200){
+                    block_name.push(result_1.data.name);
+                }
+               
+            }
+            let temp_apart=[]
+            for (var i = 0; i < apart_Id.length; i++) {
+                const temp = {
+                            label: "toa: " + block_name[i] + " " + " nha: " + name_apart[i],
+                            value: apart_Id[i]
+                        }
+                temp_apart.push(temp);
+              }
             setApartId(temp_apart[0].value);
             setApart(temp_apart);
         }
 
     }
 
-    // useEffect(() => {
-    //     // getInfoApart();
+    useEffect(() => {
+        getInfoApart();
 
-    // }, [token])
+    }, [token])
 
     const storeData = async (apartId) => {
         try {
@@ -55,32 +84,89 @@ export default function Apartment(props) {
     }
 
     return (
-        <View>
-            <RadioForm
-                radio_props={apart}
-                // initial={0}
-                onPress={(value) => { setApartId(value) }}
-                style={{fontSize:30}}
-
-            />
-            <TouchableOpacity onPress={handleClick}>
+        <View style={styles.container}>
+            <ScrollView>
+                <Text style={styles.welcome}>Mời bạn chọn căn hộ</Text>
+              
+              
+            
+                <View style={styles.component}>
+                    <RadioForm formHorizontal={false} animation={true}  >
+                        {apart.map((obj, i) => {
+                            var onPress = (value, index) => {
+                                console.log("value ",value);
+                                setApartId(value);
+                                // setvalue3(value);
+                                setvalue3Index(index);
+                                
+                            }
+                            return (
+                                <RadioButton labelHorizontal={true} key={i} >
+                                    {/*  You can set RadioButtonLabel before RadioButtonInput */}
+                                    <RadioButtonInput
+                                        obj={obj}
+                                        index={i}
+                                        isSelected={value3Index === i}
+                                        onPress={onPress}
+                                        buttonInnerColor={'#f39c12'}
+                                        buttonOuterColor={value3Index === i ? '#2196f3' : '#000'}
+                                        buttonSize={20}
+                                        buttonStyle={{}}
+                                        buttonWrapStyle={{ marginLeft: 10 }}
+                                    />
+                                    <RadioButtonLabel
+                                        obj={obj}
+                                        index={i}
+                                        onPress={onPress}
+                                        labelStyle={{ fontWeight: 'bold', color: '#2ecc71',fontSize:20 }}
+                                        labelWrapStyle={{}}
+                                    />
+                                </RadioButton>
+                            )
+                        })}
+                    </RadioForm>
+                    <Text>selected: {types3[value3Index].label}</Text>
+                </View>
+                <TouchableOpacity onPress={handleClick}>
                 <View style={styles.container}>
                     <Text style={styles.text_title}>Next</Text>
 
                 </View>
             </TouchableOpacity>
+
+            </ScrollView>
         </View>
-    )
+    );
 }
+
+
 const styles = StyleSheet.create({
     container: {
-        flexDirection: "row",
-        justifyContent: 'space-between',
-        margin: 10
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: '#F5FCFF',
     },
-    text_title: {
-        color: 'black',
-        fontSize: Text_Size.Text_title,
-        color: '#3498db'
+    welcome: {
+        fontSize: 20,
+        textAlign: 'center',
+        marginTop: 20,
+        marginBottom: 20,
+    },
+    instructions: {
+        textAlign: 'center',
+        color: '#333333',
+        marginBottom: 5,
+    },
+    component: {
+        alignItems: 'center',
+        marginBottom: 50,
+    },
+    radioStyle: {
+        borderRightWidth: 1,
+        borderColor: '#2196f3',
+        paddingRight: 10
+    },
+    radioButtonWrap: {
+        marginRight: 5
     },
 });

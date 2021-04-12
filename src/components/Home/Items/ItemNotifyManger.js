@@ -22,7 +22,7 @@ export default function ItemNotifyManger(props) {
         console.log("userid",props.userId);
         console.log("id ",props.id);
         const res = await fetch(URL + `api/noti/change-is-read`, {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 Authorization: 'Bearer ' + `${props.token}`,
                 'Content-Type': 'application/json',
@@ -33,22 +33,21 @@ export default function ItemNotifyManger(props) {
                 status:true
               })
         })
-        // const result = await res.json();
-        // console.log(" ket qua " ,result );
-        console.log("status ",res.status);
+       
     }
     const handleClick = () => {
         changeStatusNotify();
-        // props.navigation.navigate(ScreenKey.NotifyDetailManage, {
-        //     title:props.title,
-        //     content:props.content,
-        //     create_date:props.create_date,
-        //     image:props.image,
-        //     link:props.link,
-        //     token:props.token,
-        //     userId:props.userId,
-        //     notice_id:props.id
-        // })
+        setStatus(false);
+        props.navigation.navigate(ScreenKey.NotifyDetailManage, {
+            title:props.title,
+            content:props.content,
+            create_date:props.create_date,
+            image:props.image,
+            link:props.link,
+            token:props.token,
+            userId:props.userId,
+            notice_id:props.id
+        })
     }
     return (
         <View style={{flexDirection:'column',justifyContent:'space-between'}}>
@@ -77,7 +76,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#EEEEEE",
         borderBottomColor: 'gray',
         borderBottomWidth: 1,
-        marginTop: 15,
+        marginTop: 7,
         padding: 10,
         paddingVertical: 20,
         paddingHorizontal: 15,

@@ -23,6 +23,7 @@ export default function Bill({route}){
             labelStyle: { fontSize: 14 ,  fontWeight: "bold",},
             style: { backgroundColor: 'powderblue' },
             
+            
           }}>
             <Tab.Screen name="SumBill" component={SumBill} options={{tabBarLabel:'Tổng tiền'}} initialParams={{monthYear:date,token:token,apartId:apartId}}/>
             <Tab.Screen name="ElectricBill" component={ElectricBill} options={{tabBarLabel:'Hóa đơn điện'}} initialParams={{monthYear:date,token:token,apartId:apartId}} />

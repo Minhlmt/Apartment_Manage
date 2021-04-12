@@ -32,8 +32,8 @@ export default function ScreenNotifyManage({route}){
     const {token,userId}=route.params;
     return (
         <Stack.Navigator>
-            <Stack.Screen name={ScreenKey.NotifyRepair} component={TabRepair}  initialParams={{token:token,userId:userId}}/>
-            <Stack.Screen name={ScreenKey.NotifyDetailRepair} component={NotifyDetailRepair} />
+            <Stack.Screen name={ScreenKey.NotifyRepair} component={TabRepair}  initialParams={{token:token,userId:userId}} options={{headerShown:false}}/>
+            <Stack.Screen name={ScreenKey.NotifyDetailRepair} component={NotifyDetailRepair} options={{headerShown:false}} />
         </Stack.Navigator>
     )
    

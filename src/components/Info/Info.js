@@ -16,13 +16,11 @@ export default function Info(props) {
     const [apartId, setApartId] = useState();
     const [token, setToken] = useState();
     const [userId, setUserId] = useState();
-    const [identify_card, setIndetify_card] = useState();
+    const [identify_card, setIndetify_card] = useState('');
     const [flag, setFlag] = useState(true);
     const [flag2, setFlag2] = useState(true);
     const [spinner, setSpinner] = useState(false);
     const getInfoApart = async () => {
-
-
         const res = await fetch(URL + `api/apart/${apartId}`, {
             method: 'GET',
             headers: {
@@ -34,7 +32,22 @@ export default function Info(props) {
         const result = await res.json();
         setSpinner(false);
         if(res.status===200){
-            setAddress("toà " + result.data.block + " số nhà " + result.data.name);
+            const res_1 = await fetch(URL + `api/block/${result.data.block}`, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + `${token}`,
+                    'Content-Type': 'application/json',
+                },
+    
+            })
+            const result_1 = await res_1.json();
+            if(res_1.status===200){ 
+                setAddress("toà " + result_1.data.name + " số nhà " + result.data.name);
+            }
+            else{
+                setAddress('Chưa có thông tin')
+            }
+          
         }
        
        
@@ -85,16 +98,17 @@ export default function Info(props) {
 
 
     }, [flag, flag2, props.navigation])
-    // const deleteAsync = async () => {
-    //     try {
+    const deleteAsync = async () => {
+        try {
 
-    //         AsyncStorage.clear();
+            AsyncStorage.clear();
 
-    //     } catch (e) {
-    //         // error reading value
-    //     }
-    // }
-    const deleteAsync = () => {
+        } catch (e) {
+            // error reading value
+        }
+    }
+    const handleLogout = () => {
+        deleteAsync();
         props.navigation.navigate(ScreenKey.SignIn);
     }
     const handleUpdateInfo = () => {
@@ -108,10 +122,17 @@ export default function Info(props) {
             token: token
         });
     }
+    const changeApart=()=>{
+        props.navigation.navigate(ScreenKey.ChooseApart,{
+            token: token,
+            userId:userId
+        })
+    }
+    
 
     return (
         <ScrollView>
-          
+           <ImageBackground  style={{ flex: 1, resizeMode: 'cover' }} source={require('../../../image/background.jpg')}>
             <Spinner
                 visible={spinner}
                 textContent={'Loading...'}
@@ -171,15 +192,26 @@ export default function Info(props) {
             </View>
             <View style={styles.container}>
                 <View style={styles._row}>
+                    <Icon name='v-card'
+                        type='entypo'
+                        color='#e74c3c'
+                        size={30}
+                    />
+                        <Text style={styles.text}>CMND/Căn cước</Text>
+                </View>
+            </View>
+            <View style={{flexDirection:'row',justifyContent:'flex-end',borderBottomWidth:0.5}}>
+            <Text style={styles.text_info}>{identify_card}</Text>
+            </View>
+            <View style={styles.container}>
+                <View style={styles._row}>
                     <Icon name='island'
                         type='fontisto'
                         color='#2ecc71'
                         size={30}
                     />
                     <Text style={styles.text}>Quê Quán</Text>
-                </View>
-
-                
+                </View>              
             </View>
             <View style={{flexDirection:'row',justifyContent:'flex-end',borderBottomWidth:0.5}}>
             <Text style={styles.text_info}>{nativePlace}</Text>
@@ -195,38 +227,30 @@ export default function Info(props) {
                     <Text style={styles.text}>Địa chỉ</Text>
                 </View>
 
-               
             </View>
             <View style={{flexDirection:'row',justifyContent:'flex-end'}}>
             <Text style={styles.text_info}>{address}</Text>
             </View>
             <View style={styles.myButtonContainer}>
                 <View style={styles.rowButton}>
-                    <TouchableOpacity onPress={() => console.log("swicth")} style={styles.appButtonContainer}>
+                    <TouchableOpacity onPress={changeApart} style={styles.appButtonContainer}>
                         <View style={styles.myButton}>
-
                             <Text style={styles.appButtonText}>Thay đổi căn hộ</Text>
-
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={handleUpdateInfo} style={styles.appButtonContainer}>
                         <View style={styles.myButton}>
-
                             <Text style={styles.appButtonText}>Cập nhật thông tin</Text>
-
                         </View>
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity onPress={deleteAsync} style={styles.appButtonContainerLogOut}>
+                <TouchableOpacity onPress={handleLogout} style={styles.appButtonContainerLogOut}>
                     <View style={styles.myButtonLogOut}>
-
                         <Text style={styles.appButtonText}>Đăng xuất</Text>
-
                     </View>
                 </TouchableOpacity>
-
-
             </View>
+            </ImageBackground>
         </ScrollView>
     )
 }

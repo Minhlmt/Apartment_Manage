@@ -24,6 +24,7 @@ export default function App(props) {
     if (res.status === 200) {
       setSpinner(false);
       storeData(result.token,result.infoUser);
+      console.log('USERID ',result.infoUser._id)
       props.navigation.navigate(ScreenKey.ChooseApart,{token:result.token,userId:result.infoUser._id});
     } else {
       setSpinner(false);

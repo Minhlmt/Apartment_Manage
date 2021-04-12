@@ -3,6 +3,7 @@ import { StyleSheet,ScrollView, SectionList ,Text, View,FlatList} from 'react-na
 import ItemNotification from './Items/ItemNotification';
 import ItemService from './Items/ItemService';
 import {Service} from '../../globals/constants'
+import { ImageBackground } from 'react-native';
 const DATA = [
     {
       id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
@@ -19,7 +20,8 @@ const DATA = [
   ];
 export default function Home(props) {
     return (
-        <ScrollView style={{flex: 1}}>
+        // <ScrollView style={{flex: 1}}>
+          <ImageBackground  style={{ flex: 1, resizeMode: 'cover' }} source={require('../../../image/background.jpg')}>
            <View>
                <Text style={styles.title}>Service</Text>
            </View>
@@ -38,9 +40,10 @@ export default function Home(props) {
                <ItemService src='' name='jhg'/>
            </View>
            </View>
+           </ImageBackground> 
           
            
-        </ScrollView>
+        // </ScrollView>
     )
 }
 const styles = StyleSheet.create({

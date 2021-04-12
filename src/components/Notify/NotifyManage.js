@@ -32,27 +32,25 @@ export default function App(props) {
   const [limit, setLimit] = useState(1);
   const [token, setToken] = useState();
   const [flag, setFlag] = useState(true);
-  const [load,setLoad]=useState(false);
-  const [userId,setUserId]=useState();
-  const [is_read,setIs_read]=useState();
-  const [alive,setAlive]=useState();
+  const [load, setLoad] = useState(false);
+  const [userId, setUserId] = useState();
+  const [alive, setAlive] = useState();
   const renderItem = ({ item }) => {
-      // console.log(item);
-     
-      for( let receivers of item.receivers){
-        if( receivers.user_id===userId){
-         setIs_read(receivers.is_read) 
-        }
-        
+
+    let is_read;
+    for (let receivers of item.receivers) {
+      if (receivers.user_id === userId) {
+        is_read = receivers.is_read;
       }
+    }
 
     return (
-   
-        <ItemNotifyManger id={item._id} title={item.title} content={item.content} create_date={item.create_date}
+
+      <ItemNotifyManger id={item._id} title={item.title} content={item.content} create_date={item.create_date}
         image={item.image} link={item.link}
-          status={is_read} navigation={props.navigation} token={token} userId={userId} />
-     
-      
+        status={is_read} navigation={props.navigation} token={token} userId={userId} />
+
+
     );
   };
   const getData = async () => {
@@ -62,7 +60,7 @@ export default function App(props) {
       const infoUser = await AsyncStorage.getItem('infoUser');
       if (token !== null) {
         const _token = JSON.parse(token);
-        const _info= JSON.parse(infoUser);
+        const _info = JSON.parse(infoUser);
         setUserId(_info._id);
         setToken(_token);
         setFlag(false);
@@ -80,67 +78,66 @@ export default function App(props) {
         Authorization: 'Bearer ' + `${token}`,
         'Content-Type': 'application/json',
       },
-      
+
     })
     const result = await res.json();
     if (res.status === 200) {
-     
+
       if (result.data.length === 0) {
         setPage(1);
         setLoad(true);
       }
       else {
-        if(!load)
-        {
+        if (!load) {
 
           setData(data.concat(result.data));
         }
-     
+
       }
     }
   }
   useEffect(() => {
     getData();
     fetchData();
+
   }, [flag]);
 
   const handleOnEndReached = async () => {
     setPage(page + 1);
     console.log(page);
-    if(page!==1)
-    {
+    if (page !== 1) {
       fetchData();
     }
-    
-    
+
+
   };
 
   return (
-    <View>
-       <View style={styles.container1} >
-                <View style={styles.background} >
-                    {/* <Image style={styles.image} source={require('../../../image/sea.jpg')} /> */}
-                    <ImageBackground source={require('../../../image/notify.jpg')} style={styles.image}>
-                        <Text style={styles.text1} adjustsFontSizeToFit>Thông báo</Text>
-                    </ImageBackground>
-                </View>
-            </View>
-            <ImageBackground source={require('../../../image/notify1.png')} style={styles.image1}>
-            <FlatList
-      data={data}
-      keyExtractor={(item, index) => index.toString()}
-      renderItem={renderItem}
-      onEndReached={handleOnEndReached}
-      onEndReachedThreshold={0.1}
-      onScrollBeginDrag={() => {
-        stopFetchMore = false;
-      }}
-      ListFooterComponent={() => loadingMore && <ListFooterComponent />}
-    />
-            </ImageBackground>
-           
-    </View>
-    
+    <ImageBackground  style={{ flex: 1, resizeMode: 'cover' }} source={require('../../../image/background.jpg')}>
+      <View style={styles.container1} >
+        <View style={styles.background} >
+          {/* <Image style={styles.image} source={require('../../../image/sea.jpg')} /> */}
+          <ImageBackground source={require('../../../image/notify.jpg')} style={styles.image}>
+            <Text style={styles.text1} adjustsFontSizeToFit>Thông báo</Text>
+          </ImageBackground>
+        </View>
+      </View>
+      {/* <ImageBackground source={require('../../../image/notify1.png')} style={styles.image1}> */}
+        <FlatList
+          data={data}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={renderItem}
+          onEndReached={handleOnEndReached}
+          onEndReachedThreshold={0.1}
+          onScrollBeginDrag={() => {
+
+          }}
+          ListFooterComponent={() => loadingMore && <ListFooterComponent />}
+        />
+      {/* </ImageBackground> */}
+
+    </ImageBackground>
+
   );
 }
 
@@ -184,8 +181,8 @@ const styles = StyleSheet.create({
     width: window.width,
     overflow: 'hidden',
     height: window.width / 2
-},
-background: { // this shape is a circle 
+  },
+  background: { // this shape is a circle 
     borderRadius: window.width,
     width: window.width * 2,
     height: window.width * 2,
@@ -193,29 +190,29 @@ background: { // this shape is a circle
     position: 'absolute',
     bottom: 0,
     overflow: 'hidden'
-},
-image: {
+  },
+  image: {
     height: window.width / 1.7,
     width: window.width,
     position: 'absolute',
     bottom: 0,
     marginLeft: window.width / 2,
     backgroundColor: '#9DD6EB'
-},
-text1: {
-    marginTop: window.height/9.5,
+  },
+  text1: {
+    marginTop: window.height / 9.5,
     color: "white",
     fontSize: 42,
     fontWeight: "bold",
     textAlign: "center",
     // backgroundColor: "#000000a0"
-},
-image1: {
-  height: window.height/1.5,
-  width: window.width,
-  // position: 'absolute',
-  bottom: 0,
-  // marginLeft: window.width / 2,
-  backgroundColor: '#9DD6EB'
-},
+  },
+  image1: {
+    height: window.width *1.08,
+    width: window.width,
+    // position: 'absolute',
+    bottom: 0,
+    // marginLeft: window.width / 2,
+    backgroundColor: '#9DD6EB'
+  },
 });
