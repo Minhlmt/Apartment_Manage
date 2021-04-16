@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
-import { Service } from '../../../globals/constants'
 import { ScreenKey } from '../../../globals/constants'
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function ItemService(props) {
   const [token, setToken] = useState('');
@@ -31,20 +31,23 @@ export default function ItemService(props) {
     getData();
   }, [])
   const handleClick = () => {
-    if (props.id === Service.Bill) {
+    if (props.id === ScreenKey.Bill) {
       props.navigation.navigate(ScreenKey.Bill, {
         token: token,
         apartId: apartId
       })
     }
-    if (props.id === Service.Repair) {
+    if (props.id === ScreenKey.Repair) {
       props.navigation.navigate(ScreenKey.Repair)
     }
-    if (props.id === Service.NotifyRepair) {
+    if (props.id === ScreenKey.NotifyRepair) {
       props.navigation.navigate(ScreenKey.NotifyRepair, {
         token: token,
         userId: userId
       })
+    }
+    if(props.id===ScreenKey.Intro){
+      props.navigation.navigate(ScreenKey.Intro)
     }
   }
   return (

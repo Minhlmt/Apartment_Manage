@@ -8,10 +8,10 @@ var numeral = require('numeral');
 import CalDate from './CalDate'
 export default function WaterBill({route}) {
     const [oldIndex, setOldIndex] = useState(0);
-    const [newIndex, setNewIndex] = useState(10);
+    const [newIndex, setNewIndex] = useState(0);
     const [sumIndex, setSumIndex] = useState(newIndex - oldIndex);
     const [unitPrice, setUnitPrice] = useState(0);
-    const [sumPrice, setSumPrice] = useState('1000');
+    const [sumPrice, setSumPrice] = useState('0');
     const [spinner, setSpinner] = useState(false);
     const [date, setDate] = useState(new Date());
     const [show, setShow] = useState(false);
@@ -52,11 +52,12 @@ export default function WaterBill({route}) {
                 'Content-Type': 'application/json',
             },
         })
-        const result = await res.json();
-      
+       
+       
       
         setSpinner(false);
         if (res.status === 200) {
+            const result = await res.json();
             if(result.data!==null){
                 setOldIndex(result.data.old_index);
                 setNewIndex(result.data.new_index);
@@ -70,6 +71,8 @@ export default function WaterBill({route}) {
             else{
                 setOldIndex(0);
                 setNewIndex(0);
+                setUnitPrice(0);
+                setSumIndex(0);
             }
           
 

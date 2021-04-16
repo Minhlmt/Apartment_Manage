@@ -7,6 +7,7 @@ import { ScreenKey } from '../../globals/constants'
 import { ScrollView } from 'react-native-gesture-handler';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Icon } from 'react-native-elements'
+import { ImageBackground } from 'react-native';
 const cld = new Cloudinary({
     cloud: {
         cloudName: 'datnqlcc'
@@ -62,7 +63,9 @@ export default function NotifyDetailManage(props) {
     }, [])
 
     return (
+        <ImageBackground  style={{ flex: 1, resizeMode: 'cover' }} source={require('../../../image/bgDetail.jpg')}>
         <ScrollView style={styles.container}>
+
             <View>
                 {/* <Spinner
                     visible={spinner}
@@ -84,7 +87,7 @@ export default function NotifyDetailManage(props) {
                 <Text style={styles.text_input}>{title}</Text>
 
             </View>
-            <View style={{ marginTop: 20 }}>
+            <View style={{ marginTop: 30 }}>
                 <View style={styles.icon_title}>
                     <Icon name='content-paste'
                         type='material-community'
@@ -96,21 +99,21 @@ export default function NotifyDetailManage(props) {
 
                 <Text style={styles.text_input}>{content}</Text>
             </View>
-            <View style={{ marginTop: 20 }}>
+            <View style={{ marginTop: 30 }}>
                 <View style={styles.icon_title}>
                     <Icon name='date'
                         type='fontisto'
                         color='#34495e'
                         size={25}
                     />
-                    <Text style={styles.text}>Ngày báo cáo</Text>
+                    <Text style={styles.text}>Ngày đăng</Text>
                 </View>
 
                 <Text style={styles.text_input}>{create_date}</Text>
             </View>
            
                 {statusLink && (
-                    <View style={{ marginTop: 20 }}>
+                    <View style={{ marginTop: 30 }}>
                         <View style={styles.icon_title}>
                             <Icon name='article'
                                 type='material'
@@ -120,14 +123,9 @@ export default function NotifyDetailManage(props) {
                             <Text style={styles.text}>Bài viết</Text>
                         </View>
 
-                        <Text style={styles.text_input}>{link}</Text>
+                        <Text style={styles.text_input}  onPress={() => Linking.openURL(`${link}`)}>{link}</Text>
                     </View>)}
-
-
-
-          
-
-            <View style={{ marginTop: 20 }}>
+            <View style={{ marginTop: 30 }}>
                 {statusImage && (
                     <View style={styles.icon_title}>
                         <Icon name='image'
@@ -150,6 +148,7 @@ export default function NotifyDetailManage(props) {
 
 
         </ScrollView>
+        </ImageBackground>
     )
 }
 const styles = StyleSheet.create({
@@ -178,9 +177,6 @@ const styles = StyleSheet.create({
         fontSize: Text_Size.Text,
         marginTop: 2,
         marginLeft: 5,
-
-
-
     },
     text_status: {
         marginTop: 20,
@@ -189,7 +185,7 @@ const styles = StyleSheet.create({
     text_input: {
         color: '#34495e',
         fontSize: Text_Size.Text,
-
+        marginTop:10,
         borderColor: '#2ecc71',
         borderBottomWidth: 0.3
 

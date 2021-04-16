@@ -29,9 +29,10 @@ export default function Info(props) {
             },
 
         })
-        const result = await res.json();
+       
         setSpinner(false);
         if(res.status===200){
+            const result = await res.json();
             const res_1 = await fetch(URL + `api/block/${result.data.block}`, {
                 method: 'GET',
                 headers: {
@@ -194,7 +195,7 @@ export default function Info(props) {
                 <View style={styles._row}>
                     <Icon name='v-card'
                         type='entypo'
-                        color='#e74c3c'
+                        color='rgba(169, 76, 122, 0.9)'
                         size={30}
                     />
                         <Text style={styles.text}>CMND/Căn cước</Text>
@@ -268,13 +269,13 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: Text_Size.Text,
-        color: 'black',
+        color: 'rgba(0, 0, 0, 0.7)',
         marginLeft: 10,
        
     },
     text_info: {
         fontSize: Text_Size.Text,
-        color: 'black',
+        color: 'rgba(0, 0, 0, 0.7)',
         marginTop: 5,
         flexWrap: 'wrap' 
 

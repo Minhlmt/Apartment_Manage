@@ -50,9 +50,10 @@ export default function SumBill({ route }) {
                 'Content-Type': 'application/json',
             },
         })
-        const result_elect = await res_elec.json();
+        
      
         if (res_elec.status === 200) {
+            const result_elect = await res_elec.json();
             if(result_elect.data!==null){
                 tempSum=tempSum+result_elect.data.total_money;
                
@@ -74,17 +75,19 @@ export default function SumBill({ route }) {
                 'Content-Type': 'application/json',
             },
         })
-        const result_water = await res_water.json();
-        console.log("nuoc tra ve ",result_water);
+       
+       
         if (res_water.status === 200) {
+            const result_water = await res_water.json();
             if(result_water.data!==null){
+               
                 tempSum=tempSum+result_water.data.total_money;
-             
                 var _sumPrice_water = numeral(result_water.data.total_money.toString()).format('0,0');
                 setWater(_sumPrice_water)
             }
             else{
                 setWater(0);
+                
             }
            
            
@@ -98,16 +101,19 @@ export default function SumBill({ route }) {
               'Content-Type': 'application/json',
             },
           })
-          const result_other = await res_other.json();
+         
       
           setSpinner(false);
           if(res_other.status===200)
           {
+            const result_other = await res_other.json();
             if(result_other.data!==null)
             {
+                
                 let _sumPrice_other= result_other.data.apart_management+result_other.data.parking_fees+result_other.data.maintenance_fee
                 +result_other.data.service_charge+result_other.data.other_fees;
                 tempSum=tempSum+_sumPrice_other;
+               
             
                 
                 let _sumPriceFormat=numeral(_sumPrice_other.toString()).format('0,0');
@@ -115,6 +121,7 @@ export default function SumBill({ route }) {
                 setOther(_sumPriceFormat);
             }
             else{
+                console.log("ERROR");
                 setOther(0);
             }
 

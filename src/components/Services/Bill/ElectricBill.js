@@ -55,10 +55,11 @@ export default function ElectricBill({ route }) {
                 'Content-Type': 'application/json',
             },
         })
-        const result = await res.json();
+     
 
         setSpinner(false);
         if (res.status === 200) {
+            const result = await res.json();
             if (result.data !== null) {
                 setOldIndex(result.data.old_index);
                 setNewIndex(result.data.new_index);

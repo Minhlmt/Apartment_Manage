@@ -8,11 +8,10 @@ import bgImage from '../../../image/login.jpg'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { Dimensions } from 'react-native';
 const { width: WIDTH } = Dimensions.get('window')
-export default function App(props) {
+export default function App() {
     const [showPass, setShowPass] = useState(true);
     const [username, setUsername] = useState();
     const [pass, setPass] = useState();
-    const [spinner,setSpinner]=useState(false)
     const senddata = async () => {
         const res = await fetch(URL + 'api/auth/login', {
             method: 'POST',
@@ -24,11 +23,8 @@ export default function App(props) {
                 password: pass
             }),
         })
-        
-       
-        console.log("STATUS ",res.status);
+        const result = await res.json();
         if (res.status === 200) {
-            const result = await res.json();
             setSpinner(false);
             storeData(result.token, result.infoUser);
             console.log('USERID ', result.infoUser._id)

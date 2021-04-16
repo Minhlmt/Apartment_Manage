@@ -16,6 +16,7 @@ export const ScreenKey={
     TabNotify:'tabNotify',
     NotifyRepair:'notifyRepair',
     NotifyDetailRepair:'notifyDetailRepair',
+    Intro:'introduce'
     
 
 
@@ -23,7 +24,8 @@ export const ScreenKey={
 export const Service={
     Bill:'bill',
     Repair:'repair',
-    NotifyRepair:'notifyRepair'
+    NotifyRepair:'notifyRepair',
+    Intro:'introduce'
 }
 export const Text_Size={
     Text:20,

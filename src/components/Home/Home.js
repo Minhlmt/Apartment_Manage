@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet,ScrollView, SectionList ,Text, View,FlatList} from 'react-native';
 import ItemNotification from './Items/ItemNotification';
 import ItemService from './Items/ItemService';
-import {Service} from '../../globals/constants'
+import {ScreenKey} from '../../globals/constants'
 import { ImageBackground } from 'react-native';
+import { Dimensions } from 'react-native';
+const { width: WIDTH } = Dimensions.get('window')
 const DATA = [
     {
       id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
@@ -22,20 +24,25 @@ export default function Home(props) {
     return (
         // <ScrollView style={{flex: 1}}>
           <ImageBackground  style={{ flex: 1, resizeMode: 'cover' }} source={require('../../../image/background.jpg')}>
+           <ImageBackground style={{ resizeMode:'cover',height:50}} source={require('../../../image/home1.jpg')}>
+             <Text>
+               xin chao
+             </Text>
+           </ImageBackground>
            <View>
                <Text style={styles.title}>Service</Text>
            </View>
            <View style={styles.margin_top}>
            <View style={styles.service_h}>
-               <ItemService id={Service.Bill} src='' name='Hóa đơn' navigation={props.navigation}/>
-               <ItemService id={Service.Repair} src='' name='Sửa chữa' navigation={props.navigation}/>
+               <ItemService id={ScreenKey.Bill} src='' name='Hóa đơn' navigation={props.navigation}/>
+               <ItemService id={ScreenKey.Repair} src='' name='Sửa chữa' navigation={props.navigation}/>
                <ItemService  name='' navigation={props.navigation}/>
            </View>
            </View>
            <View style={styles.service_v}>
            <View style={styles.service_h}>
-               <ItemService id={Service.NotifyRepair} name='TB sửa chữa' navigation={props.navigation}/>
-               <ItemService src='' name='opl'/>
+               <ItemService id={ScreenKey.NotifyRepair} name='TB sửa chữa' navigation={props.navigation}/>
+               <ItemService id={ScreenKey.Intro} name='Giới thiệu' navigation={props.navigation}/>
 
                <ItemService src='' name='jhg'/>
            </View>

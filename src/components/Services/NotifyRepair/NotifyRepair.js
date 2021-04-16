@@ -45,9 +45,9 @@ const fetchData=async()=>{
       'Content-Type': 'application/json',
     },
   })
-  const result=await res.json();
-  console.log("res ",result);
+  
   if(res.status===200){
+    const result=await res.json();
     if(result.data.length===0){
      setPage(1);
      setLoad(true);

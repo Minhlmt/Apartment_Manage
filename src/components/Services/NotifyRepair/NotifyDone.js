@@ -4,7 +4,8 @@ import Item from '../../Home/Items/ItemNotification'
 import {URL} from '../../../globals/constants'
 import ItemNotification from '../../Home/Items/ItemNotification'
 import { useLinkProps } from '@react-navigation/native';
-
+import { ImageBackground } from 'react-native';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 
 
@@ -30,6 +31,7 @@ export default function App(props) {
   const [limit,setLimit]=useState(1);
   const [load,setLoad]=useState(false);
   const {token,userId}=props.route.params;
+  const [spinner,setSpinner]=useState(false)
   const renderItem = ({ item }) => {
     return (
       <ItemNotification id={item._id} title={item.title} is_read_user={item.is_read_user} 
@@ -45,9 +47,10 @@ const fetchData=async()=>{
       'Content-Type': 'application/json',
     },
   })
-  const result=await res.json();
-  console.log('hoan thanh ',result);
+ 
+  setSpinner(false);
   if(res.status===200){
+    const result=await res.json();
     if(result.data.length===0){
      setPage(1);
      setLoad(true);
@@ -62,6 +65,7 @@ const fetchData=async()=>{
   }
 }
   useEffect(() => {
+    setSpinner(true);
     fetchData();
   }, []);
 
@@ -74,19 +78,30 @@ const fetchData=async()=>{
     }
    
   };
+  const element = (data.length === 0) ?<View style={styles.emptyContainer}><Text style={styles.textEmpty}>Không có dữ liệu</Text></View> :
+  <FlatList
+    data={data}
+    keyExtractor={(item, index) => index.toString()}
+    renderItem={renderItem}
+    onEndReached={handleOnEndReached}
+    onEndReachedThreshold={0.1}
+    onScrollBeginDrag={() => {
+      stopFetchMore = false;
+    }}
+    ListFooterComponent={() => loadingMore && <ListFooterComponent />}
+  />
 
   return (
-    <FlatList
-      data={data}
-      keyExtractor={(item,index) => index.toString()}
-      renderItem={renderItem}
-      onEndReached={handleOnEndReached}
-      onEndReachedThreshold={0.1}
-      onScrollBeginDrag={() => {
-        stopFetchMore = false;
-      }}
-      ListFooterComponent={() => loadingMore && <ListFooterComponent />}
-    />
+    <ImageBackground  style={{ flex: 1, resizeMode: 'cover' }} source={require('../../../../image/repairNotify3.jpg')}>
+     <Spinner
+                visible={spinner}
+                textContent={'Loading...'}
+                textStyle={styles.spinnerTextStyle}
+            />
+    <View style={{flex:1, justifyContent:'center'}}>
+    {element}
+  </View>
+  </ImageBackground>
   );
 }
 
@@ -124,5 +139,11 @@ const styles = StyleSheet.create({
     color: 'black',
     marginBottom: 10,
     fontSize: 20,marginLeft:5
+  },
+  textEmpty:{
+    fontSize:20
+  },
+  emptyContainer:{
+    flexDirection:'row',justifyContent:'center',alignItems:'center'
   }
 });

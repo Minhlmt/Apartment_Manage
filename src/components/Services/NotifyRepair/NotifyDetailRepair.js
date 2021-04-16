@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import { FlatList, StyleSheet, Text, View, TouchableOpacity, Image ,ImageBackground} from 'react-native';
 import { Cloudinary } from '@cloudinary/base';
 import Item from '../../Home/Items/ItemNotification'
 import { URL, Text_Size } from '../../../globals/constants'
@@ -32,9 +32,10 @@ export default function NotifyDetailRepair(props) {
                 'Content-Type': 'application/json',
             },
         })
-        const result = await res.json();
+       
         setSpinner(false);
         if (res.status === 200) {
+            const result = await res.json();
             setTitle(result.data.title);
             setContent(result.data.content);
             setCreateDate(result.data.create_date);
@@ -60,6 +61,7 @@ export default function NotifyDetailRepair(props) {
     }, [])
 
     return (
+        <ImageBackground  style={{ flex: 1, resizeMode: 'cover' }} source={require('../../../../image/bgDetail.jpg')}>
         <ScrollView style={styles.container}>
             <View>
                 <Spinner
@@ -82,7 +84,7 @@ export default function NotifyDetailRepair(props) {
                 <Text style={styles.text_input}>{title}</Text>
 
             </View>
-            <View style={{marginTop:20}}>
+            <View style={{marginTop:30}}>
                 <View style={styles.icon_title}>
                     <Icon name='content-paste'
                         type='material-community'
@@ -94,7 +96,7 @@ export default function NotifyDetailRepair(props) {
 
                 <Text style={styles.text_input}>{content}</Text>
             </View>
-            <View style={{marginTop:20}}>
+            <View style={{marginTop:30}}>
                 <View style={styles.icon_title}>
                     <Icon name='date'
                         type='fontisto'
@@ -106,7 +108,7 @@ export default function NotifyDetailRepair(props) {
 
                 <Text style={styles.text_input}>{createDate}</Text>
             </View>
-            <View style={{marginTop:20}}>
+            <View style={{marginTop:30}}>
             {statusImage &&(
                 <View style={styles.icon_title}>
                     <Icon name='image'
@@ -129,6 +131,7 @@ export default function NotifyDetailRepair(props) {
 
 
         </ScrollView>
+        </ImageBackground>
     )
 }
 const styles = StyleSheet.create({
@@ -161,14 +164,16 @@ const styles = StyleSheet.create({
 
 
     },
+    
     text_status:{
         marginTop:20,
         paddingTop:10
     },
+
     text_input: {
         color: '#34495e',
         fontSize: Text_Size.Text,
-
+        marginTop:10,
         borderColor: '#2ecc71',
         borderBottomWidth: 0.3
 

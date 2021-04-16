@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, SectionList, Text, View, Image, TouchableOpacity, Button, TextInput, Alert } from 'react-native';
+import { StyleSheet, SectionList, Text, View, Image, TouchableOpacity, Button, TextInput, Alert, Dimensions } from 'react-native';
 import { Text_Size, URL } from '../../globals/constants'
 import { ScreenKey } from '../../globals/constants'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,6 +7,9 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Fumi } from 'react-native-textinput-effects';
+import { ImageBackground } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons'
+const { width: WIDTH } = Dimensions.get('window')
 export default function ChangeInfo(props) {
   const { name, user_id, email, phone, identify_card, native_place, token } = props.route.params;
   const [newEmail, setNewEmail] = useState(email);
@@ -45,8 +48,9 @@ export default function ChangeInfo(props) {
       })
 
     })
-    const result = await res.json();
+
     if (res.status === 200) {
+      const result = await res.json();
       setSpinner(false);
       storeData(result.data);
       getData();
@@ -72,55 +76,41 @@ export default function ChangeInfo(props) {
 
   }
   return (
-    <View>
+    <ImageBackground style={{ flex: 1, resizeMode: 'cover' }} source={require('../../../image/background.jpg')}>
       <Spinner
         visible={spinner}
         textContent={'Loading...'}
         textStyle={styles.spinnerTextStyle}
       />
-      <View style={styles.container}>
-        {/* <Text style={styles.text}>Email</Text>
+      <View>
+        <Text style={styles.text}>Email</Text>
+      </View>
+      <View style={styles.inputContainer}>
+        <Icon name={'mail-outline'} size={28} color={'rgba(255,255,255,0.7)'}
+          style={styles.inputIcon} />
         <TextInput
-          style={styles.text_input}
-          // placeholder={email}
-          multiline
-          defaultValue={newEmail}
-          
-          onChangeText={text => setNewEmail(text)} /> */}
-        <Fumi
-          label={'Email'}
-          iconClass={MaterialCommunityIcons}
-          iconName={'email-open'}
-          iconColor={'#3498db'}
-          iconSize={20}
-          iconWidth={40}
-          inputPadding={16}
-          defaultValue={newEmail}
-          inputStyle={{ color:'black'}}
-          labelStyle={{fontSize:16}}
-          onChangeText={text => setNewEmail(text)}
+          style={styles.input}
+          placeholderTextColor={'rgba(255,255,255,0.7)'}
+          underlineColorAndroid='transparent'
+          defaultValue={email}
+          onChangeText={(text)=>setNewEmail(text)}
+
         />
       </View>
-      <View style={styles.container}>
-        {/* <Text style={styles.text}>Số điện thoại</Text>
+      <View>
+        <Text style={styles.text}>Phone</Text>
+      </View>
+      <View style={styles.inputContainer}>
+        <Icon name={'phone-portrait-outline'} size={28} color={'rgba(255,255,255,0.7)'}
+          style={styles.inputIcon} />
         <TextInput
-          style={styles.text_input}
-          // placeholder={phone}
-          // multiline
-          defaultValue={newPhone}
-          onChangeText={text => setNewPhone(text)} /> */}
-        <Fumi
-          label={'Số điện thoại'}
-          iconClass={FontAwesome5}
-          iconName={'mobile-alt'}
-          iconColor={'#3498db'}
-          iconSize={20}
-          iconWidth={40}
-          inputPadding={16}
-          defaultValue={newPhone}
-          inputStyle={{ color:'black'}}
-          labelStyle={{fontSize:16}}
-          onChangeText={text => setNewPhone(text)}
+          style={styles.input}
+          placeholderTextColor={'rgba(255,255,255,0.7)'}
+          underlineColorAndroid='transparent'
+          defaultValue={phone}
+          onChangeText={(text)=>setNewPhone(text)}
+          keyboardType={'numeric'}
+
         />
 
       </View>
@@ -132,37 +122,40 @@ export default function ChangeInfo(props) {
         </TouchableOpacity>
       </View>
 
-    </View>
+    </ImageBackground>
   )
 }
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'column',
+  inputContainer: {
+    marginTop: 10
+  },
+  input: {
+    width: WIDTH - 55,
+    height: 45,
+    borderRadius: 10,
+    fontSize: 20,
+    paddingLeft: 45,
+    backgroundColor: 'rgba(0,0,0,0.35)',
+    color: 'rgba(255,255,255,1)',
+    marginHorizontal: 25
+  },
+  inputIcon: {
+    position: 'absolute',
+    top: 8,
+    left: 37
+  },
+  text:{
+    color: 'rgba(255,255,255,0.7)',
+    fontSize:20,
+   
+    fontWeight:'bold',
+    marginTop:10,
+    marginHorizontal: 25,
+  },
 
-  },
-  button_image: {
-    flexDirection: 'column',
-    marginTop: 10,
-    marginLeft: 10
-    // justifyContent:'center'
 
-  },
-  text: {
-    color: 'black',
-    fontSize: Text_Size.Text,
-    marginTop: 10,
-    marginLeft: 10,
-    marginRight: 10
-  },
-  text_input: {
-    color: 'black',
-    fontSize: Text_Size.Text,
-    borderBottomWidth: 1,
-    borderColor: '#2ecc71',
-    marginLeft: 10,
-    marginRight: 10
 
-  },
+
   myButtonContainer: {
     display: 'flex',
     alignItems: 'stretch',

@@ -15,8 +15,8 @@ export default function ItemNotifyManger(props) {
             setStatus(true);
             setStyleStatus(styles.status);
         }
-       
-    },[])
+        
+    },[props.status])
     const changeStatusNotify= async()=>{
         console.log("token api ",props.token);
         console.log("userid",props.userId);
@@ -50,7 +50,7 @@ export default function ItemNotifyManger(props) {
         })
     }
     return (
-        <View style={{flexDirection:'column',justifyContent:'space-between'}}>
+        <View style={{flexDirection:'column',justifyContent:'space-between',elevation:2}}>
         <TouchableOpacity style={ styles.container1 } onPress={handleClick}>
              <Image style={{ width: 50, height: 50, borderRadius: 400 / 2 }} source={require('../../../../image/bell.png')} />
            
@@ -73,7 +73,7 @@ export default function ItemNotifyManger(props) {
 const styles = StyleSheet.create({
     container1: {
         flexDirection: 'row',
-        backgroundColor: "#EEEEEE",
+        backgroundColor: "rgba(255, 255, 255, 0.2)",
         borderBottomColor: 'gray',
         borderBottomWidth: 1,
         marginTop: 7,
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     },
     text: {
         flex: 1,
-        color: 'black',
+        color: 'rgba(3, 0, 0, 0.7)',
         marginBottom: 10,
         fontSize: 20
     },

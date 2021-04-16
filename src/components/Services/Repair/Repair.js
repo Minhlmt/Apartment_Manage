@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, SectionList, Text, TextInput, View, Button, Image, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, SectionList, Text, TextInput, View, Button, Image, Alert, TouchableOpacity, ImageBackground } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import CalDate from '../Bill/CalDate'
 import { Text_Size, URL } from '../../../globals/constants'
 import { ScreenKey } from '../../../globals/constants'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Hoshi } from 'react-native-textinput-effects';
-import { Isao } from 'react-native-textinput-effects';
+import Icon from 'react-native-vector-icons/Ionicons'
+import { Dimensions } from 'react-native';
+const { width: WIDTH } = Dimensions.get('window')
 export default function Repair(props) {
   const [topic, setTopic] = useState('');
   const [content, setContent] = useState('');
@@ -38,7 +39,7 @@ export default function Repair(props) {
         const _apartIdObject = JSON.parse(_apartId);
         const _userIdObject = JSON.parse(_userId);
         // console.log(userId+" "+token+" "+apartId);
-        setUserId(_userIdObject.id);
+        setUserId(_userIdObject._id);
         setToken(_tokenObject);
         setApartId(_apartIdObject);
         setFlag2(false);
@@ -61,8 +62,9 @@ export default function Repair(props) {
           data: imageBase64
         }),
       })
-      const result = await res.json();
+     
       if (res.status === 200) {
+        const result = await res.json();
         const res1 = await fetch(URL + 'api/repair/add', {
           method: 'POST',
           headers: {
@@ -77,6 +79,7 @@ export default function Repair(props) {
 
           }),
         })
+     
         if (res1.status === 200) {
           Alert.alert('Thông báo', 'Báo cáo thành công',
             [
@@ -102,7 +105,9 @@ export default function Repair(props) {
 
         }),
       })
+    
       if (res1.status === 200) {
+        
         Alert.alert('Thông báo', 'Báo cáo thành công',
           [
             { text: "OK" }
@@ -180,59 +185,38 @@ export default function Repair(props) {
   }
 
   return (
-    <View>
+    <ImageBackground style={{ flex: 1, resizeMode: 'cover' }} source={require('../../../../image/background.jpg')}>
       <View style={styles.container}>
-        {/* <Text style={styles.text}>Chủ đề</Text> */}
-        {/* <TextInput style={styles.text_input}
-          placeholderTextColor="#FF0000"
-          multiline
-          onChangeText={text => setTopic(text)}
-        /> */}
-        
-        <Isao
-          label={'Chủ đề'}
-          labelStyle={styles.text}
-          // this is applied as active border and label color
-          activeColor={'#da7071'}
-          // active border height
-          borderHeight={3}
-          inputPadding={20}
-          labelHeight={24}
-          inputStyle={{ color:'black'}}
-          // this is applied as passive border and label color
-          passiveColor={'#3498db'}
-          multiline
-          onChangeText={text => setTopic(text)}
-        />
+        <View>
+          <Text style={styles.text2}>Chủ đề</Text>
+        </View>
+        <View style={styles.inputContainer}>
+          {/* <Icon name={'phone-portrait-outline'} size={28} color={'rgba(255,255,255,0.7)'}
+            style={styles.inputIcon} /> */}
+          <TextInput
+            style={styles.input2}
+            placeholderTextColor={'rgba(255,255,255,0.7)'}
+            underlineColorAndroid='transparent'
+            onChangeText={(text) => setTopic(text)}
+            multiline
+          />
+        </View>
       </View>
-
       <View style={styles.container}>
-        {/* <Text style={styles.text}>Nội dung</Text>
-        <TextInput style={styles.text_input}
-          multiline
-          placeholderTextColor="#FF0000"
-          onChangeText={text => setContent(text)}
-        /> */}
-       
-         <Isao
-          label={'Nội dung'}
-          labelStyle={styles.text}
-          // this is applied as active border and label color
-          activeColor={'#da7071'}
-       
-          // active border height
-          borderHeight={3}
-          inputPadding={20}
-          labelHeight={24}
-          inputStyle={{ color:'black'}}
-          // this is applied as passive border and label color
-          passiveColor={'#3498db'}
-          multiline
-          onChangeText={text => setContent(text)}
-          
-        />
-
-
+        <View>
+          <Text style={styles.text2}>Nội dung</Text>
+        </View>
+        <View style={styles.inputContainer}>
+          {/* <Icon name={'phone-portrait-outline'} size={28} color={'rgba(255,255,255,0.7)'}
+            style={styles.inputIcon} /> */}
+          <TextInput
+            style={styles.input2}
+            placeholderTextColor={'rgba(255,255,255,0.7)'}
+            underlineColorAndroid='transparent'
+            multiline
+            onChangeText={(text) => setContent(text)}
+          />
+        </View>
       </View>
       <View style={{ flexDirection: 'row' }}>
 
@@ -273,7 +257,7 @@ export default function Repair(props) {
           onChange={onChange}
         />
       )} */}
-    </View>
+    </ImageBackground>
   )
 
 
@@ -293,19 +277,52 @@ const styles = StyleSheet.create({
 
   },
   text: {
-    color: 'black',
-    fontSize: 18,
-   
-  },
-  text_input: {
-    color: 'black',
-    fontSize: Text_Size.Text,
-    borderBottomWidth: 1,
-    borderColor: '#2ecc71',
-    marginLeft: 10,
-    marginRight: 10
+    color: 'rgba(206, 0, 255, 1)',
+    fontSize: 20,
+
+    fontWeight: 'bold',
+    marginTop: 10,
+    marginHorizontal: 25,
 
   },
+  text2: {
+    color: 'rgba(72, 100, 106, 1)',
+    fontSize: 20,
+
+    fontWeight: 'bold',
+    marginTop: 10,
+    marginHorizontal: 25,
+
+  },
+  inputContainer: {
+    marginTop: 10
+  },
+  input: {
+    width: WIDTH - 55,
+    // height: 45,
+    borderRadius: 10,
+    fontSize: 20,
+
+    backgroundColor: ' rgba(255, 255, 255, 0.3)',
+    color: 'rgba(206, 0, 255, 1)',
+    marginHorizontal: 25
+  },
+  input2: {
+    width: WIDTH - 55,
+    // height: 45,
+    borderRadius: 10,
+    fontSize: 16,
+
+    backgroundColor: ' rgba(255, 255, 255, 0.3)',
+    color: 'rgba(72, 100, 106, 1)',
+    marginHorizontal: 25
+  },
+  inputIcon: {
+    position: 'absolute',
+    top: 8,
+    left: 37
+  },
+
   appButtonContainer: {
     elevation: 8,
     backgroundColor: "#009688",

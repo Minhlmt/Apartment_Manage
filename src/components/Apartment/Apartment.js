@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { URL, Text_Size } from '../../globals/constants'
 import { ScreenKey } from '../../globals/constants'
 import { Dimensions } from 'react-native';
+import { ImageBackground } from 'react-native';
 const window = Dimensions.get('window');
 export default function Apartment(props) {
     // const { token, userId } = props.route.params;
@@ -24,8 +25,9 @@ export default function Apartment(props) {
             },
 
         })
-        const result = await res.json();
+       
         if (res.status === 200) {
+            const result = await res.json();
             let block_Id = [];
             let name_apart=[];
             let block_name=[];
@@ -61,7 +63,6 @@ export default function Apartment(props) {
             setApartId(temp_apart[0].value);
             setApart(temp_apart);
         }
-
     }
 
     useEffect(() => {
@@ -84,12 +85,20 @@ export default function Apartment(props) {
     }
 
     return (
-        <View style={styles.container}>
-            <ScrollView>
-                <Text style={styles.welcome}>Mời bạn chọn căn hộ</Text>
+       
+       
+             <ImageBackground  style={{ flex: 1, resizeMode: 'cover' }} source={require('../../../image/bgApart.jpg')}>
+          
+                   <View style={styles._title}>
+                <Text style={styles._text_title} >{`WELCOME,\nCÁM ƠN BẠN ĐÃ SỬ DỤNG DỊCH VỤ CHÚNG TÔI !`}</Text>
+               
+            </View>
+            <View style={{ flex:1, flexDirection:'column',justifyContent:'space-around'}}>
+
+                <View >
+
               
-              
-            
+                <Text style={styles.welcome}>Mời bạn chọn căn hộ </Text>
                 <View style={styles.component}>
                     <RadioForm formHorizontal={false} animation={true}  >
                         {apart.map((obj, i) => {
@@ -108,9 +117,9 @@ export default function Apartment(props) {
                                         index={i}
                                         isSelected={value3Index === i}
                                         onPress={onPress}
-                                        buttonInnerColor={'#f39c12'}
+                                        buttonInnerColor={'rgba(0, 0, 255, 0.7)'}
                                         buttonOuterColor={value3Index === i ? '#2196f3' : '#000'}
-                                        buttonSize={20}
+                                        buttonSize={15}
                                         buttonStyle={{}}
                                         buttonWrapStyle={{ marginLeft: 10 }}
                                     />
@@ -125,32 +134,43 @@ export default function Apartment(props) {
                             )
                         })}
                     </RadioForm>
-                    <Text>selected: {types3[value3Index].label}</Text>
+                    {/* <Text>selected: {types3[value3Index].label}</Text> */}
                 </View>
-                <TouchableOpacity onPress={handleClick}>
-                <View style={styles.container}>
+                </View>
+                <TouchableOpacity onPress={handleClick} style={styles.container}>
+                <View >
                     <Text style={styles.text_title}>Next</Text>
 
                 </View>
             </TouchableOpacity>
 
-            </ScrollView>
-        </View>
+            </View>
+           
+            </ImageBackground>
+      
     );
 }
 
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+       
+        flexDirection:'column',
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
+        justifyContent:'center',
+        alignContent:'center',
+        marginRight:20,
+        backgroundColor: 'rgba(0, 0, 255, 0.4)',
+        paddingVertical:20,
+        marginHorizontal:10,
+        borderRadius:25
     },
     welcome: {
-        fontSize: 20,
+        fontSize: 22,
         textAlign: 'center',
         marginTop: 20,
         marginBottom: 20,
+        color:'rgba(46, 138, 138, 0.9)'
     },
     instructions: {
         textAlign: 'center',
@@ -168,5 +188,23 @@ const styles = StyleSheet.create({
     },
     radioButtonWrap: {
         marginRight: 5
+    },
+    _title: {
+        display: 'flex',
+        flexDirection: "row",
+        justifyContent: 'center',
+        padding: 25,
+        backgroundColor: "#00a8ff",
+        paddingVertical: 10,
+        paddingHorizontal: 12,
+        elevation: 8,
+    },
+    _text_title: {
+        fontSize: 20,
+
+        color: "#fff",
+        fontWeight: "bold",
+        alignSelf: "center",
+        textTransform: 'capitalize',
     },
 });

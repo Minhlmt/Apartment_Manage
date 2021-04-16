@@ -47,7 +47,7 @@ export default function ItemNotification(props) {
 const styles = StyleSheet.create({
     container1: {
         flexDirection: 'row',
-        backgroundColor: "#EEEEEE",
+        backgroundColor: "rgba(255, 255, 255, 0.2)",
         borderBottomColor: 'gray',
         borderBottomWidth: 1,
         marginTop: 15,
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     },
     text: {
         flex: 1,
-        color: 'black',
+        color: 'rgba(3, 0, 0, 0.7)',
         marginBottom: 10,
         fontSize: 20
     },
