@@ -81,7 +81,8 @@ export default function Apartment(props) {
     const handleClick = () => {
 
         storeData(apartId);
-        props.navigation.navigate(ScreenKey.Home);
+        
+        props.navigation.navigate(ScreenKey.Home,{imageBase64:''});
     }
 
     return (

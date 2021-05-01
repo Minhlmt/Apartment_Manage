@@ -12,6 +12,8 @@ import ScreenInfo from '../components/Info/ScreenInfo'
 import ScreenNotifyManage from '../components/Notify/ScreenNotifyManage'
 import ScreenNotifyRepair from '../components/Services/NotifyRepair/ScreenNotifyRepair'
 import Intro from '../components/Introduce/snippets'
+import ChooseImageHome from '../components/Home/ChooseImage'
+import Complain from '../components/Complain/Complain'
 const ServiceNavigationStack = createStackNavigator();
 // const Tab = createBottomTabNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -23,6 +25,8 @@ export const Stack_Home_Service = () => {
       <ServiceNavigationStack.Screen name={ScreenKey.Repair} component={RepairScreen} options={{ title: 'Sửa chữa' }} />
       <ServiceNavigationStack.Screen name={ScreenKey.NotifyRepair} component={ScreenNotifyRepair} options={{ title: 'TB sửa chữa' }} />
       <ServiceNavigationStack.Screen name={ScreenKey.Intro} component={Intro} options={{ title: 'Giới thiệu' , headerShown:false}} />
+      <ServiceNavigationStack.Screen name={ScreenKey.ChooseImageHome} component={ChooseImageHome} options={{ headerShown:false}} />
+      <ServiceNavigationStack.Screen name={ScreenKey.Complain} component={Complain} options={{ headerShown:false}} />
 
     </ServiceNavigationStack.Navigator>
   )
@@ -97,6 +101,7 @@ export const Tab_Home_Profile = () => {
     <Tab.Screen
       name={ScreenKey.TabHome}
       component={Stack_Home_Service}
+    
       options={{
         tabBarLabel: 'Home',
         tabBarColor: ' rgba(0, 184, 255, 1)',

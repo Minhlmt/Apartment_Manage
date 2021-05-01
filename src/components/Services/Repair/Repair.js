@@ -39,7 +39,7 @@ export default function Repair(props) {
         const _apartIdObject = JSON.parse(_apartId);
         const _userIdObject = JSON.parse(_userId);
         // console.log(userId+" "+token+" "+apartId);
-        setUserId(_userIdObject._id);
+        setUserId(_userIdObject.id);
         setToken(_tokenObject);
         setApartId(_apartIdObject);
         setFlag2(false);
@@ -76,18 +76,14 @@ export default function Repair(props) {
             content: content,
             author: userId,
             image: result.data
-
           }),
         })
-     
         if (res1.status === 200) {
           Alert.alert('Thông báo', 'Báo cáo thành công',
             [
-
               { text: "OK" }
             ]);
         }
-
       }
     }
     else {
@@ -102,10 +98,8 @@ export default function Repair(props) {
           content: content,
           author: userId,
           image: ''
-
         }),
       })
-    
       if (res1.status === 200) {
         
         Alert.alert('Thông báo', 'Báo cáo thành công',

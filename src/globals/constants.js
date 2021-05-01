@@ -16,8 +16,9 @@ export const ScreenKey={
     TabNotify:'tabNotify',
     NotifyRepair:'notifyRepair',
     NotifyDetailRepair:'notifyDetailRepair',
-    Intro:'introduce'
-    
+    Intro:'introduce',
+    ChooseImageHome:'chooseImageHome',
+    Complain:'complain'
 
 
 }
@@ -33,3 +34,31 @@ export const Text_Size={
     Text_sum:22
 }
 export const URL="https://qlcc-api.herokuapp.com/";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React,{ useState } from 'react';
+export default function ApartId (){
+   const[apart,setApart]=useState();
+   const [token1,setToken1]=useState();
+    const getData = async () => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            const apartId = await AsyncStorage.getItem('apartId');
+            if (token != null) {
+               
+                const _token = JSON.parse(token);
+                const _apartId = JSON.parse(apartId);
+               setApart(_apartId);
+               setToken1(_token);
+            }
+           
+
+        } catch (e) {
+            // error reading value
+        }
+    }
+    getData();
+    return{
+        apart,
+        token1
+    }
+}

@@ -26,13 +26,12 @@ export default function App(props) {
         })
         
        
-        console.log("STATUS ",res.status);
+   
         if (res.status === 200) {
             const result = await res.json();
             setSpinner(false);
             storeData(result.token, result.infoUser);
-            console.log('USERID ', result.infoUser._id)
-            props.navigation.navigate(ScreenKey.ChooseApart, { token: result.token, userId: result.infoUser._id });
+            props.navigation.navigate(ScreenKey.ChooseApart, { token: result.token, userId: result.infoUser.id });
         } else {
             setSpinner(false);
             Alert.alert("Login", 'username or password invalid');

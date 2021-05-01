@@ -58,7 +58,7 @@ export default function App(props) {
       if (token !== null) {
         const _token = JSON.parse(token);
         const _info = JSON.parse(infoUser);
-        setUserId(_info._id);
+        setUserId(_info.id);
         setToken(_token);
         setFlag(false);
       }
@@ -67,6 +67,7 @@ export default function App(props) {
     }
   }
   const fetchData = async () => {
+    console.log("USERID ",userId);
     const res = await fetch(URL + `api/noti/user/${userId}/${page}/10`, {
       method: 'GET',
       headers: {
@@ -75,6 +76,7 @@ export default function App(props) {
       },
 
     })
+    console.log("STATUS ",res.status)
 
     setSpinner(false);
     if (res.status === 200) {

@@ -69,7 +69,7 @@ export default function Info(props) {
                 setEmail(_infoUser.email);
                 setPhone(_infoUser.phone);
                 setNativePlace(_infoUser.native_place);
-                setUserId(_infoUser._id);
+                setUserId(_infoUser.id);
                 setIndetify_card(_infoUser.identify_card);
                 setFlag(false);
 

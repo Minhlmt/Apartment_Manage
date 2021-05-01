@@ -58,6 +58,7 @@ export default function ElectricBill({ route }) {
       if(res.status===200)
       {
         const result = await res.json();
+        console.log("Other ",result);
          if(result.data!==null){
             let _apart_manage=numeral(result.data.apart_management.toString()).format('0,0');
             setApartManage(_apart_manage);

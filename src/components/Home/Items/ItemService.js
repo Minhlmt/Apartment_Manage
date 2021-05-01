@@ -19,7 +19,7 @@ export default function ItemService(props) {
         const _userIdObject = JSON.parse(_userId);
         setToken(_tokenObject);
         setApartID(_apartIdObject);
-        setUserId(_userIdObject._id)
+        setUserId(_userIdObject.id)
 
       }
 
