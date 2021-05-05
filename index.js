@@ -10,9 +10,9 @@ import Home from './src/components/Home/Home'
 import Item from './src/components/Home/Items/ItemNotification'
 import test from './src/components/Introduce/snippets'
 import Info from './src/components/Info/Info'
-import Test from './src/components/Services/NotifyRepair/NotifyDetailRepair'
+import Test from './src/components/Services/Apart_Empty/Apart'
 
 
 import {name as appName} from './app.json';
 
-AppRegistry.registerComponent(appName, () => App);
+AppRegistry.registerComponent(appName, () =>App);

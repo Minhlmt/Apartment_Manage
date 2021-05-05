@@ -14,6 +14,7 @@ import ScreenNotifyRepair from '../components/Services/NotifyRepair/ScreenNotify
 import Intro from '../components/Introduce/snippets'
 import ChooseImageHome from '../components/Home/ChooseImage'
 import Complain from '../components/Complain/Complain'
+import Screen_Apart_Empty from '../components/Services/Apart_Empty/Screen'
 const ServiceNavigationStack = createStackNavigator();
 // const Tab = createBottomTabNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -27,7 +28,7 @@ export const Stack_Home_Service = () => {
       <ServiceNavigationStack.Screen name={ScreenKey.Intro} component={Intro} options={{ title: 'Giới thiệu' , headerShown:false}} />
       <ServiceNavigationStack.Screen name={ScreenKey.ChooseImageHome} component={ChooseImageHome} options={{ headerShown:false}} />
       <ServiceNavigationStack.Screen name={ScreenKey.Complain} component={Complain} options={{ headerShown:false}} />
-
+      <ServiceNavigationStack.Screen name={ScreenKey.Apart_Empty} component={Screen_Apart_Empty} options={{ headerShown:false}} />
     </ServiceNavigationStack.Navigator>
   )
 }

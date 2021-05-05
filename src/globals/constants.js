@@ -18,7 +18,9 @@ export const ScreenKey={
     NotifyDetailRepair:'notifyDetailRepair',
     Intro:'introduce',
     ChooseImageHome:'chooseImageHome',
-    Complain:'complain'
+    Complain:'complain',
+    Apart_Empty:'apart_Empty',
+    DetailApart_Empty:'detailApart_Empty'
 
 
 }

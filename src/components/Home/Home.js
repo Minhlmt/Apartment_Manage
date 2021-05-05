@@ -130,7 +130,7 @@ export default function Home(props) {
         <View style={styles.service_h}>
           <ItemService id={ScreenKey.Bill} src='' name='Hóa đơn' navigation={props.navigation} />
           <ItemService id={ScreenKey.Repair} src='' name='Sửa chữa' navigation={props.navigation} />
-          <ItemService name='' navigation={props.navigation} />
+          <ItemService id={ScreenKey.Apart_Empty} name='CH trống' navigation={props.navigation} />
         </View>
       </View>
       <View style={styles.service_v}>

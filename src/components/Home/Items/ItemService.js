@@ -37,17 +37,22 @@ export default function ItemService(props) {
         apartId: apartId
       })
     }
-    if (props.id === ScreenKey.Repair) {
+    else if (props.id === ScreenKey.Repair) {
       props.navigation.navigate(ScreenKey.Repair)
     }
-    if (props.id === ScreenKey.NotifyRepair) {
+    else if (props.id === ScreenKey.NotifyRepair) {
       props.navigation.navigate(ScreenKey.NotifyRepair, {
         token: token,
         userId: userId
       })
     }
-    if(props.id===ScreenKey.Intro){
+    else if(props.id===ScreenKey.Intro){
       props.navigation.navigate(ScreenKey.Intro)
+    }
+    else if(props.id===ScreenKey.Apart_Empty){
+      props.navigation.navigate(ScreenKey.Apart_Empty,{
+        token:token
+      })
     }
   }
   return (
