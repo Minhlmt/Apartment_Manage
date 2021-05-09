@@ -7,6 +7,7 @@ export default function ItemNotifyManger(props) {
     const [status,setStatus]=useState();
     const [styleStatus,setStyleStatus]=useState();
     useEffect(()=>{
+      
         if(props.status){
             setStatus(false);
             setStyleStatus(styles.status_wait);
@@ -36,6 +37,7 @@ export default function ItemNotifyManger(props) {
        
     }
     const handleClick = () => {
+        props.updateBadge();
         changeStatusNotify();
         setStatus(false);
         props.navigation.navigate(ScreenKey.NotifyDetailManage, {

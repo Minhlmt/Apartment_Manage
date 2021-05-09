@@ -41,7 +41,7 @@ export default function NotifyDetailManage(props) {
             const myURL = myImage.toURL();
             setImage(myURL);
         }
-        console.log("link ",link);
+    
         if (link === '') {
             setStatusLink(false);
         }

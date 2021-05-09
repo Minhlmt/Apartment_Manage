@@ -43,92 +43,40 @@ export default function SumBill({ route }) {
     );
     const getdata = async () => {
         /*get electric bill*/
-        const res_elec = await fetch(URL + `api/elec-bill/month-bill/${apartId}/${month}/${year}`, {
+        const res = await fetch(URL + `api/all-bill/bill/${apartId}/${month}/${year}`, {
             method: 'GET',
             headers: {
                 Authorization: 'Bearer ' + `${token}`,
                 'Content-Type': 'application/json',
             },
         })
-        
-     
-        if (res_elec.status === 200) {
-            const result_elect = await res_elec.json();
-            if(result_elect.data!==null){
-                tempSum=tempSum+result_elect.data.total_money;
-               
-                var _sumPrice_elec = numeral(result_elect.data.total_money.toString()).format('0,0');
-                setElectric(_sumPrice_elec);
+        if(res.status===200){
+            const result=await res.json();
+            if(result.data.length!==0){
+                setElectric(numeral(result.data.electric_bill.toString()).format('0,0'));
+                setWater(numeral(result.data.water_bill.toString()).format('0,0'));
+                setOther(numeral(result.data.other_bill.toString()).format('0,0'));
+                setSumPrice(numeral(result.data.total_money.toString()).format('0,0'))
             }
             else{
                 setElectric(0);
-            }
-          
-          
-
-        }
-        /* get water bill */
-        const res_water = await fetch(URL + `api/water-bill/month-bill/${apartId}/${month}/${year}`, {
-            method: 'GET',
-            headers: {
-                Authorization: 'Bearer ' + `${token}`,
-                'Content-Type': 'application/json',
-            },
-        })
-       
-       
-        if (res_water.status === 200) {
-            const result_water = await res_water.json();
-            if(result_water.data!==null){
-               
-                tempSum=tempSum+result_water.data.total_money;
-                var _sumPrice_water = numeral(result_water.data.total_money.toString()).format('0,0');
-                setWater(_sumPrice_water)
-            }
-            else{
                 setWater(0);
-                
-            }
-           
-           
-
-        }/* get other bill */
-
-        const res_other = await fetch(URL+`api/other-bill/month-bill/${apartId}/${month}/${year}`, {
-            method: 'GET',
-            headers: {
-              Authorization: 'Bearer ' + `${token}`,
-              'Content-Type': 'application/json',
-            },
-          })
-         
-      
-          setSpinner(false);
-          if(res_other.status===200)
-          {
-            const result_other = await res_other.json();
-            if(result_other.data!==null)
-            {
-                
-                let _sumPrice_other= result_other.data.apart_management+result_other.data.parking_fees+result_other.data.maintenance_fee
-                +result_other.data.service_charge+result_other.data.other_fees;
-                tempSum=tempSum+_sumPrice_other;
-               
-            
-                
-                let _sumPriceFormat=numeral(_sumPrice_other.toString()).format('0,0');
-               
-                setOther(_sumPriceFormat);
-            }
-            else{
-                console.log("ERROR");
                 setOther(0);
+                setSumPrice(0);
             }
+          
+        }
+        else{
+            setElectric(0);
+            setWater(0);
+            setOther(0);
+            setSumPrice(0);
+        }
+        setSpinner(false)
 
-           
-          }
-
-          setSumPrice(numeral(tempSum.toString()).format('0,0'));
+        
+     
+ 
          
 
 

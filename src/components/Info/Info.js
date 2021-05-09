@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, SectionList, Text, View, Image, TouchableOpacity,ImageBackground, Button,ScrollView } from 'react-native';
+import { StyleSheet, SectionList, Text, View, Image, TouchableOpacity, ImageBackground, Button, ScrollView } from 'react-native';
 import { Icon } from 'react-native-elements'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { URL, Text_Size } from '../../globals/constants'
 import { ScreenKey } from '../../globals/constants'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Dimensions } from 'react-native';
+import { Menu, MenuOptions, MenuOption, MenuTrigger, MenuProvider, } from 'react-native-popup-menu';
 const window = Dimensions.get('window');
 export default function Info(props) {
     const [name, setName] = useState('');
@@ -29,9 +30,9 @@ export default function Info(props) {
             },
 
         })
-       
+
         setSpinner(false);
-        if(res.status===200){
+        if (res.status === 200) {
             const result = await res.json();
             const res_1 = await fetch(URL + `api/block/${result.data.block}`, {
                 method: 'GET',
@@ -39,19 +40,19 @@ export default function Info(props) {
                     Authorization: 'Bearer ' + `${token}`,
                     'Content-Type': 'application/json',
                 },
-    
+
             })
             const result_1 = await res_1.json();
-            if(res_1.status===200){ 
+            if (res_1.status === 200) {
                 setAddress("toà " + result_1.data.name + " số nhà " + result.data.name);
             }
-            else{
+            else {
                 setAddress('Chưa có thông tin')
             }
-          
+
         }
-       
-       
+
+
     }
 
     const getData = async () => {
@@ -123,136 +124,192 @@ export default function Info(props) {
             token: token
         });
     }
-    const changeApart=()=>{
-        props.navigation.navigate(ScreenKey.ChooseApart,{
+    const handleChangePass = () => {
+        props.navigation.navigate(ScreenKey.ChangePass, {
+            user_id: userId,
+           
+            token: token
+        });
+    }
+    const changeApart = () => {
+        props.navigation.navigate(ScreenKey.ChooseApart, {
             token: token,
-            userId:userId
+            userId: userId
         })
     }
-    
+
 
     return (
-        <ScrollView>
-           <ImageBackground  style={{ flex: 1, resizeMode: 'cover' }} source={require('../../../image/background.jpg')}>
-            <Spinner
-                visible={spinner}
-                textContent={'Loading...'}
-                textStyle={styles.spinnerTextStyle}
-            />
-            {/* <View style={styles._title}>
+        <MenuProvider style={{ flex: 1 }}>
+            <ScrollView>
+                <ImageBackground style={{ flex: 1, resizeMode: 'cover' }} source={require('../../../image/background.jpg')}>
+                    <Spinner
+                        visible={spinner}
+                        textContent={'Loading...'}
+                        textStyle={styles.spinnerTextStyle}
+                    />
+                    {/* <View style={styles._title}>
                 <Text style={styles._text_title} >Thông tin cá nhân</Text>
             </View> */}
-             <View style={styles.container1} >
-                <View style={styles.background} >
-                    {/* <Image style={styles.image} source={require('../../../image/sea.jpg')} /> */}
-                    <ImageBackground source={require('../../../image/sea.jpg')} style={styles.image}>
-                        <Text style={styles.text1} adjustsFontSizeToFit>Thông tin cá nhân</Text>
-                    </ImageBackground>
-                </View>
-            </View>
-            <View style={styles.container}>
-                <View style={styles._row}>
-                    <Icon name='user'
-                        type='feather'
-                        color='#f1c40f'
-                        size={30}
-                    />
-                    <Text style={styles.text} >Họ tên</Text>
-                </View>
-            </View>
-            <View style={{flexDirection:'row',justifyContent:'flex-end',borderBottomWidth:0.5}}>
-            <Text style={styles.text_info}>{name}</Text>
-            </View>
-            <View style={styles.container}>
-                <View style={styles._row}>
-                    <Icon name='email'
-                        type='fontisto'
-                        color='#e74c3c'
-                        size={30}
-                    />
-                        <Text style={styles.text}>Email</Text>
-                </View>
-            </View>
-            <View style={{flexDirection:'row',justifyContent:'flex-end',borderBottomWidth:0.5}}>
-            <Text style={styles.text_info}>{email}</Text>
-            </View>
-            <View style={styles.container}>
-                <View style={styles._row}>
-                    <Icon name='phone-call'
-                        type='feather'
-                        color='#3498db'
-                        size={30}
-                    />
-                    <Text style={styles.text}>Điện thoại</Text>
-                </View>
-
-               
-            </View>
-            <View style={{flexDirection:'row',justifyContent:'flex-end',borderBottomWidth:0.5}}>
-            <Text style={styles.text_info}>{phone}</Text>
-            </View>
-            <View style={styles.container}>
-                <View style={styles._row}>
-                    <Icon name='v-card'
-                        type='entypo'
-                        color='rgba(169, 76, 122, 0.9)'
-                        size={30}
-                    />
-                        <Text style={styles.text}>CMND/Căn cước</Text>
-                </View>
-            </View>
-            <View style={{flexDirection:'row',justifyContent:'flex-end',borderBottomWidth:0.5}}>
-            <Text style={styles.text_info}>{identify_card}</Text>
-            </View>
-            <View style={styles.container}>
-                <View style={styles._row}>
-                    <Icon name='island'
-                        type='fontisto'
-                        color='#2ecc71'
-                        size={30}
-                    />
-                    <Text style={styles.text}>Quê Quán</Text>
-                </View>              
-            </View>
-            <View style={{flexDirection:'row',justifyContent:'flex-end',borderBottomWidth:0.5}}>
-            <Text style={styles.text_info}>{nativePlace}</Text>
-            </View>
-
-            <View style={styles.container}>
-                <View style={styles._row}>
-                    <Icon name='building-o'
-                        type='font-awesome'
-                        color='#1abc9c'
-                        size={30}
-                    />
-                    <Text style={styles.text}>Địa chỉ</Text>
-                </View>
-
-            </View>
-            <View style={{flexDirection:'row',justifyContent:'flex-end'}}>
-            <Text style={styles.text_info}>{address}</Text>
-            </View>
-            <View style={styles.myButtonContainer}>
-                <View style={styles.rowButton}>
-                    <TouchableOpacity onPress={changeApart} style={styles.appButtonContainer}>
-                        <View style={styles.myButton}>
-                            <Text style={styles.appButtonText}>Thay đổi căn hộ</Text>
+                    <View style={styles.container1} >
+                        <View style={styles.background} >
+                            {/* <Image style={styles.image} source={require('../../../image/sea.jpg')} /> */}
+                            <ImageBackground source={require('../../../image/sea.jpg')} style={styles.image}>
+                                <Text style={styles.text1} adjustsFontSizeToFit>Thông tin cá nhân</Text>
+                            </ImageBackground>
                         </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={handleUpdateInfo} style={styles.appButtonContainer}>
-                        <View style={styles.myButton}>
-                            <Text style={styles.appButtonText}>Cập nhật thông tin</Text>
+                        <View style={{ flexDirection: 'row-reverse' }}>
+
+                            <Menu>
+                                <MenuTrigger style={{ fontSize: 20 }}>
+                                    <Icon name='dots-three-horizontal'
+                                        type='entypo'
+                                        color='black'
+                                        size={30}
+                                    />
+                                </MenuTrigger>
+                                <MenuOptions>
+                                    <MenuOption  >
+                                        <TouchableOpacity onPress={changeApart} >
+                                            <View style={{ borderBottomWidth: 0.5, padding: 10 }}>
+                                                <Text style={styles.textMenu}>Thay đổi căn hộ</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </MenuOption>
+                                    <MenuOption>
+                                        <TouchableOpacity onPress={handleUpdateInfo} >
+                                            <View style={{ borderBottomWidth: 0.5, padding: 10 }}>
+                                                <Text style={styles.textMenu}>Cập nhật thông tin</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </MenuOption>
+                                    <MenuOption>
+                                        <TouchableOpacity onPress={handleChangePass} >
+                                            <View style={{ borderBottomWidth: 0.5,padding: 10 }}>
+                                                <Text style={styles.textMenu}>Thay đổi mật khẩu</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </MenuOption>
+                                    <MenuOption>
+                                        <TouchableOpacity onPress={handleLogout} >
+                                        <View style={{ padding: 10 }}>
+                                                <Text style={styles.textMenu}>Đăng xuất</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </MenuOption>
+
+                                </MenuOptions>
+                            </Menu>
+
                         </View>
-                    </TouchableOpacity>
-                </View>
-                <TouchableOpacity onPress={handleLogout} style={styles.appButtonContainerLogOut}>
-                    <View style={styles.myButtonLogOut}>
-                        <Text style={styles.appButtonText}>Đăng xuất</Text>
                     </View>
-                </TouchableOpacity>
-            </View>
-            </ImageBackground>
-        </ScrollView>
+                    <View style={styles.container}>
+                        <View style={styles._row}>
+                            <Icon name='user'
+                                type='feather'
+                                color='#f1c40f'
+                                size={30}
+                            />
+                            <Text style={styles.text} >Họ tên</Text>
+                        </View>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'flex-end', borderBottomWidth: 0.5 }}>
+                        <Text style={styles.text_info}>{name}</Text>
+                    </View>
+                    <View style={styles.container}>
+                        <View style={styles._row}>
+                            <Icon name='email'
+                                type='fontisto'
+                                color='#e74c3c'
+                                size={30}
+                            />
+                            <Text style={styles.text}>Email</Text>
+                        </View>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'flex-end', borderBottomWidth: 0.5 }}>
+                        <Text style={styles.text_info}>{email}</Text>
+                    </View>
+                    <View style={styles.container}>
+                        <View style={styles._row}>
+                            <Icon name='phone-call'
+                                type='feather'
+                                color='#3498db'
+                                size={30}
+                            />
+                            <Text style={styles.text}>Điện thoại</Text>
+                        </View>
+
+
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'flex-end', borderBottomWidth: 0.5 }}>
+                        <Text style={styles.text_info}>{phone}</Text>
+                    </View>
+                    <View style={styles.container}>
+                        <View style={styles._row}>
+                            <Icon name='v-card'
+                                type='entypo'
+                                color='rgba(169, 76, 122, 0.9)'
+                                size={30}
+                            />
+                            <Text style={styles.text}>CMND/Căn cước</Text>
+                        </View>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'flex-end', borderBottomWidth: 0.5 }}>
+                        <Text style={styles.text_info}>{identify_card}</Text>
+                    </View>
+                    <View style={styles.container}>
+                        <View style={styles._row}>
+                            <Icon name='island'
+                                type='fontisto'
+                                color='#2ecc71'
+                                size={30}
+                            />
+                            <Text style={styles.text}>Quê Quán</Text>
+                        </View>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'flex-end', borderBottomWidth: 0.5 }}>
+                        <Text style={styles.text_info}>{nativePlace}</Text>
+                    </View>
+
+                    <View style={styles.container}>
+                        <View style={styles._row}>
+                            <Icon name='building-o'
+                                type='font-awesome'
+                                color='#1abc9c'
+                                size={30}
+                            />
+                            <Text style={styles.text}>Địa chỉ</Text>
+                        </View>
+
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                        <Text style={styles.text_info}>{address}</Text>
+                    </View>
+                    <View style={styles.myButtonContainer}>
+                        {/* <View style={styles.rowButton}>
+                            <TouchableOpacity onPress={changeApart} style={styles.appButtonContainer}>
+                                <View style={styles.myButton}>
+                                    <Text style={styles.appButtonText}>Thay đổi căn hộ</Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={handleUpdateInfo} style={styles.appButtonContainer}>
+                                <View style={styles.myButton}>
+                                    <Text style={styles.appButtonText}>Cập nhật thông tin</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View> */}
+
+
+                        {/* <TouchableOpacity onPress={handleLogout} style={styles.appButtonContainerLogOut}>
+                            <View style={styles.myButtonLogOut}>
+                                <Text style={styles.appButtonText}>Đăng xuất</Text>
+                            </View>
+                        </TouchableOpacity> */}
+
+                    </View>
+                </ImageBackground>
+            </ScrollView>
+        </MenuProvider>
     )
 }
 const styles = StyleSheet.create({
@@ -267,17 +324,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
 
     },
+    textMenu: {
+        color: 'black', fontSize: 17
+    },
     text: {
         fontSize: Text_Size.Text,
         color: 'rgba(0, 0, 0, 0.7)',
         marginLeft: 10,
-       
+
     },
     text_info: {
         fontSize: Text_Size.Text,
         color: 'rgba(0, 0, 0, 0.7)',
         marginTop: 5,
-        flexWrap: 'wrap' 
+        flexWrap: 'wrap'
 
 
     },
@@ -354,6 +414,7 @@ const styles = StyleSheet.create({
         marginRight: 10
     },
     container1: {
+
         alignSelf: 'center',
         width: window.width,
         overflow: 'hidden',
@@ -377,7 +438,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#9DD6EB'
     },
     text1: {
-        marginTop: window.height/9.5,
+        marginTop: window.height / 9.5,
         color: "white",
         fontSize: 42,
         fontWeight: "bold",

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, ScrollView, SectionList, Text, View, FlatList } from 'react-native';
+import { StyleSheet, ScrollView, SectionList, Text, View, FlatList, Image } from 'react-native';
 import ItemNotification from './Items/ItemNotification';
 import ItemService from './Items/ItemService';
 import { ScreenKey } from '../../globals/constants'
@@ -21,8 +21,8 @@ export default function Home(props) {
   const [sumMoney, setSumMoney] = useState();
   const [ruleDate, setRuleDate] = useState(10);
   const [bntComplain, setbtnComplain] = useState();
-  const [is_pay,setIsPay]=useState();
-  const [billId,setBillId]=useState();
+  const [is_pay, setIsPay] = useState();
+  const [billId, setBillId] = useState();
   const getData = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
@@ -37,7 +37,6 @@ export default function Home(props) {
         setToken(_token);
         setFlag(false);
       }
-
     } catch (e) {
       // error reading value
     }
@@ -49,23 +48,35 @@ export default function Home(props) {
         Authorization: 'Bearer ' + `${token}`,
         'Content-Type': 'application/json',
       },
-
     })
+
     if (res.status === 200) {
       const result = await res.json();
+    
       setSumMoney(numeral(result.data.total_money.toString()).format('0,0'));
       setBillId(result.data.id);
-      if(result.data.is_pay){
+
+      if (result.data.is_pay) {
         setIsPay("Đã thanh toán");
       }
-      else{
+      else {
         setIsPay("Chưa thanh toán")
       }
-
+      var today = new Date("2021-08-11");
+      let date = CalDate(today);
+      if (parseInt(date.dd) >= ruleDate && (!result.data.is_pay))
+        return setbtnComplain(true);
+      return setbtnComplain(false);
     }
-
-    // console.log("RESULT ",result)
+    if(result.data.length===0){
+     
+        setSumMoney(0);
+        setIsPay("Chưa có dữ liệu");
+      
+    }
+    
   }
+
   const fetchData = async () => {
     await getData();
     await fetchData1()
@@ -89,11 +100,7 @@ export default function Home(props) {
     }
     setMonth(monthtoday);
     setYear(yeartoday);
-
     fetchData();
-    if (parseInt(date.dd) >= ruleDate)
-      return setbtnComplain(true);;
-    return setbtnComplain(false);
   }, [month, year, flag])
   const handleUploadImage = () => {
     props.navigation.navigate(ScreenKey.Complain, {
@@ -103,8 +110,20 @@ export default function Home(props) {
       height: '',
       mime: '',
       path: '',
-      billId:billId
+      billId: billId
     });
+  }
+  const handleClickBill = () => {
+    props.navigation.navigate(ScreenKey.Bill)
+
+  }
+  const handleClickRepair=()=>{
+    props.navigation.navigate(ScreenKey.Repair)
+  }
+  const handleClickApartEmpty=()=>{
+    props.navigation.navigate(ScreenKey.Apart_Empty,{
+      token:token
+    })
   }
   return (
     // <ScrollView style={{flex: 1}}>
@@ -118,19 +137,42 @@ export default function Home(props) {
             <Text style={styles.text2} adjustsFontSizeToFit>{is_pay}</Text>
             {bntComplain && (<TouchableOpacity onPress={handleUploadImage}>
               <Text style={styles.text3} adjustsFontSizeToFit>Khiếu nại</Text>
-            </TouchableOpacity>)} 
+            </TouchableOpacity>)}
 
           </ImageBackground>
         </View>
       </View>
-      <View>
-        <Text style={styles.title}>Service</Text>
-      </View>
+     
       <View style={styles.margin_top}>
         <View style={styles.service_h}>
-          <ItemService id={ScreenKey.Bill} src='' name='Hóa đơn' navigation={props.navigation} />
-          <ItemService id={ScreenKey.Repair} src='' name='Sửa chữa' navigation={props.navigation} />
-          <ItemService id={ScreenKey.Apart_Empty} name='CH trống' navigation={props.navigation} />
+        <View style={styles.shadow_button}>
+          <TouchableOpacity style={styles.container} onPress={handleClickBill}>
+            <Image resizeMode='contain' style={styles.tinyLogo} source={require('../../../image/billHome.png')} />
+            <View>
+              <Text style={styles.text}>Hóa đơn</Text>
+            </View>
+          </TouchableOpacity>
+          </View>
+          <View style={styles.shadow_button}>
+          <TouchableOpacity style={styles.container} onPress={handleClickRepair}>
+            <Image resizeMode='contain' style={styles.tinyLogo} source={require('../../../image/repairHome.png')} />
+            <View>
+              <Text style={styles.text}>Sửa chữa</Text>
+            </View>
+          </TouchableOpacity>
+          </View>
+          <View style={styles.shadow_button}>
+          <TouchableOpacity style={styles.container} onPress={handleClickApartEmpty}>
+            <Image resizeMode='contain' style={styles.tinyLogo} source={require('../../../image/apart-empty.png')} />
+            <View>
+              <Text style={styles.text}>Căn hộ trống</Text>
+            </View>
+          </TouchableOpacity>
+          </View>
+
+
+
+         
         </View>
       </View>
       <View style={styles.service_v}>
@@ -206,9 +248,45 @@ const styles = StyleSheet.create({
     marginTop: 10,
     color: "red",
     fontSize: 20,
-   
+
     textAlign: "center",
     // backgroundColor: "#000000a0"
-    textDecorationLine:'underline'
+    textDecorationLine: 'underline'
+  },
+  container: {
+    display: 'flex',
+    //   justifyContent:'center',
+    alignItems: 'center',
+    // backgroundColor:'transparent'
+
+  },
+  tinyLogo: {
+    width: 80,
+    height: 80,
+
+    
+  },
+  logo: {
+    width: 66,
+    height: 58,
+  },
+  text: {
+    color: 'black',
+    marginBottom: 10,
+    fontSize: 20
+  },
+  shadow_button: {
+    flex: 1,
+    marginHorizontal: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 12,
+    },
+    shadowOpacity: 0.58,
+    shadowRadius: 16.00,
+    elevation: 4,
+    // backgroundColor:'red',
+
   }
 });

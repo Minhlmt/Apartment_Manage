@@ -20,7 +20,11 @@ export const ScreenKey={
     ChooseImageHome:'chooseImageHome',
     Complain:'complain',
     Apart_Empty:'apart_Empty',
-    DetailApart_Empty:'detailApart_Empty'
+    DetailApart_Empty:'detailApart_Empty',
+    MainBill:'mainBill',
+    NotifyBill:'notifyBill',
+    ChangePass:'changePass'
+    
 
 
 }

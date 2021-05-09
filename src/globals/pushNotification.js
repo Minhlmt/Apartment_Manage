@@ -1,6 +1,6 @@
 import PushNotification from "react-native-push-notification";
 import Firesase from '@react-native-firebase/app'
-export const PushNotify=(navigation,onRefesh)=>{
+export const PushNotify=()=>{
     Firesase.initializeApp();
     
     PushNotification.configure({
@@ -12,17 +12,13 @@ export const PushNotify=(navigation,onRefesh)=>{
     
       onNotification: function (notification) {
         console.log("NOTIFICATION:", notification);
-        navigation.navigate('tabProfile');
-        onRefesh
-      
-        // notification.finish(PushNotificationIOS.FetchResult.NoData);
       },
     
       onAction: function (notification) {
         console.log("ACTION:", notification.action);
         console.log("NOTIFICATION:", notification);
     
-      
+        // process the action
       },
     
      

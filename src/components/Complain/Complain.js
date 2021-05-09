@@ -68,7 +68,7 @@ export default function Repair(props) {
             // var body = new FormData();
             // body.append('file', imageBase64);
             const result = await res.json()
-            console.log("RESULT ", result);
+         
             let arrImage=[];
             let imageKey=result.key;
             arrImage.push(imageKey);

@@ -15,6 +15,7 @@ export default function Bill({route}){
     var today = new Date();    
     let date=CalDate(today);
     return (
+        
       
         <Tab.Navigator initialRouteName='SumBill'  
     

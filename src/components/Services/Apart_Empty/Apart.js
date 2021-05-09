@@ -35,7 +35,7 @@ export default function Apart(props) {
       };
 
     return (
-        <View>
+        <ImageBackground style={{ flex: 1, resizeMode: 'cover' }} source={require('../../../../image/background.jpg')}>
             <View style={styles._title}>
                 <Text style={styles._text_title} >Căn hộ trống</Text>
             </View>
@@ -45,7 +45,8 @@ export default function Apart(props) {
                 renderItem={renderItem}
                 ItemSeparatorComponent={ItemSeparatorView}
             />
-        </View>
+          </ImageBackground>
+        
     )
 }
 const styles = StyleSheet.create({

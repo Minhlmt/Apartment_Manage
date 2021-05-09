@@ -36,6 +36,7 @@ export default function App(props) {
   const [userId, setUserId] = useState();
   const [alive, setAlive] = useState();
   const [spinner, setSpinner] = useState(false);
+  const {updateBadge}=props.route.params;
   const renderItem = ({ item }) => {
     let is_read;
     for (let receivers of item.receivers) {
@@ -48,7 +49,7 @@ export default function App(props) {
 
       <ItemNotifyManger id={item._id} title={item.title} content={item.content} create_date={item.create_date}
         image={item.image} link={item.link}
-        status={is_read} navigation={props.navigation} token={token} userId={userId} />
+        status={is_read} navigation={props.navigation} token={token} userId={userId} updateBadge={updateBadge}/>
     );
   };
   const getData = async () => {
