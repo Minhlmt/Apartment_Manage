@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 // import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
-import { ScreenKey, URL } from './constants'
+import { ScreenKey, URL} from './constants'
 import Home from '../components/Home/Home'
 import BillScreen from '../components/Services/Bill/Screen/Screen';
 import RepairScreen from '../components/Services/Repair/ScreenRepair';
@@ -16,6 +16,7 @@ import ChooseImageHome from '../components/Home/ChooseImage'
 import Complain from '../components/Complain/Complain'
 import Screen_Apart_Empty from '../components/Services/Apart_Empty/Screen'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const ServiceNavigationStack = createStackNavigator();
 // const Tab = createBottomTabNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -33,8 +34,11 @@ export const Stack_Home_Service = () => {
     </ServiceNavigationStack.Navigator>
   )
 }
-export const Tab_Home_Profile = () => {
+export const Tab_Home_Profile = (props) => {
+
+ 
   const [count, setCount] = useState(0);
+  
   const updateBadge = () => {
     getData()
   }
@@ -70,53 +74,60 @@ export const Tab_Home_Profile = () => {
     }
   }
   useEffect(() => {
+   
     getData();
-  })
+   
+
+  }, [])
   return (
-    <Tab.Navigator
-      initialRouteName={ScreenKey.TabHome}
-      activeColor="#fff"
+   
 
-      shifting={true}
-    >
-      <Tab.Screen
-        name={ScreenKey.TabHome}
-        component={Stack_Home_Service}
 
-        options={{
-          tabBarLabel: 'Home',
-          tabBarColor: ' rgba(0, 184, 255, 1)',
-          tabBarIcon: ({ color }) => (
-            <Icon name="ios-home" color={color} size={26} />
-          ),
+      <Tab.Navigator
+        initialRouteName={ScreenKey.TabHome}
+        activeColor="#fff"
 
-        }}
-      />
-      <Tab.Screen
-        name={ScreenKey.TabNotify}
-        component={ScreenNotifyManage}
-        options={{
-          tabBarLabel: 'Updates',
-          tabBarColor: '#1f65ff',
-          tabBarIcon: ({ color }) => (
-            <Icon name="ios-notifications" color={color} size={26} />
-          ),
-          tabBarBadge: `${count}`
-        }}
-        initialParams={{ updateBadge }}
-      />
-      <Tab.Screen
-        name={ScreenKey.TabProfile}
-        component={ScreenInfo}
-        options={{
-          tabBarLabel: 'Profile',
-          tabBarColor: '#694fad',
-          tabBarIcon: ({ color }) => (
-            <Icon name="ios-person" color={color} size={26} />
-          ),
-        }}
-      />
-    </Tab.Navigator>
+        shifting={true}
+      >
+        <Tab.Screen
+          name={ScreenKey.TabHome}
+          component={Stack_Home_Service}
+
+          options={{
+            tabBarLabel: 'Home',
+            tabBarColor: ' rgba(0, 184, 255, 1)',
+            tabBarIcon: ({ color }) => (
+              <Icon name="ios-home" color={color} size={26} />
+            ),
+
+          }}
+        />
+        <Tab.Screen
+          name={ScreenKey.TabNotify}
+          component={ScreenNotifyManage}
+          options={{
+            tabBarLabel: 'Updates',
+            tabBarColor: '#1f65ff',
+            tabBarIcon: ({ color }) => (
+              <Icon name="ios-notifications" color={color} size={26} />
+            ),
+            tabBarBadge: `${count}`
+          }}
+          initialParams={{ updateBadge }}
+        />
+        <Tab.Screen
+          name={ScreenKey.TabProfile}
+          component={ScreenInfo}
+          options={{
+            tabBarLabel: 'Profile',
+            tabBarColor: '#694fad',
+            tabBarIcon: ({ color }) => (
+              <Icon name="ios-person" color={color} size={26} />
+            ),
+          }}
+        />
+      </Tab.Navigator>
+   
   )
 }
 const styles = StyleSheet.create({

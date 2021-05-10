@@ -40,8 +40,13 @@ export const Text_Size={
     Text_sum:22
 }
 export const URL="https://qlcc-api.herokuapp.com/";
+import React,{ createContext } from 'react';
+export const notifyBillContext=createContext(null);
+export const Tab_Home_ProfileBillContext=createContext(null);
+
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React,{ useState } from 'react';
+
 export default function ApartId (){
    const[apart,setApart]=useState();
    const [token1,setToken1]=useState();

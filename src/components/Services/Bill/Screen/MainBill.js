@@ -1,23 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, SectionList, Text, View, Image, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState ,useContext} from 'react';
+import { StyleSheet, SectionList, Text, View, Image, TouchableOpacity ,BackHandler} from 'react-native';
 import ItemMainBill from './ItemMainBill'
-import { ScreenKey } from '../../../../globals/constants'
+import { ScreenKey,Tab_Home_ProfileBillContext ,notifyBillContext} from '../../../../globals/constants'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function MainBill(props) {
+    const notifyBill=useContext(Tab_Home_ProfileBillContext)
     const [token, setToken] = useState('');
     const [apartId, setApartID] = useState('');
     const [userId, setUserId] = useState();
-    const [newMessage,setNewMessage]=useState(false)
+    const [newMessage,setNewMessage]=useState(notifyBill);
+    console.log("CONTEXT Main ",useContext(Tab_Home_ProfileBillContext));
+    const handleChangeNotifyBill= useContext(notifyBillContext).handleChangeNotifyBill;
     const getData = async () => {
         try {
             const _token = await AsyncStorage.getItem('token');
             const _apartId = await AsyncStorage.getItem('apartId');
             const _userId = await AsyncStorage.getItem('infoUser');
-            const _newMessage= await AsyncStorage.getItem('notifyBill');
-            if(_newMessage!==null){
-                setNewMessage(true);
-            }
+            // const _newMessage= await AsyncStorage.getItem('notifyBill');
+            // if(_newMessage!==null){
+            //     setNewMessage(true);
+            // }
             if (_token !== null && _apartId !== null) {
                 const _tokenObject = JSON.parse(_token);
                 const _apartIdObject = JSON.parse(_apartId);
@@ -33,15 +36,23 @@ export default function MainBill(props) {
         }
     }
     useEffect(() => {
+        setNewMessage(notifyBill);
+
         getData();
-        const unsubscribe = props.navigation.addListener('focus', () => {
-            getData();
-        });
+        const backAction = () => {
+            props.navigation.goBack();
+            return true;
+        };
 
-        return unsubscribe;
+        const backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            backAction
+        );
 
-
-    }, [props.navigation])
+        return () => backHandler.remove();
+      
+        
+    }, [notifyBill])
     const handleClickBill = () => {
 
         props.navigation.navigate(ScreenKey.Bill, {
@@ -61,7 +72,9 @@ export default function MainBill(props) {
         }
     }
     const handleClickNotify = () => {
+        
         setNewMessage(false)
+        handleChangeNotifyBill();
         deleteAsyncStorageNotifyBill();
         props.navigation.navigate(ScreenKey.NotifyBill)
     }

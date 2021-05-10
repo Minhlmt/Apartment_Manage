@@ -38,7 +38,6 @@ export default function Repair(props) {
         }
     }
     useEffect(() => {
-
         var filename = path.replace(/^.*[\\\/]/, '')
         setNameExtension(filename);
         const nameimage = filename.split('.');

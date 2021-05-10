@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, View, TouchableOpacity, ImageBackground,Alert,BackHandler } from 'react-native';
+import React, { useEffect, useState, useContext } from 'react';
+import { FlatList, StyleSheet, Text, View, TouchableOpacity, ImageBackground, Alert, BackHandler } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { URL } from '../../../../globals/constants'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -25,10 +25,10 @@ const ListFooterComponent = () => (
     </Text>
 );
 const renderItem = ({ item }) => {
-   
+
     return (
 
-       <ItemNotifyBill item={item}/>
+        <ItemNotifyBill item={item} />
     );
 };
 
@@ -40,7 +40,7 @@ export default function App(props) {
     const [apartId, setApartId] = useState();
     const [load, setLoad] = useState(false);
     const [spinner, setSpinner] = useState(false);
-  
+
     const getData = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
@@ -185,7 +185,7 @@ export default function App(props) {
                 ]
 
             }
-            
+
             if (result.data.length === 0) {
                 setPage(1);
                 setLoad(true);
@@ -200,19 +200,7 @@ export default function App(props) {
     useEffect(() => {
         setSpinner(true);
         getData();
-            const backAction = () => {
-                props.navigation.goBack() ;
-              return true;
-            };
-        
-            const backHandler = BackHandler.addEventListener(
-              "hardwareBackPress",
-              backAction
-            );
-        
-            return () => backHandler.remove();
-        
-        
+
     }, []);
 
     const handleOnEndReached = async () => {
@@ -232,7 +220,7 @@ export default function App(props) {
                 textContent={'Loading...'}
                 textStyle={styles.spinnerTextStyle}
             />
-              <View style={styles._title}>
+            <View style={styles._title}>
                 <Text style={styles._text_title} >Thông báo hóa đơn</Text>
             </View>
 

@@ -6,6 +6,7 @@ import { Text_Size, URL } from '../../../globals/constants'
 import { ScreenKey } from '../../../globals/constants'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Ionicons'
+import Spinner from 'react-native-loading-spinner-overlay';
 import { Dimensions } from 'react-native';
 const { width: WIDTH } = Dimensions.get('window')
 export default function Repair(props) {
@@ -13,15 +14,12 @@ export default function Repair(props) {
   const [content, setContent] = useState('');
   const [userId, setUserId] = useState('123');
   const [token, setToken] = useState('');
-  const [apartId, setApartId] = useState('');
-  const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState('date');
-  const [show, setShow] = useState(false);
-  const [flag, setFlag] = useState(true);
-  const [flag2, setFlag2,] = useState(true);
   const [image, setImage] = useState(null);
-  const [imagePublic, setImagePublic] = useState();
-  const { imageBase64, uri, width, height, mime } = props.route.params;
+  const [nameImage, setNameImage] = useState();
+  const [nameExtension, setNameExtension] = useState();
+  const [extension, setExtension] = useState();
+  const [spinner,setSpinner]=useState(false);
+  const { imageBase64, uri, width, height, mime, path } = props.route.params;
 
 
   const getData = async () => {
@@ -29,20 +27,17 @@ export default function Repair(props) {
     try {
 
       const _token = await AsyncStorage.getItem('token');
-      const _apartId = await AsyncStorage.getItem('apartId');
       const _userId = await AsyncStorage.getItem('infoUser');
 
 
-      if (_token !== null && _apartId !== null && _userId !== null) {
+      if (_token !== null  && _userId !== null) {
 
         const _tokenObject = JSON.parse(_token);
-        const _apartIdObject = JSON.parse(_apartId);
         const _userIdObject = JSON.parse(_userId);
         // console.log(userId+" "+token+" "+apartId);
         setUserId(_userIdObject.id);
         setToken(_tokenObject);
-        setApartId(_apartIdObject);
-        setFlag2(false);
+      
 
       }
 
@@ -52,34 +47,67 @@ export default function Repair(props) {
   }
   const sendImage = async () => {
     if (imageBase64 !== '') {
-      const res = await fetch(URL + 'api/upload-image/upload', {
-        method: 'POST',
+      console.log("filename ",nameImage);
+      console.log("extension ",extension);
+      console.log("token ",token);
+      const res = await fetch(URL + `api/uploadv2/signed-url?fileName=${nameImage}&extension=${extension}&mediaType=image`, {
+        method: 'GET',
         headers: {
           Authorization: 'Bearer ' + `${token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          data: imageBase64
-        }),
       })
-     
+      console.log("STATUS_1",res.status);
       if (res.status === 200) {
-        const result = await res.json();
-        const res1 = await fetch(URL + 'api/repair/add', {
-          method: 'POST',
+        // var body = new FormData();
+        // body.append('file', imageBase64);
+        const result = await res.json()
+
+        const localFile = await fetch(path);
+
+        // then create a blob out of it (only works with RN 0.54 and above)
+        const fileBlob = await localFile.blob();
+
+        // then send this blob to filestack
+        const serverRes = await fetch(`${result.uploadUrl}`, { // Your POST endpoint
+          method: 'PUT',
           headers: {
-            Authorization: 'Bearer ' + `${token}`,
-            'Content-Type': 'application/json',
+            'Content-Type': fileBlob && fileBlob.type,
           },
-          body: JSON.stringify({
-            title: topic,
-            content: content,
-            author: userId,
-            image: result.data
-          }),
-        })
-        if (res1.status === 200) {
-          Alert.alert('Thông báo', 'Báo cáo thành công',
+          body: fileBlob, // This is your file object
+        });
+        console.log("STATUS_2",serverRes.status);
+        if (serverRes.status === 200) {
+          const res_2 = await fetch(URL + `api/repair/add`, {
+            method: 'POST',
+            headers: {
+              Authorization: 'Bearer ' + `${token}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              title: topic,
+              content: content,
+              author: userId,
+              image: result.key
+            }),
+          })
+          console.log("STATUS_3",res_2.status);
+          if (res_2.status === 200) {
+            Alert.alert('Thông báo', 'Báo cáo thành công',
+              [
+                { text: "OK" }
+              ]);
+          }
+          else {
+            Alert.alert('Thông báo', 'Server đang bảo trì ! Vui lòng thử lại sau',
+              [
+                { text: "OK" }
+              ]);
+          }
+
+        }
+        else {
+          Alert.alert('Thông báo', 'upload S3 fail',
             [
               { text: "OK" }
             ]);
@@ -101,7 +129,7 @@ export default function Repair(props) {
         }),
       })
       if (res1.status === 200) {
-        
+
         Alert.alert('Thông báo', 'Báo cáo thành công',
           [
             { text: "OK" }
@@ -109,31 +137,6 @@ export default function Repair(props) {
       }
     }
   }
-
-
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === 'ios');
-    setDate(currentDate);
-    let date = CalDate(currentDate);
-    let string_date = date.dd + '/' + date.mm + '/' + date.yyyy
-
-
-
-  };
-
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
-  const showDatepicker = () => {
-    showMode('date');
-  };
-
-  const showTimepicker = () => {
-    showMode('time');
-  };
 
   const checkTextInput = async () => {
 
@@ -148,27 +151,31 @@ export default function Repair(props) {
       return;
     }
     else {
+      // setSpinner(true);
       await sendImage();
     }
 
 
 
   };
-  useEffect(() => {
 
-    getData();
-    setFlag(false);
+  useEffect(() => {
+    var filename = path.replace(/^.*[\\\/]/, '')
+    setNameExtension(filename);
+    const nameimage = filename.split('.');
+
+    setNameImage(nameimage[0])
+    var extension = mime.replace(/^.*[\\\/]/, '');
+    setExtension(extension);
     setImage({
       uri: uri,
       width: width,
       height: height,
       mime: mime,
-
-    })
-
-  }, [flag, flag2, props.route.params?.imageBase64])
+    });
+    getData();
+  }, [props.route.params?.imageBase64])
   const renderAsset = (image) => {
-
     return (<Image
       style={{ width: 100, height: 100, resizeMode: 'contain' }}
       source={image}
@@ -180,6 +187,11 @@ export default function Repair(props) {
 
   return (
     <ImageBackground style={{ flex: 1, resizeMode: 'cover' }} source={require('../../../../image/background.jpg')}>
+      <Spinner
+        visible={spinner}
+        textContent={'Loading...'}
+        textStyle={styles.spinnerTextStyle}
+      />
       <View style={styles.container}>
         <View>
           <Text style={styles.text2}>Chủ đề</Text>

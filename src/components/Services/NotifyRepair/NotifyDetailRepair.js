@@ -43,9 +43,23 @@ export default function NotifyDetailRepair(props) {
                 setStatusImage(false);
             }
             else{
-                const myImage = cld.image(`${result.data.image}`);
-                const myURL = myImage.toURL();
-                setImage(myURL);
+                const res_1 = await fetch(URL + `api/uploadv2/image-url?key=${result.data.image}`, {
+                    method: 'GET',
+                    headers: {
+                        Authorization: 'Bearer ' + `${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                })
+                if(res_1.status===200){
+                    const result_1=await res_1.json();
+                    console.log("URL ",result_1.imageUrl);
+                    setImage(result_1.imageUrl);
+                }
+            
+
+                // const myImage = cld.image(`${result.data.image}`);
+                // const myURL = myImage.toURL();
+                // setImage(myURL);
                
             }
            

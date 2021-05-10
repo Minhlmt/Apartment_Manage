@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import { StyleSheet, ScrollView, SectionList, Text, View, FlatList, Image } from 'react-native';
 import ItemNotification from './Items/ItemNotification';
 import ItemService from './Items/ItemService';
-import { ScreenKey } from '../../globals/constants'
+import { ScreenKey ,notifyBillContext,Tab_Home_ProfileBillContext} from '../../globals/constants'
 import { ImageBackground } from 'react-native';
 import CalDate from '../Services/Bill/CalDate'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -12,7 +12,9 @@ import { TouchableOpacity } from 'react-native';
 var numeral = require('numeral');
 const window = Dimensions.get('window');
 export default function Home(props) {
-
+  
+ 
+  
   const [month, setMonth] = useState();
   const [year, setYear] = useState();
   const [apartId, setApartId] = useState();
@@ -23,6 +25,7 @@ export default function Home(props) {
   const [bntComplain, setbtnComplain] = useState();
   const [is_pay, setIsPay] = useState();
   const [billId, setBillId] = useState();
+
   const getData = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
@@ -83,6 +86,7 @@ export default function Home(props) {
   }
 
   useEffect(() => {
+   
     var today = new Date("2021-08-11");
     let date = CalDate(today);
     let monthtoday, yeartoday;
@@ -101,6 +105,11 @@ export default function Home(props) {
     setMonth(monthtoday);
     setYear(yeartoday);
     fetchData();
+    getData();
+   
+
+
+
   }, [month, year, flag])
   const handleUploadImage = () => {
     props.navigation.navigate(ScreenKey.Complain, {
@@ -126,7 +135,8 @@ export default function Home(props) {
     })
   }
   return (
-    // <ScrollView style={{flex: 1}}>
+    // <Tab_Home_ProfileBillContext.Provider value={newMessBill}>
+     <ScrollView style={{flex: 1}}>
     <ImageBackground style={{ flex: 1, resizeMode: 'cover' }} source={require('../../../image/background.jpg')}>
       <View style={styles.container1} >
         <View style={styles.background} >
@@ -184,7 +194,8 @@ export default function Home(props) {
         </View>
       </View>
     </ImageBackground>
-    // </ScrollView>
+     </ScrollView>
+    // </Tab_Home_ProfileBillContext.Provider>
   )
 }
 const styles = StyleSheet.create({

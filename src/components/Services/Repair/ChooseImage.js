@@ -14,14 +14,23 @@ export default function ChooseImage(props) {
       includeBase64:true
     })
       .then((image) => {
-        console.log('received image', image);
-        const imageBase64='data:'+image.mime+';base64,'+image.data;
+        // console.log('received image', image);
+        // const imageBase64='data:'+image.mime+';base64,'+image.data;
+        // props.navigation.navigate(ScreenKey.RepairService,{
+        //   imageBase64:imageBase64,
+        //   uri: image.path,
+        //   width: image.width,
+        //   height: image.height,
+        //   mime: image.mime,
+        // })
+        const imageBase64=image;
         props.navigation.navigate(ScreenKey.RepairService,{
           imageBase64:imageBase64,
           uri: image.path,
           width: image.width,
           height: image.height,
           mime: image.mime,
+          path:image.path
         })
         
       })
@@ -46,13 +55,22 @@ export default function ChooseImage(props) {
       includeBase64:true
     })
       .then((image) => {
-        const imageBase64='data:'+image.mime+';base64,'+image.data;
+        // const imageBase64='data:'+image.mime+';base64,'+image.data;
+        // props.navigation.navigate(ScreenKey.RepairService,{
+        //   imageBase64:imageBase64,
+        //   uri: image.path,
+        //   width: image.width,
+        //   height: image.height,
+        //   mime: image.mime,
+        // })
+        const imageBase64=image;
         props.navigation.navigate(ScreenKey.RepairService,{
           imageBase64:imageBase64,
           uri: image.path,
           width: image.width,
           height: image.height,
           mime: image.mime,
+          path:image.path
         })
       
       })

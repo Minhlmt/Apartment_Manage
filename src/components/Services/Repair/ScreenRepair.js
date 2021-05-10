@@ -9,7 +9,7 @@ export default function ScreenRepair(props){
     return(
         <NavigationStack.Navigator>
             <NavigationStack.Screen name={ScreenKey.RepairService} component={Repair} options={{headerShown:false}} 
-            initialParams={{imageBase64:'',uri:null,width:null,height:null,mime:null}}
+            initialParams={{imageBase64:'',uri:'',width:'',height:'',mime:'',path:''}}
             />
             <NavigationStack.Screen name={ScreenKey.ChooseImage} component={ChooseImage} options={{headerShown:false}}/>
         </NavigationStack.Navigator>
