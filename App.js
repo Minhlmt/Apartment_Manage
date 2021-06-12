@@ -1,153 +1,141 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+
 import { createStackNavigator } from '@react-navigation/stack';
-import Welcome from './src/components/Welcome/Welcome'
+import { NavigationContainer } from '@react-navigation/native';
+import { Login_Home } from './src/admin/globals/screen'
+import Complain from './src/admin/Complain/ScreenComplain'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import  {Tab_Home_Profile}  from './src/globals/screen'
-import Apartment from './src/components/Apartment/Apartment'
-import { ScreenKey, URL, notifyBillContext } from './src/globals/constants';
-import SignIn from './src/components/SignIn/SignIn'
+import { TokenContext,URL } from './src/admin/globals/constants'
 import messaging from '@react-native-firebase/messaging';
-// import PushNotificationIOS from "@react-native-community/push-notification-ios";
-import PushNotification from "react-native-push-notification";
-import Firesase from '@react-native-firebase/app'
-import { PushNotify } from './src/globals/pushNotification'
-const MainNavigationStack = createStackNavigator();
-
-export default function App({ navigation }) {
-  const [notifyBill, setNotifyBill] = useState();
-  const handleChangeNotifyBill=()=>{
-    
-    setNotifyBill(false);
-  }
-  const updateTokenDevice = async (token_device, userId, token) => {
-    const res = await fetch(URL + `api/auth/update-token-device`, {
-      method: 'PUT',
-      headers: {
-        Authorization: 'Bearer ' + `${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        user_id: userId,
-        token_device: token_device
-
-      })
-    })
-
-    if (res.status === 200) {
-      const result = await res.json();
+// import PushNotification from "react-native-push-notification";
+// import Firesase from '@react-native-firebase/app'
+export default function ScreenInfo({ route }) {
+    const [token, setToken] = useState('');
+    const [refesh,setRefesh]=useState(true);
+    const [loading, setLoading] = useState(true);
+    const [reloadBadge,setReloadBadge]=useState(false);
+    const changeRefesh=()=>{
+        setRefesh(!refesh);
     }
-  }
-  const getStoragenotifyBill = async () => {
-    try {
-      const _notifyBill = await AsyncStorage.getItem('notifyBill');
-     
-      if (_notifyBill !== null) {
-        setNotifyBill(true)
-      }
-      else {
-        setNotifyBill(false);
-      }
-    }
-    catch (e) {
-
-    }
-  }
-  const getData = async (tokenDevice) => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      const infoUser = await AsyncStorage.getItem('infoUser')
-      if (token !== null) {
-        const _infoUser = JSON.parse(infoUser);
-        const _token = JSON.parse(token);
-        await updateTokenDevice(tokenDevice, _infoUser.id, _token)
-      }
-    } catch (e) {
-      // error reading value
-    }
-  }
-  const storeDataNotifyBill = async (notifyBill) => {
-    try {
-      const jsonNotifyBill = JSON.stringify(notifyBill);
-      await AsyncStorage.setItem('notifyBill', jsonNotifyBill);
-
-    } catch (e) {
-      // saving error
-    }
-  }
-
-  useEffect(() => {
-    // PushNotify();
-
-    getStoragenotifyBill();
-    Firesase.initializeApp();
-
-    PushNotification.configure({
-
-      onRegister: function (token) {
-        console.log("TOKEN:", token);
-        getData(token.token);
-
-      },
-
-      onNotification: function (notification) {
-        console.log("NOTIFICATION:", notification);
-        if (notification.data.type === "1") {
-          storeDataNotifyBill(notification.data.type);
-          setNotifyBill(true);
+    const getFcmToken = async () => {
+        const fcmToken = await messaging().getToken();
+        if (fcmToken) {
+          // console.log(fcmToken);
+          UpdateTokenDevice(fcmToken);
+          console.log("Your Firebase Token is:", fcmToken);
+        } else {
+          console.log("Failed", "No token received");
         }
-        console.log("TILTE ", notification.title);
-        console.log("BODY ", notification.body);
-        console.log("DATA ", notification.data.type)
+      }
+      const requestUserPermission = async () => {
+        const authStatus = await messaging().requestPermission();
+        const enabled =
+          authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+          authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+    
+        if (enabled) {
+          getFcmToken()
+          // console.log('Authorization status:', authStatus);
+        }
+      }
+    const sendUpdateTokenDevice = async (token_device, userId, token) => {
+        const res = await fetch(URL + `api/auth/update-token-device-mobile`, {
+            method: 'PUT',
+            headers: {
+                Authorization: 'Bearer ' + `${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                user_id: userId,
+                token_device: token_device
 
-        // setNotification(notification)
+            })
+        })
+        if (res.status === 200) {
+            const result = await res.json();
+        }
+    }
+    const getToken = async () => {
+        try {
+            const _token = await AsyncStorage.getItem('token');
+            const infoUser=await AsyncStorage.getItem('infoUser');
+            if (_token !== null) {
+                const _tokenObject = JSON.parse(_token);
+                const _infoUserObject=JSON.parse(infoUser);
+                setToken(_tokenObject);
 
-        // notification.finish(PushNotificationIOS.FetchResult.NoData);
-      },
+            }
+        } catch (e) {
 
-      onAction: function (notification) {
-        console.log("ACTION:", notification.action);
-        console.log("NOTIFICATION1:", notification);
+        }
+    }
+    const UpdateTokenDevice=async(token_device)=>{
+        try {
+            const _token = await AsyncStorage.getItem('token');
+            const infoUser=await AsyncStorage.getItem('infoUser');
+            if (_token !== null) {
+                const _tokenObject = JSON.parse(_token);
+                const _infoUserObject=JSON.parse(infoUser);
+                await sendUpdateTokenDevice(token_device,_infoUserObject._id,_tokenObject);
 
+            }
+        } catch (e) {
 
-      },
-
-
-      onRegistrationError: function (err) {
-        console.error(err.message, err);
-      },
-
-
-      permissions: {
-        alert: true,
-        badge: true,
-        sound: true,
-      },
-
-
-      popInitialNotification: true,
-
-
-      requestPermissions: true,
-    });
-  
-  }, [])
-
-
-
-
-  return (
-    <notifyBillContext.Provider value={{notifyBill,handleChangeNotifyBill}}>
-      <NavigationContainer>
-        <MainNavigationStack.Navigator initialRouteName={ScreenKey.Welcome}>
-
-          <MainNavigationStack.Screen name={ScreenKey.Home} component={Tab_Home_Profile} options={{ headerShown: false }} />
-
-          <MainNavigationStack.Screen name={ScreenKey.Welcome} component={Welcome} options={{ headerShown: false }} initialParams={{notifyBill}} />
-          <MainNavigationStack.Screen name={ScreenKey.ChooseApart} component={Apartment} options={{ headerShown: false }} />
-          <MainNavigationStack.Screen name={ScreenKey.SignIn} component={SignIn} options={{ headerShown: false }} />
-        </MainNavigationStack.Navigator>
-      </NavigationContainer >
-    </notifyBillContext.Provider>
-  );
+        }
+    }
+    useEffect(() => {
+        getToken();
+        requestUserPermission();
+        messaging().onMessage(async remoteMessage => {
+          console.log('A new FCM message arrived!', remoteMessage);
+          if (remoteMessage.data.type === "1") {
+            storeDataNotifyBill(remoteMessage.data.type);
+            setNotifyBill(true);
+          }
+          else{
+            console.log("reload")
+            setReloadBadge({...reloadBadge,reloadBadge:!reloadBadge})
+          }
+        });
+        messaging().setBackgroundMessageHandler(async remoteMessage => {
+          console.log('Message handled in the background!', remoteMessage);
+        });
+        messaging().onNotificationOpenedApp(remoteMessage => {
+          console.log(
+            'Notification caused app to open from background state:',
+            remoteMessage.notification,
+          );
+    
+        });
+    
+        // Check whether an initial notification is available
+        messaging()
+          .getInitialNotification()
+          .then(remoteMessage => {
+            if (remoteMessage) {
+              console.log(
+                'Notification caused app to open from quit state:',
+                remoteMessage.notification,
+              );
+            }
+            setLoading(false);
+          });
+        const unsubscribe = messaging().onMessage(async remoteMessage => {
+          // Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+        });
+    
+        return unsubscribe;
+    
+      
+    }, [refesh])
+    if (loading) {
+        return null;
+      }
+    return (
+        <TokenContext.Provider value={{token,changeRefesh,reloadBadge}}>
+            <NavigationContainer>
+                <Login_Home />
+            </NavigationContainer>
+        </TokenContext.Provider>
+    )
 }
