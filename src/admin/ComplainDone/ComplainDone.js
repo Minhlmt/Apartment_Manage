@@ -35,7 +35,7 @@ export default function App(props) {
       showPicker(false);
       setDate(selectedDate);
       let mydate = CalDate(selectedDate);
-      var today = new Date(dateCurrent);
+      var today = new Date();
       let monthYear = CalDate(today);
       if (mydate.mm === monthYear.mm && mydate.yyyy === monthYear.yyyy) {
       }
@@ -90,7 +90,7 @@ export default function App(props) {
 
     />
   useEffect(() => {
-    var today = new Date(dateCurrent);
+    var today = new Date();
     let monthYear = CalDate(today);
     let monthtoday, yeartoday;
 
@@ -178,7 +178,9 @@ const styles = StyleSheet.create({
   }, chooseDate: {
     flexDirection: "row",
     justifyContent: 'space-between',
-    margin: 10
+    margin: 10,
+    paddingBottom:10,
+    borderBottomWidth:1
   },
   text: {
     fontSize: 20

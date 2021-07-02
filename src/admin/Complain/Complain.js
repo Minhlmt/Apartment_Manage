@@ -6,7 +6,7 @@ import { Text, StyleSheet, View, TextInput, ActivityIndicator, Alert, TouchableO
 import { FlatList } from 'react-native-gesture-handler';
 
 import Spinner from 'react-native-loading-spinner-overlay';
-import {URL,token} from '../globals/constants'
+import { URL, token } from '../globals/constants'
 import ItemComplain from './ItemComplain';
 const ItemSeparatorView = () => {
   return (
@@ -18,7 +18,7 @@ export default function App(props) {
   const [filterData, setFilterData] = useState([]);
   const [masterData, setmasterData] = useState([]);
   const [search, setSearch] = useState('');
-  const [spinner,setSpinner]=useState(false);
+  const [spinner, setSpinner] = useState(false);
   const ItemView = (item) => {
     return (
       <ItemComplain item={item.item} navigation={props.navigation} />
@@ -27,7 +27,7 @@ export default function App(props) {
 
 
   const fetchData = async () => {
-    const res = await fetch(URL+`api/all-bill/all-report`, {
+    const res = await fetch(URL + `api/all-bill/all-report`, {
       method: 'GET',
       headers: {
         Authorization: 'Bearer ' + `${token}`,
@@ -35,7 +35,7 @@ export default function App(props) {
       },
     })
     // setSpinner(false);
-  
+
     if (res.status === 200) {
       const result = await res.json();
       setFilterData(result.data);
@@ -47,22 +47,22 @@ export default function App(props) {
     fetchData();
     const unsubscribe = props.navigation.addListener('focus', () => {
       fetchData();
-  });
+    });
 
-  return unsubscribe;
+    return unsubscribe;
 
-   
+
 
   }, [props.navigation])
 
   const searchFilter = (text) => {
 
-    if (text ) {
+    if (text) {
       const newData = masterData.filter((item) => {
         const itemData = item.name ?
           item.name.toUpperCase()
           : ''.toUpperCase();
-          const textData = text.toUpperCase();
+        const textData = text.toUpperCase();
         return (itemData.indexOf(textData) > -1);
       });
       setFilterData(newData);
@@ -73,7 +73,14 @@ export default function App(props) {
       setSearch(text);
     }
   }
+  const element = (filterData.length === 0) ? <View style={styles.emptyContainer}><Text style={styles.textEmpty}>Không có khiếu nại</Text></View> :
+    <FlatList
+      data={filterData}
+      keyExtractor={(item, index) => index.toString()}
+      ItemSeparatorComponent={ItemSeparatorView}
+      renderItem={(item) => ItemView(item)}
 
+    />
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Spinner
@@ -86,23 +93,9 @@ export default function App(props) {
 
       </View>
 
-      <View style={styles.container}>
-        {/* <View style={{ flexDirection: 'row' }}>
-          <TextInput style={styles.textInput}
-            value={search}
-            placeholder='search here'
-            underlineColorAndroid="transparent"
-            onChangeText={(text) => searchFilter(text)}
-          />
-        </View> */}
-        <FlatList
-          data={filterData}
-          keyExtractor={(item, index) => index.toString()}
-          ItemSeparatorComponent={ItemSeparatorView}
-          renderItem={(item) => ItemView(item)}
-
-        />
-      </View>
+     
+      {element}
+     
     </SafeAreaView>
   )
 }
@@ -119,8 +112,8 @@ const styles = StyleSheet.create({
     margin: 5,
     borderColor: '#009688',
     backgroundColor: 'white',
-    flex:1
-   
+    flex: 1
+
   }, chooseDate: {
     flexDirection: "row",
     justifyContent: 'space-between',
@@ -143,5 +136,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     alignSelf: "center",
     textTransform: 'capitalize',
+  },
+  emptyContainer: {
+    flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: '50%',
+  },
+  textEmpty: {
+    fontSize: 20
   },
 })

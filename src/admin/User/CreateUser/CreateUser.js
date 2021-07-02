@@ -279,11 +279,13 @@ export default function ChangeInfo(props) {
                             label={'Họ và tên'}
                             iconClass={FontAwesomeIcon}
                             iconName={'user-circle-o'}
-                            iconColor={'#f95a25'}
+                            iconColor={'white'}
                             iconSize={20}
                             iconWidth={40}
                             inputPadding={16}
-                            style={{ backgroundColor: 'rgba(0,0,0,0.35)', borderRadius: 10 }}
+                            labelStyle={{color:'white'}}
+                            inputStyle={{color:'white'}}
+                            style={{ backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: 10 ,color:'white'}}
                             onChangeText={(text) => setName(text)}
 
                         />
@@ -294,11 +296,13 @@ export default function ChangeInfo(props) {
                             label={'Điện thoại'}
                             iconClass={FontAwesomeIcon}
                             iconName={'phone'}
-                            iconColor={'#f95a25'}
+                            iconColor={'white'}
                             iconSize={20}
                             iconWidth={40}
                             inputPadding={16}
-                            style={{ backgroundColor: 'rgba(0,0,0,0.35)', borderRadius: 10 }}
+                            labelStyle={{color:'white'}}
+                            inputStyle={{color:'white'}}
+                            style={{ backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: 10 }}
                             onChangeText={(text) => setPhone(text)}
                             keyboardType="numeric"
 
@@ -310,11 +314,13 @@ export default function ChangeInfo(props) {
                             label={'Email'}
                             iconClass={Fundation}
                             iconName={'mail'}
-                            iconColor={'#f95a25'}
+                            iconColor={'white'}
                             iconSize={20}
                             iconWidth={40}
                             inputPadding={16}
-                            style={{ backgroundColor: 'rgba(0,0,0,0.35)', borderRadius: 10 }}
+                            labelStyle={{color:'white'}}
+                            inputStyle={{color:'white'}}
+                            style={{ backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: 10 }}
                             onChangeText={(text) => setEmail(text)}
                         />
                     </View>
@@ -323,11 +329,13 @@ export default function ChangeInfo(props) {
                             label={'CMND/CCCD'}
                             iconClass={FontAwesomeIcon}
                             iconName={'id-card'}
-                            iconColor={'#f95a25'}
+                            iconColor={'white'}
                             iconSize={20}
                             iconWidth={40}
                             inputPadding={16}
-                            style={{ backgroundColor: 'rgba(0,0,0,0.35)', borderRadius: 10 }}
+                            labelStyle={{color:'white'}}
+                            inputStyle={{color:'white'}}
+                            style={{ backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: 10 }}
                             onChangeText={(text) => setIdentify_card(text)}
 
                         />
@@ -338,11 +346,13 @@ export default function ChangeInfo(props) {
                             label={'Quê quán'}
                             iconClass={Fontisto}
                             iconName={'island'}
-                            iconColor={'#f95a25'}
+                            iconColor={'white'}
                             iconSize={20}
                             iconWidth={40}
                             inputPadding={16}
-                            style={{ backgroundColor: 'rgba(0,0,0,0.35)', borderRadius: 10 }}
+                            labelStyle={{color:'white'}}
+                            inputStyle={{color:'white'}}
+                            style={{ backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: 10 }}
                             onChangeText={(text) => setNative_place(text)}
 
                         />
@@ -353,11 +363,13 @@ export default function ChangeInfo(props) {
                             label={'Biển số xe'}
                             iconClass={FontAwesomeIcon}
                             iconName={'drivers-license-o'}
-                            iconColor={'#f95a25'}
+                            iconColor={'white'}
                             iconSize={20}
                             iconWidth={40}
                             inputPadding={16}
-                            style={{ backgroundColor: 'rgba(0,0,0,0.35)', borderRadius: 10 }}
+                            labelStyle={{color:'white'}}
+                            inputStyle={{color:'white'}}
+                            style={{ backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: 10 }}
                             onChangeText={(text) => setLicenseString(text)}
 
                         />
@@ -422,7 +434,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginHorizontal: 10,
         marginTop: 10,
-        backgroundColor: 'rgba(0,0,0,0.35)',
+        backgroundColor: 'rgba(0,0,0,0.2)',
         paddingVertical: 10,
         justifyContent: 'space-around',
         flexDirection: 'row'
@@ -437,7 +449,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         fontSize: 20,
         paddingLeft: 45,
-        backgroundColor: 'rgba(0,0,0,0.35)',
+        backgroundColor: 'rgba(0,0,0,0.2)',
         color: 'rgba(255,255,255,1)',
         marginHorizontal: 25
     },
@@ -496,7 +508,7 @@ const styles = StyleSheet.create({
         margin: 20,
         backgroundColor: "white",
         borderRadius: 20,
-        padding: 35,
+        padding: 2,
         alignItems: "center",
         shadowColor: "#000",
         shadowOffset: {

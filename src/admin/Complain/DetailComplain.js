@@ -131,7 +131,7 @@ export default function DetailComplain(props){
             body: JSON.stringify({
                 apart_id: apart_id ,
                 title: 'Khiếu nại bạn đã được giải quyết',
-                content:'Khiếu nại bạn được giải quyết'
+                content:'BQL chung cư thông báo, khiếu nại của anh/chị đã được giải quyết. Đề nghị kiểm tra lại'
             }),
         })
         const result= await res.json();
@@ -146,7 +146,7 @@ export default function DetailComplain(props){
             body: JSON.stringify({
                 apart_id: apart_id ,
                 title: 'Khiếu nại không hợp lệ. Liên hệ BQL để giải quyết',
-                content:'Khiếu nại bạn không được giải quyết'
+                content:'BQL chung cư thông báo, khiếu nại của anh/chị chưa hợp lệ. Đề nghị liên hệ BQL để giải quyết '
             }),
 
         })

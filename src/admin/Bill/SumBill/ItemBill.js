@@ -1,12 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, SectionList, Text, View, Image, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements'
-import {ScreenKey} from '../../globals/constants'
+import {ScreenKey,URL} from '../../globals/constants'
 var numeral = require('numeral');
  function ItemBill(props) {
      const [status,setStatus]=useState('');
      const [is_pay,setIs_pay]=useState();
+     const [tokenDevices, setTokenDevices] = useState('');
+     const getTokenDevice = async () => {
+        const res = await fetch(URL + `api/user/token-device/${props.item.apart_id}`, {
+            method: 'GET',
+            headers: {
+                Authorization: 'Bearer ' + `${props.token}`,
+                'Content-Type': 'application/json',
+            },
+        })
+        if (res.status === 200) {
+            const result = await res.json();
+            console.log("result token devices ",result)
+            setTokenDevices(result.token_device)
+        }
+    }
      useEffect(()=>{
+        getTokenDevice();
          if(props.item.is_pay){
              setIs_pay(true);
             setStatus('Đã thanh toán');
@@ -28,7 +44,8 @@ var numeral = require('numeral');
             electric_bill:props.item.electric_bill,
             water_bill:props.item.water_bill,
             other_bill:props.item.other_bill,
-            total_money:props.item.total_money
+            total_money:props.item.total_money,
+            tokenDevices
         })
     }
     return (

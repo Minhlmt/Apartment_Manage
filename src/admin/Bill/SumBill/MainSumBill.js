@@ -39,7 +39,7 @@ export default function App(props) {
       showPicker(false);
       setDate(selectedDate);
       let mydate = CalDate(selectedDate);
-      var today = new Date(dateCurrent);
+      var today = new Date();
       let monthYear = CalDate(today);
       if (mydate.mm === monthYear.mm && mydate.yyyy === monthYear.yyyy) {
       }
@@ -64,7 +64,7 @@ export default function App(props) {
       // </Text>
       // <ItemBill navigation={props.navigation} title={item.item.apart_name} sumPrice={sumPrice} status={item.item.is_pay} billId={item.item.id}
       // apartId={item.item.apart_id} month={item.item.month} year={item.item.year} electric_bill={item.item.electric_bill} />
-      <ItemBill item={item.item} navigation={props.navigation} />
+      <ItemBill item={item.item} navigation={props.navigation} token={token}/>
     )
   }
 
@@ -106,7 +106,7 @@ export default function App(props) {
     />
   useEffect(() => {
     setSpinner(true);
-    var today = new Date(dateCurrent);
+    var today = new Date();
     let monthYear = CalDate(today);
     let monthtoday, yeartoday;
     let preMonth = (monthYear.mm - 1).toString();

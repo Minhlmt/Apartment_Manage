@@ -14,7 +14,7 @@ export default function ScreenInfo({ route }) {
             <SumBillStack.Screen name={ScreenKey.DetailBill} component={BillDetail} options={
                 ({ route }) => ({
                     title: route.params.name,
-                    headerRight: (() => <ButtonRight billId={route.params.billId} is_pay={route.params.is_pay} status={route.params.status} />),
+                    headerRight: (() => <ButtonRight billId={route.params.billId} is_pay={route.params.is_pay} tokenDevices={route.params.tokenDevices} status={route.params.status} />),
                 })
             } />
         </SumBillStack.Navigator>
@@ -24,6 +24,29 @@ function ButtonRight(props) {
     const [status, setStatus] = useState(props.status);
     const [is_pay, setIs_pay] = useState(props.is_pay);
     const [billId, setBillId] = useState(props.billId);
+    console.log("asd ",props.tokenDevices)
+    const [tokenDevices, setTokenDevices] = useState(props.tokenDevices);
+  
+     const pushNotify = async () => {
+        console.log("token devices ",tokenDevices)
+        const res = await fetch(URL + `api/push-noti/add-notice`, {
+            method: 'POST',
+            headers: {
+                Authorization: 'Bearer ' + `${token}`,
+                'Content-Type': "application/json",
+            },
+            body: JSON.stringify({
+                tokens: [
+                    `${tokenDevices}`
+                ],
+                title: "Hóa đơn",
+                body: "Đã cập nhật tình trạng hóa đơn",
+                type: 1
+            })
+
+        })
+        console.log("STATUS PUSH", res.status);
+    }
     const sendDataChangeIs_pay=async()=>{
         const res = await fetch(URL + `api/all-bill/change-pay`, {
             method: 'PUT',
@@ -42,13 +65,13 @@ function ButtonRight(props) {
           {
               setStatus('Đã thanh toán');
               setIs_pay(true);
+              pushNotify();
           }
           else{
             setStatus("Chưa thanh toán")
             setIs_pay(false);
+            pushNotify();
           }
-         
-         
         }
     }
     const handleChangeIs_pay = () => {

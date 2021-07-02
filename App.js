@@ -51,6 +51,7 @@ export default function ScreenInfo({ route }) {
 
             })
         })
+        console.log("UPDATE TOKEN ",res.status);
         if (res.status === 200) {
             const result = await res.json();
         }

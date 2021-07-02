@@ -41,6 +41,13 @@ export default function Parking(props) {
     useEffect(() => {
         getdata();
     }, [])
+    const element = (filterData.length === 0) ? <View style={styles.emptyContainer}><Text style={styles.textEmpty}>Không có khiếu nại</Text></View> :
+    <FlatList
+    data={filterData}
+    keyExtractor={(item, index) => index.toString()}
+    ItemSeparatorComponent={ItemSeparatorView}
+    renderItem={(item) => ItemView(item)}
+/>
     return (
         <View style={{ height: '90%' }} >
             <Spinner
@@ -52,14 +59,9 @@ export default function Parking(props) {
                 <Text style={styles._text_title} >{'Bãi xe'}</Text>
 
             </View>
-            <View style={styles.container}>
-                <FlatList
-                    data={filterData}
-                    keyExtractor={(item, index) => index.toString()}
-                    ItemSeparatorComponent={ItemSeparatorView}
-                    renderItem={(item) => ItemView(item)}
-                />
-            </View>
+           
+              {element}
+           
         </View>
     )
 }
@@ -101,4 +103,10 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         textTransform: 'capitalize',
     },
+    emptyContainer: {
+        flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: '50%', 
+      },
+      textEmpty: {
+        fontSize: 20
+      },
 })

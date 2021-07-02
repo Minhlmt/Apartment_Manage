@@ -4,7 +4,7 @@ import { Table, TableWrapper, Row, Rows, Col } from 'react-native-table-componen
 import MonthPicker from 'react-native-month-year-picker';
 import { Icon } from 'react-native-elements';
 import CalDate from '../../Bill/SumBill/Detail/CalDate'
-import { URL, token,ScreenKey } from '../../globals/constants'
+import { URL, token, ScreenKey } from '../../globals/constants'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Button } from 'react-native';
 
@@ -32,7 +32,7 @@ export default function Statistic(props) {
       showPicker(false);
       setDate(selectedDate);
       let mydate = CalDate(selectedDate);
-      var today = new Date(dateCurrent);
+      var today = new Date();
       let monthYear = CalDate(today);
       if (mydate.mm === monthYear.mm && mydate.yyyy === monthYear.yyyy) {
       }
@@ -101,14 +101,14 @@ export default function Statistic(props) {
     setSpinner(true);
     fetchData();
   }
-  const onChangeBill=()=>{
-    props.navigation.navigate(ScreenKey.SumBill,{
-      filterRadio:2
+  const onChangeBill = () => {
+    props.navigation.navigate(ScreenKey.SumBill, {
+      filterRadio: 2
     })
   }
   useEffect(() => {
     setSpinner(true);
-    var today = new Date(dateCurrent);
+    var today = new Date();
     let monthYear = CalDate(today);
     let monthtoday, yeartoday;
 
@@ -145,6 +145,36 @@ export default function Statistic(props) {
         <Text style={styles._text_title} >{`Thống kê`}</Text>
 
       </View>
+      <View style={{flexDirection:'column', borderBottomWidth:1,marginBottom:10}}>
+        <View style={styles.chooseDate}>
+          <TouchableOpacity onPress={() => showPicker(true)}>
+            <Text style={styles.text}>Tháng {month}, năm {year}</Text>
+          </TouchableOpacity>
+          {show && (
+            <MonthPicker
+              onChange={onValueChange}
+              value={date}
+              minimumDate={new Date(2019, 0)}
+              maximumDate={new Date()}
+
+            />
+          )}
+          <TouchableOpacity onPress={handleClick} style={{ marginTop: 10 }}>
+            <Icon name='search1'
+              type='antdesign'
+              color='#f1c40f'
+              size={25}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+      <Table borderStyle={{marginTop:10, borderWidth: 0.5 }}>
+        <Row data={tableHead} flexArr={[1, 2, 2, 2]} style={styles.head} textStyle={styles.text_table} />
+        <TableWrapper style={styles.wrapper}>
+          <Col data={tableTitle} style={styles.title} heightArr={[50, 50]} textStyle={styles.text_table} />
+          <Rows data={tableData} flexArr={[2, 2, 2]} style={styles.row} textStyle={styles.text_table} />
+        </TableWrapper>
+      </Table>
       <View style={styles.btnDetail}>
         <Button
           onPress={onChangeBill}
@@ -152,34 +182,6 @@ export default function Statistic(props) {
           color="#841584"
         />
       </View>
-      <View style={styles.chooseDate}>
-        <TouchableOpacity onPress={() => showPicker(true)}>
-          <Text style={styles.text}>Tháng {month}, năm {year}</Text>
-        </TouchableOpacity>
-        {show && (
-          <MonthPicker
-            onChange={onValueChange}
-            value={date}
-            minimumDate={new Date(2019, 0)}
-            maximumDate={new Date()}
-
-          />
-        )}
-        <TouchableOpacity onPress={handleClick} style={{ marginTop: 10 }}>
-          <Icon name='search1'
-            type='antdesign'
-            color='#f1c40f'
-            size={25}
-          />
-        </TouchableOpacity>
-      </View>
-      <Table borderStyle={{ borderWidth: 1 }}>
-        <Row data={tableHead} flexArr={[1, 2, 2, 2]} style={styles.head} textStyle={styles.text_table} />
-        <TableWrapper style={styles.wrapper}>
-          <Col data={tableTitle} style={styles.title} heightArr={[50, 50]} textStyle={styles.text_table} />
-          <Rows data={tableData} flexArr={[2, 2, 2]} style={styles.row} textStyle={styles.text_table} />
-        </TableWrapper>
-      </Table>
     </View>
   )
 
@@ -217,8 +219,9 @@ const styles = StyleSheet.create({
   }, text: {
     fontSize: 20
   },
-  btnDetail:{
-    flexDirection:'row',
-    justifyContent:'flex-end'
+  btnDetail: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: 10
   }
 });
