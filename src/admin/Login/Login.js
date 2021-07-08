@@ -92,9 +92,9 @@ export default function App(props) {
                     />
                 </TouchableOpacity>
             </View>
-            <TouchableOpacity >
+            {/* <TouchableOpacity >
                 <Text style={styles.textPass}>Quên mật khẩu</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity style={styles.btnLogin} onPress={handleLogin}>
                 <Text style={styles.text}>Login</Text>
             </TouchableOpacity>

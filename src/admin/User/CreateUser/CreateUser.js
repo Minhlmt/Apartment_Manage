@@ -142,10 +142,10 @@ export default function ChangeInfo(props) {
         })
 
         if (res.status === 200) {
-            alert("Tạo tài khoản thành công");
+            Alert.alert("Thông báo","Tạo tài khoản thành công");
         }
         else {
-            alert("Tạo tài khoản thất bại")
+            Alert.alert("Thông báo","Tạo tài khoản thất bại")
         }
     }
     const cutLicense_plates = () => {

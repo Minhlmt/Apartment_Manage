@@ -23,8 +23,9 @@ export default function Info(props) {
 
 
     return (
-        <ScrollView>
+       
             <ImageBackground style={{ flex: 1, resizeMode: 'cover' }} source={require('../../../../image/background.jpg')}>
+               <ScrollView>
                 <View style={styles.container}>
                     <View style={styles._row}>
                         <Icon name='user'
@@ -121,8 +122,9 @@ export default function Info(props) {
                 <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
                     <Text style={styles.text_info}>{license}</Text>
                 </View>
+                </ScrollView>
             </ImageBackground>
-        </ScrollView>
+      
     )
 }
 const styles = StyleSheet.create({

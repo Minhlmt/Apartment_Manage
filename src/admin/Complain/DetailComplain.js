@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext} from 'react';
 import { StyleSheet, SectionList, Text, View, Image, TouchableOpacity ,ScrollView,Alert} from 'react-native';
 import ImageZoom from 'react-native-image-pan-zoom';
 var numeral = require('numeral');
-import {URL,token} from '../globals/constants'
+import {URL,token,TokenContext} from '../globals/constants'
 import {ScreenKey} from '../globals/constants'
 import { Dimensions } from 'react-native';
 
@@ -11,6 +11,7 @@ const window = Dimensions.get('window');
 export default function DetailComplain(props){
     const {id,apart_name,electric_bill,water_bill,other_bill,total_money,is_pay,apart_id,image}=props.route.params.item;
     console.log("Author ",props.route.params.item);
+    const reloadBadge=useContext(TokenContext).changeReloadBadge;
     const [electric,setElectric]=useState();
     const [water,setWater]=useState();
     const [other,setOther]=useState();
@@ -153,10 +154,12 @@ export default function DetailComplain(props){
         const result= await res.json();
     }
     const handleClickOk=async()=>{
+      
         await sendDataChangeIs_pay()
         await sendDataChangeReport();
          await pushNotify();
-        await sendCreatNotifyDone()
+        await sendCreatNotifyDone();
+        reloadBadge();
         Alert.alert(
             "Thông báo",
             "Đã giải quyết khiếu nại",
@@ -169,6 +172,7 @@ export default function DetailComplain(props){
          await sendDataChangeReport()
          await sendCreatNotifyNotDone();
          await pushNotify();
+         reloadBadge();
         Alert.alert(
             "Thông báo",
             "Đã từ chối khiếu nại",

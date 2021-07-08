@@ -17,6 +17,9 @@ export default function ScreenInfo({ route }) {
     const changeRefesh=()=>{
         setRefesh(!refesh);
     }
+    const changeReloadBadge=()=>{
+      setReloadBadge({...reloadBadge,reloadBadge:!reloadBadge})
+    }
     const getFcmToken = async () => {
         const fcmToken = await messaging().getToken();
         if (fcmToken) {
@@ -133,7 +136,7 @@ export default function ScreenInfo({ route }) {
         return null;
       }
     return (
-        <TokenContext.Provider value={{token,changeRefesh,reloadBadge}}>
+        <TokenContext.Provider value={{token,changeRefesh,reloadBadge,changeReloadBadge}}>
             <NavigationContainer>
                 <Login_Home />
             </NavigationContainer>

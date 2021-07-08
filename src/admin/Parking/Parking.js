@@ -49,7 +49,7 @@ export default function Parking(props) {
     renderItem={(item) => ItemView(item)}
 />
     return (
-        <View style={{ height: '90%' }} >
+        <View style={{ flex:1 }} >
             <Spinner
                 visible={spinner}
                 textContent={'Loading...'}
